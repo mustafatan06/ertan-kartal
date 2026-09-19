@@ -10,7 +10,6 @@
         body { font-family: 'Poppins', sans-serif; background: #f8fafc; margin: 0; padding: 20px; color: #1e293b; }
         .container { max-width: 1000px; margin: 0 auto; }
         h1 { color: #ff6b00; margin-bottom: 5px; }
-        p.subtitle { color: #64748b; margin-bottom: 20px; }
         .order-card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 15px; border-left: 5px solid #ff6b00; display: flex; justify-content: space-between; align-items: center; }
         .order-info h3 { margin: 0 0 8px 0; color: #1e293b; }
         .order-info p { margin: 4px 0; color: #64748b; font-size: 14px; }
@@ -19,67 +18,50 @@
 </head>
 <body>
     <div class="container">
-        <h1><i class="fa-solid fa-store"></i> Merkez Şube Canlı Sipariş Paneli</h1>
-        <p class="subtitle">Müşteriler site üzerinden sipariş verdikçe anlık olarak ekrana düşecektir.</p>
+        <h1><i class="fa-solid fa-store"></i> Canlı Şube Paneli</h1>
+        <p style="color: #64748b; margin-bottom: 20px;">Menüden verilen siparişler anlık olarak buraya düşecektir.</p>
         
-        <div id="canliSiparislerListesi">
+        <div id="panelListe">
             <p style="color: #64748b;">Siparişler yükleniyor...</p>
         </div>
     </div>
 
-    <!-- Firebase SDK (Compat v9) -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     <script>
-        const firebaseConfig = {
-          apiKey: "AIzaSyDMIz96KNZF-7zWGRuI-2fvQ72fZImHtUw",
-          authDomain: "eretankartal.firebaseapp.com",
-          projectId: "eretankartal",
-          storageBucket: "eretankartal.firebasestorage.app",
-          messagingSenderId: "775846519838",
-          appId: "1:775846519838:web:75b1d7dfb4ef942a3f7a0f",
-          measurementId: "G-6SL3LJVG99"
-        };
+        function siparisleriListele() {
+            const liste = document.getElementById('panelListe');
+            const siparisler = JSON.parse(localStorage.getItem('ertan_orders')) || [];
 
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
-        }
-        const db = firebase.database();
-
-        const listeDiv = document.getElementById('canliSiparislerListesi');
-
-        // Firebase Real-time Dinleyici (Anlık Senkronizasyon)
-        db.ref('orders').on('value', (snapshot) => {
-            const data = snapshot.val();
-            
-            if (!data) {
-                listeDiv.innerHTML = '<p style="color: #64748b;">Henüz gelen yeni sipariş bulunmuyor...</p>';
+            if (siparisler.length === 0) {
+                liste.innerHTML = '<p style="color: #64748b;">Henüz gelen sipariş bulunmuyor...</p>';
                 return;
             }
 
             let html = '';
-            // Verileri ters çevirip en yeni sipariş üstte olacak şekilde diziyoruz
-            const siparislerDizi = Object.entries(data).reverse();
-
-            siparislerDizi.forEach(([id, sip]) => {
-                // Sadece Merkez Şube'ye ait siparişleri göstermek istiyorsan filtreleyebilirsin, 
-                // ya da tüm şubeleri görmek için filtreyi kaldırabilirsin.
+            siparisler.forEach(s => {
                 html += `
                     <div class="order-card">
                         <div class="order-info">
-                            <h3>${sip.product} — <span style="color:#ff6b00;">${sip.branch}</span></h3>
-                            <p><strong>Müşteri:</strong> ${sip.name} (${sip.phone})</p>
-                            <p><strong>Adres:</strong> ${sip.address}</p>
-                            <p><strong>Saat:</strong> ${sip.time}</p>
+                            <h3>${s.product} — <span style="color:#ff6b00;">${s.branch}</span></h3>
+                            <p><strong>Müşteri:</strong> ${s.name} (${s.phone})</p>
+                            <p><strong>Adres:</strong> ${s.address}</p>
+                            <p><strong>Saat:</strong> ${s.time}</p>
                         </div>
                         <div>
-                            <span class="badge">${sip.status}</span>
+                            <span class="badge">${s.status}</span>
                         </div>
                     </div>
                 `;
             });
+            liste.innerHTML = html;
+        }
 
-            listeDiv.innerHTML = html;
+        siparisleriListele();
+
+        // Anlık senkronizasyon dinleyicisi
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'ertan_orders') {
+                siparisleriListele();
+            }
         });
     </script>
 </body>
