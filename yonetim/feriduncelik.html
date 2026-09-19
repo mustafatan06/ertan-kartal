@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feridunçelik Şube | Ertan Kartal Yönetim Paneli</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        body { background-color: #f1f5f9; padding: 30px 0; min-height: 100vh; }
+        .panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; background: white; padding: 20px 30px; border-radius: 14px; box-shadow: 0 4px 20px rgba(0,0,0,0.04); }
+        .live-badge { background-color: #27ae60; color: white; padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; }
+        .live-badge i { animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
+        .orders-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; }
+        .order-ticket { background: white; border-radius: 14px; padding: 22px; box-shadow: 0 6px 20px rgba(0,0,0,0.06); border-left: 6px solid var(--pan-orange); position: relative; }
+        .order-ticket h3 { font-size: 17px; color: var(--pan-dark); margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f0f0f0; padding-bottom: 8px; }
+        .order-ticket p { font-size: 14px; color: #444; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
+        .order-ticket p i { color: var(--pan-orange); width: 16px; }
+        .status-badge { display: inline-block; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 600; margin-bottom: 10px; background: #e2e8f0; color: #334155; }
+        .status-hazirlaniyor { background: #fef3c7; color: #d97706; }
+        .status-yolaciikti { background: #e0f2fe; color: #0284c7; }
+        .action-buttons { display: flex; flex-direction: column; gap: 8px; margin-top: 15px; border-top: 1px solid #f0f0f0; padding-top: 15px; }
+        .btn-action { border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 12px; display: flex; align-items: center; justify-content: center; gap: 6px; text-decoration: none; color: white; }
+        .btn-prep { background: #d97706; }
+        .btn-road { background: #0284c7; }
+        .btn-wa { background: #25d366; }
+        .btn-complete { background: #27ae60; }
+        .no-order { text-align: center; padding: 60px 20px; background: white; border-radius: 14px; color: #888; grid-column: 1 / -1; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="panel-header">
+            <div>
+                <h2><i class="fa-solid fa-store" style="color: var(--pan-orange);"></i> Feridunçelik Şube Yönetim Paneli</h2>
+                <p style="font-size: 13px; color: #666; margin-top: 4px;">Feridunçelik şubesine gelen siparişler buluttan anında bu ekrana düşer.</p>
+            </div>
+            <div class="live-badge"><i class="fa-solid fa-circle"></i> Bulut Bağlantısı Aktif</div>
+        </div>
+
+        <div id="ordersContainer" class="orders-grid">
+            <div class="no-order"><i class="fa-solid fa-bell-slash"></i><p>Aktif sipariş bulunmuyor.</p></div>
+        </div>
+    </div>
+
+    <audio id="alertSound" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" preload="auto"></audio>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <script>
+        const firebaseConfig = {
+          apiKey: "AIzaSyDMIz96KNZF-7zWGRuI-2fvQ72fZImHtUw",
+          authDomain: "eretankartal.firebaseapp.com",
+          projectId: "eretankartal",
+          storageBucket: "eretankartal.firebasestorage.app",
+          messagingSenderId: "775846519838",
+          appId: "1:775846519838:web:75b1d7dfb4ef942a3f7a0f",
+          measurementId: "G-6SL3LJVG99"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        const targetBranch = "Feridunçelik Şube";
+        const container = document.getElementById('ordersContainer');
+        let firstLoad = true;
+
+        database.ref('orders').on('value', (snapshot) => {
+            const data = snapshot.val();
+            container.innerHTML = '';
+
+            if (!data) {
+                container.innerHTML = `<div class="no-order"><i class="fa-solid fa-bell-slash"></i><p><strong>${targetBranch}</strong> için aktif sipariş yok.</p></div>`;
+                firstLoad = false;
+                return;
+            }
+
+            let html = '';
+            let hasOrder = false;
+
+            Object.keys(data).forEach(key => {
+                const order = data[key];
+                if (order.branch === targetBranch) {
+                    hasOrder = true;
+                    
+                    if (!firstLoad) {
+                        document.getElementById('alertSound').play().catch(e => console.log("Ses çalma bekleniyor"));
+                    }
+
+                    let statusClass = '';
+                    if(order.status === 'Hazırlanıyor') statusClass = 'status-hazirlaniyor';
+                    if(order.status === 'Yola Çıktı') statusClass = 'status-yolaciikti';
+
+                    let waTextPrep = encodeURIComponent(`Sayın ${order.name}, "${order.product}" siparişiniz alınmıştır, şu an hazırlanıyor. - Ertan Kartal Çiğ Köfte`);
+                    let waTextRoad = encodeURIComponent(`Sayın ${order.name}, "${order.product}" siparişiniz yola çıkmıştır. Afiyet olsun! - Ertan Kartal Çiğ Köfte`);
+                    let cleanPhone = order.phone.startsWith('0') ? order.phone.substring(1) : order.phone;
+                    let waNumber = "90" + cleanPhone;
+
+                    html += `
+                        <div class="order-ticket">
+                            <span class="status-badge ${statusClass}">Durum: ${order.status || 'Yeni Sipariş'}</span>
+                            <h3><span><i class="fa-solid fa-utensils"></i> ${order.product}</span> <span style="font-size:12px; color:#777;">${order.time}</span></h3>
+                            <p><i class="fa-solid fa-user"></i> <strong>Ad Soyad:</strong> ${order.name}</p>
+                            <p><i class="fa-solid fa-phone"></i> <strong>Telefon:</strong> ${order.phone}</p>
+                            <p><i class="fa-solid fa-location-dot"></i> <strong>Adres:</strong> ${order.address}</p>
+                            
+                            <div class="action-buttons">
+                                <button class="btn-action btn-prep" onclick="updateStatus('${key}', 'Hazırlanıyor')"><i class="fa-solid fa-fire-burner"></i> Hazırlanıyor İşaretle</button>
+                                <button class="btn-action btn-road" onclick="updateStatus('${key}', 'Yola Çıktı')"><i class="fa-solid fa-motorcycle"></i> Yola Çıktı İşaretle</button>
+                                
+                                <a href="https://wa.me/${waNumber}?text=${waTextPrep}" target="_blank" class="btn-action btn-wa"><i class="fa-brands fa-whatsapp"></i> Hazırlanıyor WhatsApp Mesajı Gönder</a>
+                                <a href="https://wa.me/${waNumber}?text=${waTextRoad}" target="_blank" class="btn-action btn-wa" style="background:#128c7e;"><i class="fa-brands fa-whatsapp"></i> Yola Çıktı WhatsApp Mesajı Gönder</a>
+
+                                <button class="btn-action btn-complete" onclick="completeOrder('${key}')"><i class="fa-solid fa-check"></i> Siparişi Tamamla / Kapat</button>
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+
+            if (!hasOrder) {
+                container.innerHTML = `<div class="no-order"><i class="fa-solid fa-bell-slash"></i><p><strong>${targetBranch}</strong> için aktif sipariş yok.</p></div>`;
+            } else {
+                container.innerHTML = html;
+            }
+            firstLoad = false;
+        });
+
+        function updateStatus(orderId, newStatus) {
+            database.ref('orders/' + orderId).update({ status: newStatus });
+        }
+
+        function completeOrder(orderId) {
+            if(confirm("Bu siparişi tamamlayıp listeden kaldırmak istediğinize emin misiniz?")) {
+                database.ref('orders/' + orderId).remove();
+            }
+        }
+    </script>
+</body>
+</html>
