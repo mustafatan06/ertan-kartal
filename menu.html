@@ -12,7 +12,7 @@
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0,0,0,0.6);
             justify-content: center;
             align-items: center;
             z-index: 999999 !important;
@@ -23,9 +23,18 @@
             border-radius: 14px;
             width: 100%;
             max-width: 450px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
             position: relative;
             z-index: 1000000 !important;
+        }
+        .food-card {
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .food-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(255,107,0,0.15);
+            border: 2px solid #ff6b00;
         }
         #kesinGonderBtn {
             width: 100%;
@@ -39,7 +48,6 @@
             cursor: pointer !important;
             margin-top: 15px;
             display: block !important;
-            z-index: 1000001 !important;
         }
         #kesinGonderBtn:hover { background: #e66000 !important; }
     </style>
@@ -60,7 +68,7 @@
     <main class="container">
         <section class="hero">
             <h1>Lezzeti Keşfet, Anında Sipariş Ver!</h1>
-            <p>Ertan Kartal Çiğ Köfte taze lezzetleri kapınıza kadar getiriyor.</p>
+            <p>Ürüne tıklayarak hemen sipariş ekranını açabilirsin.</p>
         </section>
 
         <!-- KATEGORİ FİLTRELERİ -->
@@ -73,7 +81,7 @@
 
         <!-- ÜRÜNLER LİSTESİ -->
         <div class="food-grid">
-            <div class="food-card" data-category="durum">
+            <div class="food-card" data-category="durum" onclick="modalAc('Klasik Dürüm Çiğ Köfte', '90 ₺')">
                 <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=600&q=80" alt="Klasik Dürüm" class="food-img">
                 <div class="food-body">
                     <div class="food-title-price">
@@ -81,11 +89,11 @@
                         <span class="price">90 ₺</span>
                     </div>
                     <p>Özel lavaş içerisinde bol çiğ köfte, taze marul, nane, roka ve özel nar ekşisi sosuyla.</p>
-                    <button type="button" class="order-btn" onclick="modalAc('Klasik Dürüm Çiğ Köfte', '90 ₺')"><i class="fa-solid fa-cart-shopping"></i> Hemen Sipariş Ver</button>
+                    <button type="button" class="order-btn"><i class="fa-solid fa-cart-shopping"></i> Hemen Sipariş Ver</button>
                 </div>
             </div>
 
-            <div class="food-card" data-category="durum">
+            <div class="food-card" data-category="durum" onclick="modalAc('Özel Soslu Mega Dürüm', '130 ₺')">
                 <img src="https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&w=600&q=80" alt="Özel Soslu Mega Dürüm" class="food-img">
                 <div class="food-body">
                     <div class="food-title-price">
@@ -93,11 +101,11 @@
                         <span class="price">130 ₺</span>
                     </div>
                     <p>Ekstra doyurucu kalın lavaş, yoğun çiğ köfte ve şefe özel acı sos seçeneğiyle.</p>
-                    <button type="button" class="order-btn" onclick="modalAc('Özel Soslu Mega Dürüm', '130 ₺')"><i class="fa-solid fa-cart-shopping"></i> Hemen Sipariş Ver</button>
+                    <button type="button" class="order-btn"><i class="fa-solid fa-cart-shopping"></i> Hemen Sipariş Ver</button>
                 </div>
             </div>
 
-            <div class="food-card" data-category="porsiyon">
+            <div class="food-card" data-category="porsiyon" onclick="modalAc('Ertan Kartal Porsiyon (Orta)', '180 ₺')">
                 <img src="https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80" alt="Porsiyon Tabak" class="food-img">
                 <div class="food-body">
                     <div class="food-title-price">
@@ -105,11 +113,11 @@
                         <span class="price">180 ₺</span>
                     </div>
                     <p>Özenle sıkılmış çiğ köfteler, zengin yeşillik tabağı, limon ve lavaş hediyeli.</p>
-                    <button type="button" class="order-btn" onclick="modalAc('Ertan Kartal Porsiyon (Orta)', '180 ₺')"><i class="fa-solid fa-cart-shopping"></i> Hemen Sipariş Ver</button>
+                    <button type="button" class="order-btn"><i class="fa-solid fa-cart-shopping"></i> Hemen Sipariş Ver</button>
                 </div>
             </div>
 
-            <div class="food-card" data-category="icecek">
+            <div class="food-card" data-category="icecek" onclick="modalAc('Kola / Ayran (Büyük Boy)', '35 ₺')">
                 <img src="https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=600&q=80" alt="Ayran" class="food-img">
                 <div class="food-body">
                     <div class="food-title-price">
@@ -117,13 +125,13 @@
                         <span class="price">35 ₺</span>
                     </div>
                     <p>Buz gibi köpüklü yayık ayranı veya kutu kola seçeneğiyle.</p>
-                    <button type="button" class="order-btn" onclick="modalAc('Kola / Ayran (Büyük Boy)', '35 ₺')"><i class="fa-solid fa-cart-shopping"></i> Hemen Sipariş Ver</button>
+                    <button type="button" class="order-btn"><i class="fa-solid fa-cart-shopping"></i> Hemen Sipariş Ver</button>
                 </div>
             </div>
         </div>
     </main>
 
-    <!-- SİPARİŞ MODALI (Formsuz, Kesin Tıklanabilir Yapı) -->
+    <!-- SİPARİŞ MODALI -->
     <div id="orderModal" class="modal">
         <div class="modal-content">
             <div class="modal-header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
@@ -152,8 +160,8 @@
                 <textarea id="customerAddress" rows="3" placeholder="Mahalle, Cadde, Ada, Sokak, No, Daire..." style="width:100%; padding:10px; border:2px solid #e2e8f0; border-radius:8px;"></textarea>
             </div>
 
-            <!-- Form etiketi tamamen kaldırıldı, buton doğrudan tıklanabilir div/button yapıldı -->
-            <button type="button" id="kesinGonderBtn">Siparişi Onayla ve Gönder</button>
+            <!-- Doğrudan onclick ile fonksiyona bağlandı, tıklandığı an çalışacak -->
+            <button type="button" id="kesinGonderBtn" onclick="siparihiTamamlaveYonlendir()">Siparişi Onayla ve Gönder</button>
         </div>
     </div>
 
@@ -176,7 +184,6 @@
         }
         const db = firebase.database();
 
-        // Modalı Aç
         window.modalAc = function(ad, fiyat) {
             const m = document.getElementById('orderModal');
             const b = document.getElementById('modalProductName');
@@ -186,71 +193,70 @@
             }
         };
 
-        // Modalı Kapat
         window.modalKapat = function() {
             const m = document.getElementById('orderModal');
             if(m) m.style.display = 'none';
         };
 
-        // BUTON TIKLAMA DİNLEYİCİSİ (Formsuz, Direkt Çalışır)
-        document.addEventListener('DOMContentLoaded', () => {
-            const gonderBtn = document.getElementById('kesinGonderBtn');
-            if (gonderBtn) {
-                gonderBtn.addEventListener('click', function(e) {
-                    e.preventDefault();
+        // KESİN ÇALIŞAN GLOBAL FONKSİYON (Tıklayınca hem Firebase'e yazar hem sipariş ekranına atar)
+        window.siparihiTamamlaveYonlendir = function() {
+            const sube = document.getElementById('branchSelect').value;
+            const isim = document.getElementById('customerName').value.trim();
+            const telefon = document.getElementById('customerPhone').value.trim();
+            const adres = document.getElementById('customerAddress').value.trim();
+            const urun = document.getElementById('modalProductName').textContent;
 
-                    const sube = document.getElementById('branchSelect').value;
-                    const isim = document.getElementById('customerName').value.trim();
-                    const telefon = document.getElementById('customerPhone').value.trim();
-                    const adres = document.getElementById('customerAddress').value.trim();
-                    const urun = document.getElementById('modalProductName').textContent;
-
-                    if(!isim) {
-                        alert("Lütfen isim soyisim giriniz.");
-                        document.getElementById('customerName').focus();
-                        return;
-                    }
-                    if(!telefon || telefon.length < 10) {
-                        alert("Lütfen geçerli bir telefon numarası giriniz.");
-                        document.getElementById('customerPhone').focus();
-                        return;
-                    }
-                    if(!adres) {
-                        alert("Lütfen teslimat adresi giriniz.");
-                        document.getElementById('customerAddress').focus();
-                        return;
-                    }
-
-                    const veri = {
-                        branch: sube,
-                        name: isim,
-                        phone: telefon,
-                        address: adres,
-                        product: urun,
-                        status: "Yeni Sipariş",
-                        time: new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })
-                    };
-
-                    db.ref('orders').push(veri)
-                        .then(() => {
-                            alert("Tebrikler! Siparişiniz " + sube + " şubesine iletildi.");
-                            modalKapat();
-                            document.getElementById('customerName').value = '';
-                            document.getElementById('customerPhone').value = '';
-                            document.getElementById('customerAddress').value = '';
-                        })
-                        .catch((err) => {
-                            alert("Gönderilemedi: " + err.message);
-                        });
-                });
+            if(!isim) {
+                alert("Lütfen isim soyisim giriniz.");
+                document.getElementById('customerName').focus();
+                return;
+            }
+            if(!telefon || telefon.length < 10) {
+                alert("Lütfen geçerli bir telefon numarası giriniz.");
+                document.getElementById('customerPhone').focus();
+                return;
+            }
+            if(!adres) {
+                alert("Lütfen teslimat adresinizi giriniz.");
+                document.getElementById('customerAddress').focus();
+                return;
             }
 
-            // Kategori Filtreleme
+            const veri = {
+                branch: sube,
+                name: isim,
+                phone: telefon,
+                address: adres,
+                product: urun,
+                status: "Yeni Sipariş",
+                time: new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })
+            };
+
+            db.ref('orders').push(veri)
+                .then(() => {
+                    alert("Harika! Siparişiniz " + sube + " şubesine başarıyla iletildi.");
+                    modalKapat();
+                    // Formu temizle
+                    document.getElementById('customerName').value = '';
+                    document.getElementById('customerPhone').value = '';
+                    document.getElementById('customerAddress').value = '';
+                    
+                    // Kullanıcıyı şube paneline veya başarı / sipariş takip sayfasına yönlendir
+                    window.location.href = "index.html"; 
+                })
+                .catch((err) => {
+                    alert("Sipariş gönderilirken hata oluştu: " + err.message);
+                });
+        };
+
+        // Kategori Filtreleme
+        document.addEventListener('DOMContentLoaded', () => {
             const filterButtons = document.querySelectorAll('.filter-btn');
             const foodCards = document.querySelectorAll('.food-card');
 
             filterButtons.forEach(btn => {
-                btn.addEventListener('click', () => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
                     filterButtons.forEach(b => b.classList.remove('active'));
                     btn.classList.add('active');
                     const filterValue = btn.getAttribute('data-filter');
