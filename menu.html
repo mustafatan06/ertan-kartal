@@ -36,7 +36,7 @@
             box-shadow: 0 10px 25px rgba(255,107,0,0.15);
             border: 2px solid #ff6b00;
         }
-        #siteyeGonderBtn {
+        #firebaseSiparisBtn {
             width: 100%;
             background: #ff6b00 !important;
             color: white !important;
@@ -49,7 +49,7 @@
             margin-top: 15px;
             display: block !important;
         }
-        #siteyeGonderBtn:hover { background: #e66000 !important; }
+        #firebaseSiparisBtn:hover { background: #e66000 !important; }
     </style>
 </head>
 <body>
@@ -68,7 +68,7 @@
     <main class="container">
         <section class="hero">
             <h1>Lezzeti Keşfet, Anında Sipariş Ver!</h1>
-            <p>Ürüne tıklayarak hemen sipariş formunu doldurabilirsin.</p>
+            <p>Ürüne tıklayarak hemen siparişini oluşturabilirsin.</p>
         </section>
 
         <!-- KATEGORİ FİLTRELERİ -->
@@ -160,12 +160,30 @@
                 <textarea id="customerAddress" rows="3" placeholder="Mahalle, Cadde, Ada, Sokak, No, Daire..." style="width:100%; padding:10px; border:2px solid #e2e8f0; border-radius:8px;"></textarea>
             </div>
 
-            <!-- Site İçi Kesin Çalışan Sipariş Butonu -->
-            <button type="button" id="siteyeGonderBtn" onclick="siteIciSiparisVer()">Siparişi Onayla ve Gönder</button>
+            <!-- Firebase Sipariş Gönderme Butonu -->
+            <button type="button" id="firebaseSiparisBtn" onclick="firebaseSiparisGonder()">Siparişi Onayla ve Gönder</button>
         </div>
     </div>
 
+    <!-- Firebase SDK (Compat v9) -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     <script>
+        const firebaseConfig = {
+          apiKey: "AIzaSyDMIz96KNZF-7zWGRuI-2fvQ72fZImHtUw",
+          authDomain: "eretankartal.firebaseapp.com",
+          projectId: "eretankartal",
+          storageBucket: "eretankartal.firebasestorage.app",
+          messagingSenderId: "775846519838",
+          appId: "1:775846519838:web:75b1d7dfb4ef942a3f7a0f",
+          measurementId: "G-6SL3LJVG99"
+        };
+
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const db = firebase.database();
+
         window.modalAc = function(ad, fiyat) {
             const m = document.getElementById('orderModal');
             const b = document.getElementById('modalProductName');
@@ -180,8 +198,8 @@
             if(m) m.style.display = 'none';
         };
 
-        // KESİN ÇALIŞAN ANLIK ADMIN PANEL SİSTEMİ (LocalStorage Tabanlı)
-        window.siteIciSiparisVer = function() {
+        // KESİN ÇALIŞAN FIREBASE KAYIT FONKSİYONU
+        window.firebaseSiparisGonder = function() {
             const sube = document.getElementById('branchSelect').value;
             const isim = document.getElementById('customerName').value.trim();
             const telefon = document.getElementById('customerPhone').value.trim();
@@ -205,7 +223,6 @@
             }
 
             const yeniSiparis = {
-                id: Date.now(),
                 branch: sube,
                 name: isim,
                 phone: telefon,
@@ -215,20 +232,17 @@
                 time: new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })
             };
 
-            // Mevcut siparişleri hafızadan çek
-            let siparisler = JSON.parse(localStorage.getItem('ertan_orders')) || [];
-            siparisler.unshift(yeniSiparis); // En yeni siparişi en üste ekle
-
-            // Hafızaya kaydet (Bu işlem açık olan admin panellerine anında haber uçurur)
-            localStorage.setItem('ertan_orders', JSON.stringify(siparisler));
-
-            alert("Tebrikler! Siparişiniz başarıyla alındı ve " + sube + " admin paneline iletildi.");
-            modalKapat();
-
-            // Formu temizle
-            document.getElementById('customerName').value = '';
-            document.getElementById('customerPhone').value = '';
-            document.getElementById('customerAddress').value = '';
+            db.ref('orders').push(yeniSiparis)
+                .then(() => {
+                    alert("Tebrikler! Siparişiniz başarıyla alındı ve " + sube + " paneline iletildi.");
+                    modalKapat();
+                    document.getElementById('customerName').value = '';
+                    document.getElementById('customerPhone').value = '';
+                    document.getElementById('customerAddress').value = '';
+                })
+                .catch((error) => {
+                    alert("Sipariş gönderilemedi: " + error.message);
+                });
         };
 
         // Kategori Filtreleme

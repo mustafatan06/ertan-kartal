@@ -9,7 +9,8 @@
     <style>
         body { font-family: 'Poppins', sans-serif; background: #f8fafc; margin: 0; padding: 20px; color: #1e293b; }
         .container { max-width: 1000px; margin: 0 auto; }
-        h1 { color: #ff6b00; margin-bottom: 20px; }
+        h1 { color: #ff6b00; margin-bottom: 5px; }
+        p.subtitle { color: #64748b; margin-bottom: 20px; }
         .order-card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 15px; border-left: 5px solid #ff6b00; display: flex; justify-content: space-between; align-items: center; }
         .order-info h3 { margin: 0 0 8px 0; color: #1e293b; }
         .order-info p { margin: 4px 0; color: #64748b; font-size: 14px; }
@@ -18,30 +19,55 @@
 </head>
 <body>
     <div class="container">
-        <h1><i class="fa-solid fa-store"></i> Şube Sipariş Yönetim Paneli</h1>
-        <p>Müşteriler site üzerinden sipariş verdikçe aşağıya anlık olarak düşecektir.</p>
+        <h1><i class="fa-solid fa-store"></i> Merkez Şube Canlı Sipariş Paneli</h1>
+        <p class="subtitle">Müşteriler site üzerinden sipariş verdikçe anlık olarak ekrana düşecektir.</p>
         
-        <div id="siparislerListesi">
-            <p style="color: #64748b;">Henüz yeni sipariş bulunmuyor...</p>
+        <div id="canliSiparislerListesi">
+            <p style="color: #64748b;">Siparişler yükleniyor...</p>
         </div>
     </div>
 
+    <!-- Firebase SDK (Compat v9) -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     <script>
-        function siparisleriGoster() {
-            const listeDiv = document.getElementById('siparislerListesi');
-            let siparisler = JSON.parse(localStorage.getItem('ertan_orders')) || [];
+        const firebaseConfig = {
+          apiKey: "AIzaSyDMIz96KNZF-7zWGRuI-2fvQ72fZImHtUw",
+          authDomain: "eretankartal.firebaseapp.com",
+          projectId: "eretankartal",
+          storageBucket: "eretankartal.firebasestorage.app",
+          messagingSenderId: "775846519838",
+          appId: "1:775846519838:web:75b1d7dfb4ef942a3f7a0f",
+          measurementId: "G-6SL3LJVG99"
+        };
 
-            if (siparisler.length === 0) {
-                listeDiv.innerHTML = '<p style="color: #64748b;">Henüz yeni sipariş bulunmuyor...</p>';
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const db = firebase.database();
+
+        const listeDiv = document.getElementById('canliSiparislerListesi');
+
+        // Firebase Real-time Dinleyici (Anlık Senkronizasyon)
+        db.ref('orders').on('value', (snapshot) => {
+            const data = snapshot.val();
+            
+            if (!data) {
+                listeDiv.innerHTML = '<p style="color: #64748b;">Henüz gelen yeni sipariş bulunmuyor...</p>';
                 return;
             }
 
             let html = '';
-            siparisler.forEach(sip => {
+            // Verileri ters çevirip en yeni sipariş üstte olacak şekilde diziyoruz
+            const siparislerDizi = Object.entries(data).reverse();
+
+            siparislerDizi.forEach(([id, sip]) => {
+                // Sadece Merkez Şube'ye ait siparişleri göstermek istiyorsan filtreleyebilirsin, 
+                // ya da tüm şubeleri görmek için filtreyi kaldırabilirsin.
                 html += `
                     <div class="order-card">
                         <div class="order-info">
-                            <h3>${sip.product} — <strong>${sip.branch}</strong></h3>
+                            <h3>${sip.product} — <span style="color:#ff6b00;">${sip.branch}</span></h3>
                             <p><strong>Müşteri:</strong> ${sip.name} (${sip.phone})</p>
                             <p><strong>Adres:</strong> ${sip.address}</p>
                             <p><strong>Saat:</strong> ${sip.time}</p>
@@ -52,17 +78,8 @@
                     </div>
                 `;
             });
+
             listeDiv.innerHTML = html;
-        }
-
-        // Sayfa açıldığında yükle
-        siparisleriGoster();
-
-        // Başka sekmeden/sayfadan sipariş geldikçe anlık olarak ekrana yansıt (Real-time Sync)
-        window.addEventListener('storage', (e) => {
-            if (e.key === 'ertan_orders') {
-                siparisleriGoster();
-            }
         });
     </script>
 </body>
