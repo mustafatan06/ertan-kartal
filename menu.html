@@ -36,20 +36,21 @@
             box-shadow: 0 10px 25px rgba(255,107,0,0.15);
             border: 2px solid #ff6b00;
         }
-        #firebaseSiparisBtn {
+        #kesinCalisanBtn {
             width: 100%;
             background: #ff6b00 !important;
             color: white !important;
             border: none !important;
-            padding: 15px !important;
+            padding: 16px !important;
             border-radius: 10px !important;
             font-weight: 700 !important;
             font-size: 16px !important;
             cursor: pointer !important;
             margin-top: 15px;
             display: block !important;
+            box-shadow: 0 4px 10px rgba(255,107,0,0.3);
         }
-        #firebaseSiparisBtn:hover { background: #e66000 !important; }
+        #kesinCalisanBtn:hover { background: #e66000 !important; }
     </style>
 </head>
 <body>
@@ -68,7 +69,7 @@
     <main class="container">
         <section class="hero">
             <h1>Lezzeti Keşfet, Anında Sipariş Ver!</h1>
-            <p>Ürüne tıklayarak hemen siparişini oluşturabilirsin.</p>
+            <p>Ürüne tıklayarak hemen sipariş formunu doldurabilirsin.</p>
         </section>
 
         <!-- KATEGORİ FİLTRELERİ -->
@@ -81,7 +82,7 @@
 
         <!-- ÜRÜNLER LİSTESİ -->
         <div class="food-grid">
-            <div class="food-card" data-category="durum" onclick="modalAc('Klasik Dürüm Çiğ Köfte', '90 ₺')">
+            <div class="food-card" data-category="durum" onclick="urunTiklandi('Klasik Dürüm Çiğ Köfte', '90 ₺')">
                 <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=600&q=80" alt="Klasik Dürüm" class="food-img">
                 <div class="food-body">
                     <div class="food-title-price">
@@ -93,7 +94,7 @@
                 </div>
             </div>
 
-            <div class="food-card" data-category="durum" onclick="modalAc('Özel Soslu Mega Dürüm', '130 ₺')">
+            <div class="food-card" data-category="durum" onclick="urunTiklandi('Özel Soslu Mega Dürüm', '130 ₺')">
                 <img src="https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&w=600&q=80" alt="Özel Soslu Mega Dürüm" class="food-img">
                 <div class="food-body">
                     <div class="food-title-price">
@@ -105,7 +106,7 @@
                 </div>
             </div>
 
-            <div class="food-card" data-category="porsiyon" onclick="modalAc('Ertan Kartal Porsiyon (Orta)', '180 ₺')">
+            <div class="food-card" data-category="porsiyon" onclick="urunTiklandi('Ertan Kartal Porsiyon (Orta)', '180 ₺')">
                 <img src="https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80" alt="Porsiyon Tabak" class="food-img">
                 <div class="food-body">
                     <div class="food-title-price">
@@ -117,7 +118,7 @@
                 </div>
             </div>
 
-            <div class="food-card" data-category="icecek" onclick="modalAc('Kola / Ayran (Büyük Boy)', '35 ₺')">
+            <div class="food-card" data-category="icecek" onclick="urunTiklandi('Kola / Ayran (Büyük Boy)', '35 ₺')">
                 <img src="https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=600&q=80" alt="Ayran" class="food-img">
                 <div class="food-body">
                     <div class="food-title-price">
@@ -160,8 +161,8 @@
                 <textarea id="customerAddress" rows="3" placeholder="Mahalle, Cadde, Ada, Sokak, No, Daire..." style="width:100%; padding:10px; border:2px solid #e2e8f0; border-radius:8px;"></textarea>
             </div>
 
-            <!-- Firebase Sipariş Gönderme Butonu -->
-            <button type="button" id="firebaseSiparisBtn" onclick="firebaseSiparisGonder()">Siparişi Onayla ve Gönder</button>
+            <!-- Kesin Çalışan Buton (Doğrudan onclick tetikleyicisi) -->
+            <button type="button" id="kesinCalisanBtn" onclick="siparihiVerNet()">Siparişi Onayla ve Gönder</button>
         </div>
     </div>
 
@@ -184,22 +185,24 @@
         }
         const db = firebase.database();
 
-        window.modalAc = function(ad, fiyat) {
-            const m = document.getElementById('orderModal');
-            const b = document.getElementById('modalProductName');
-            if(m && b) {
-                b.textContent = ad + " (" + fiyat + ")";
-                m.style.display = 'flex';
+        // Ürüne tıklandığında modalı aç
+        window.urunTiklandi = function(ad, fiyat) {
+            const modal = document.getElementById('orderModal');
+            const baslik = document.getElementById('modalProductName');
+            if(modal && baslik) {
+                baslik.textContent = ad + " (" + fiyat + ")";
+                modal.style.display = 'flex';
             }
         };
 
+        // Modalı kapat
         window.modalKapat = function() {
-            const m = document.getElementById('orderModal');
-            if(m) m.style.display = 'none';
+            const modal = document.getElementById('orderModal');
+            if(modal) modal.style.display = 'none';
         };
 
-        // KESİN ÇALIŞAN FIREBASE KAYIT FONKSİYONU
-        window.firebaseSiparisGonder = function() {
+        // SİPARİŞİ KESİN OLARAK GÖNDEREN ANA FONKSİYON
+        window.siparihiVerNet = function() {
             const sube = document.getElementById('branchSelect').value;
             const isim = document.getElementById('customerName').value.trim();
             const telefon = document.getElementById('customerPhone').value.trim();
@@ -232,16 +235,17 @@
                 time: new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })
             };
 
+            // Firebase'e veri yollama
             db.ref('orders').push(yeniSiparis)
                 .then(() => {
-                    alert("Tebrikler! Siparişiniz başarıyla alındı ve " + sube + " paneline iletildi.");
+                    alert("Tebrikler! Siparişiniz başarıyla alındı ve " + sube + " admin paneline iletildi.");
                     modalKapat();
                     document.getElementById('customerName').value = '';
                     document.getElementById('customerPhone').value = '';
                     document.getElementById('customerAddress').value = '';
                 })
                 .catch((error) => {
-                    alert("Sipariş gönderilemedi: " + error.message);
+                    alert("Hata oluştu: " + error.message);
                 });
         };
 
