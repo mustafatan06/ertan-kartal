@@ -16,7 +16,6 @@
         .controls { display: flex; gap: 15px; align-items: center; flex-wrap: wrap; }
         select { padding: 10px 15px; border: 2px solid #e2e8f0; border-radius: 8px; font-weight: 600; background: #fff; cursor: pointer; color: #334155; }
 
-        /* Ses Aktif Etme Butonu */
         #sesAcBtn { background: #10b981; color: white; border: none; padding: 10px 16px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 14px; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 10px rgba(16, 185, 129, 0.2); }
         #sesAcBtn:hover { background: #059669; }
 
@@ -50,12 +49,18 @@
             display: none;
             background: #ff6b00;
             color: white;
-            padding: 12px 20px;
+            padding: 15px 20px;
             border-radius: 10px;
             margin-bottom: 20px;
-            font-weight: 600;
+            font-weight: 700;
+            font-size: 16px;
             text-align: center;
-            box-shadow: 0 4px 12px rgba(255,107,0,0.3);
+            box-shadow: 0 4px 15px rgba(255,107,0,0.4);
+            animation: yanipSoner 0.8s infinite alternate;
+        }
+        @keyframes yanipSoner {
+            0% { opacity: 0.8; transform: scale(1); }
+            100% { opacity: 1; transform: scale(1.01); background: #ea580c; }
         }
     </style>
 </head>
@@ -64,7 +69,6 @@
         <div class="panel-header">
             <h1><i class="fa-solid fa-store"></i> Ertan Kartal Yönetim Paneli</h1>
             <div class="controls">
-                <!-- SES KİLİDİNİ AÇAN BUTON -->
                 <button type="button" id="sesAcBtn" onclick="sesKilidiniAc()">
                     <i class="fa-solid fa-volume-high"></i> Ses Bildirimini Aç
                 </button>
@@ -80,7 +84,7 @@
         </div>
 
         <div id="bildirimKutusu">
-            <i class="fa-solid fa-bell"></i> 🔔 Dikkat! Panele Yeni Bir Sipariş Düştü!
+            <i class="fa-solid fa-bell"></i> 🔔 DİKKAT! YENİ BİR SİPARİŞ GELDİ! 🔔
         </div>
 
         <div class="tabs">
@@ -117,52 +121,57 @@
 
         let aktifSekme = 'gelen';
         let hamVeriler = {};
-        let eskiSayi = -1;
+        let ilkYukleme = true;
         let sesKilidiAcildi = false;
 
         function sesKilidiniAc() {
             try {
                 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                if (audioCtx.state === 'suspended') {
-                    audioCtx.resume();
-                }
-                // Test sesi çal
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(523.25, audioCtx.currentTime);
-                gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-                osc.start();
-                osc.stop(audioCtx.currentTime + 0.3);
+                if (audioCtx.state === 'suspended') { audioCtx.resume(); }
+                
+                // Test sesi
+                notCal(audioCtx, 659.25, 0, 0.15);
+                notCal(audioCtx, 783.99, 0.15, 0.25);
 
                 sesKilidiAcildi = true;
                 const btn = document.getElementById('sesAcBtn');
                 btn.style.background = '#059669';
                 btn.innerHTML = '<i class="fa-solid fa-check"></i> Ses Bildirimi Aktif';
             } catch(e) {
-                alert("Tarayıcı ses izni verilemedi.");
+                alert("Ses kilidi açılamadı.");
             }
         }
 
-        function bildirimSesiCal() {
-            if (!sesKilidiAcildi) return; // Kullanıcı butona basmadıysa çalmaz
+        // Dikkat Çekici Çift Çalarlı Ding-Dong Zil Sesi Motoru
+        function zilSesiCal() {
+            if (!sesKilidiAcildi) return;
             try {
                 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(587.33, audioCtx.currentTime);
-                osc.frequency.setValueAtTime(880, audioCtx.currentTime + 0.15);
-                gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.6);
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-                osc.start();
-                osc.stop(audioCtx.currentTime + 0.6);
+                if (audioCtx.state === 'suspended') { audioCtx.resume(); }
+
+                // 1. Ding Tonu
+                notCal(audioCtx, 587.33, 0.0, 0.2);
+                // 2. Dong Tonu (Daha yüksek ve net)
+                notCal(audioCtx, 880.00, 0.25, 0.4);
+                // 3. Ekstra Vurgu Tonu
+                notCal(audioCtx, 1046.50, 0.5, 0.4);
             } catch(e) {}
+        }
+
+        function notCal(ctx, frekans, baslangicZamani, sure) {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'triangle'; // Daha tok ve dikkat çekici ses tipi
+            osc.frequency.setValueAtTime(frekans, ctx.currentTime + baslangicZamani);
+            
+            gain.gain.setValueAtTime(0.4, ctx.currentTime + baslangicZamani);
+            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + baslangicZamani + sure);
+            
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            
+            osc.start(ctx.currentTime + baslangicZamani);
+            osc.stop(ctx.currentTime + baslangicZamani + sure);
         }
 
         function sekmeDegis(sekme) {
@@ -172,23 +181,28 @@
             ekraniYenile();
         }
 
+        // ANLIK DİNLEYİCİ: .onDEĞİŞİKLİK VEYA .on('child_added') İLE ANINDA YAKALAMA
         db.ref('orders').on('value', (snapshot) => {
-            const data = snapshot.val();
-            hamVeriler = data || {};
-
-            let toplamYeni = 0;
-            Object.values(hamVeriler).forEach(s => {
-                if(s.status === 'Yeni Sipariş') toplamYeni++;
-            });
-
-            if (eskiSayi !== -1 && toplamYeni > eskiSayi) {
-                const bKutusu = document.getElementById('bildirimKutusu');
-                bKupusu.style.display = 'block';
-                setTimeout(() => { bKutusu.style.display = 'none'; }, 6000);
-                bildirimSesiCal();
+            const yeniVeri = snapshot.val() || {};
+            
+            // Eğer ilk yüklemeden sonra yeni bir sipariş eklendiyse (veya veri sayısı arttıysa) ses çal
+            if (!ilkYukleme) {
+                let eskiKeys = Object.keys(hamVeriler);
+                let yeniKeys = Object.keys(yeniVeri);
+                
+                // Yeni bir ID eklendiyse
+                let yeniSiparisVarMi = yeniKeys.some(k => !eskiKeys.includes(k));
+                
+                if (yeniSiparisVarMi) {
+                    const bKutusu = document.getElementById('bildirimKutusu');
+                    bKutusu.style.display = 'block';
+                    setTimeout(() => { bKutusu.style.display = 'none'; }, 8000);
+                    zilSesiCal();
+                }
             }
-            eskiSayi = toplamYeni;
 
+            hamVeriler = yeniVeri;
+            ilkYukleme = false;
             ekraniYenile();
         });
 
@@ -200,7 +214,7 @@
             Object.keys(hamVeriler).forEach(key => {
                 dizi.push({ firebaseKey: key, ...hamVeriler[key] });
             });
-            dizi.reverse();
+            dizi.reverse(); // En yeni sipariş en üstte
 
             let filtrelenmis = dizi.filter(s => {
                 let aktifDurumlar = (s.status === 'Yeni Sipariş' || s.status === 'Hazırlanıyor' || s.status === 'Yola Çıktı');
