@@ -60,8 +60,8 @@
 
         .form-group { margin-bottom: 15px; }
         .form-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: #cbd5e1; }
-        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px; background: #0f172a; border: 1px solid #334155; border-radius: 8px; color: #white; font-size: 14px; outline: none; }
-        .form-group input:focus, .form-group textarea:focus { border-color: #ff6b00; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px; background: #0f172a; border: 1px solid #334155; border-radius: 8px; color: #fff; font-size: 14px; outline: none; cursor: pointer; }
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color: #ff6b00; }
 
         #firebaseBtn { width: 100%; background: #ff6b00; color: white; border: none; padding: 14px; border-radius: 8px; font-weight: 700; font-size: 16px; cursor: pointer; margin-top: 10px; transition: 0.3s; }
         #firebaseBtn:hover { background: #e05e00; }
@@ -85,20 +85,17 @@
     </header>
 
     <main class="container">
-        <!-- İSTEDİĞİN ÖZEL BAŞLIK -->
         <div class="hero-banner">
             <h1>ERTAN KARTAL Lezzetleri <span>Şimdi Daha Hızlı Kapında.</span></h1>
             <p>Aşağıdan dilediğin lezzeti seç, adresini gir; en yakın şubemizden anında kapına gelsin.</p>
         </div>
 
-        <!-- SİPARİŞ TAKİP EKRANI -->
         <div id="canliTakipKutusu">
             <h3><i class="fa-solid fa-person-biking"></i> Sipariş Durumunuz</h3>
             <p id="durumMetni" style="font-size: 18px; font-weight: 700; color: #ffffff;">Siparişiniz kontrol ediliyor...</p>
             <p style="font-size: 13px; color: #94a3b8; margin-top: 5px;">Sayfayı yenileseniz bile durumunuz buradan canlı takip edilir.</p>
         </div>
 
-        <!-- KATEGORİ: PAN DÜRÜMLER -->
         <h2 class="section-title"><i class="fa-solid fa-fire" style="color:#ff6b00;"></i> Pan Dürümler</h2>
         <div class="food-grid">
             <div class="food-card">
@@ -109,7 +106,7 @@
                 <div class="food-body">
                     <div>
                         <div class="food-title-price"><h3>Pan Klasik Dürüm</h3><span class="price">95 ₺</span></div>
-                        <p>90 Gram Tek Lavaş. Doritoslu, İstediğiniz Malzeme ile.</p>
+                        <p>90 Gram Tek Lavaş. Doritoslu, İstediğiniz Malzeme ile[cite: 7].</p>
                     </div>
                     <button type="button" class="order-action-btn" onclick="modalAc('Pan Klasik Dürüm', 95)"><i class="fa-solid fa-cart-shopping"></i> Sipariş Ver</button>
                 </div>
@@ -123,7 +120,7 @@
                 <div class="food-body">
                     <div>
                         <div class="food-title-price"><h3>Pan Mega Dürüm</h3><span class="price">105 ₺</span></div>
-                        <p>125 Gram Tek Lavaş. Doritoslu, İstediğiniz Malzeme ile.</p>
+                        <p>125 Gram Tek Lavaş. Doritoslu, İstediğiniz Malzeme ile[cite: 7].</p>
                     </div>
                     <button type="button" class="order-action-btn" onclick="modalAc('Pan Mega Dürüm', 105)"><i class="fa-solid fa-cart-shopping"></i> Sipariş Ver</button>
                 </div>
@@ -137,7 +134,7 @@
                 <div class="food-body">
                     <div>
                         <div class="food-title-price"><h3>Pan Süper Mega Dürüm</h3><span class="price">120 ₺</span></div>
-                        <p>150 Gram Çift Lavaş. Doritoslu, İstediğiniz Malzeme ile.</p>
+                        <p>150 Gram Çift Lavaş. Doritoslu, İstediğiniz Malzeme ile[cite: 7].</p>
                     </div>
                     <button type="button" class="order-action-btn" onclick="modalAc('Pan Süper Mega Dürüm', 120)"><i class="fa-solid fa-cart-shopping"></i> Sipariş Ver</button>
                 </div>
@@ -151,7 +148,7 @@
                 <div class="food-body">
                     <div>
                         <div class="food-title-price"><h3>Pan Double Dürüm</h3><span class="price">140 ₺</span></div>
-                        <p>175 Gram Çift Lavaş. Doritoslu, İstediğiniz Malzeme ile.</p>
+                        <p>175 Gram Çift Lavaş. Doritoslu, İstediğiniz Malzeme ile[cite: 7].</p>
                     </div>
                     <button type="button" class="order-action-btn" onclick="modalAc('Pan Double Dürüm', 140)"><i class="fa-solid fa-cart-shopping"></i> Sipariş Ver</button>
                 </div>
@@ -165,14 +162,13 @@
                 <div class="food-body">
                     <div>
                         <div class="food-title-price"><h3>Pan Bazuka Dürüm</h3><span class="price">160 ₺</span></div>
-                        <p>200 Gram Çift Lavaş. Doritoslu, İstediğiniz Malzeme ile.</p>
+                        <p>200 Gram Çift Lavaş. Doritoslu, İstediğiniz Malzeme ile[cite: 7].</p>
                     </div>
                     <button type="button" class="order-action-btn" onclick="modalAc('Pan Bazuka Dürüm', 160)"><i class="fa-solid fa-cart-shopping"></i> Sipariş Ver</button>
                 </div>
             </div>
         </div>
 
-        <!-- KATEGORİ: PAN PORSİYON MENÜLER -->
         <h2 class="section-title"><i class="fa-solid fa-utensils" style="color:#ff6b00;"></i> Pan Porsiyon Menüler</h2>
         <div class="food-grid">
             <div class="food-card">
@@ -180,7 +176,7 @@
                 <div class="food-body">
                     <div>
                         <div class="food-title-price"><h3>1 Kişilik Porsiyon (200 Gr)</h3><span class="price">170 ₺</span></div>
-                        <p>2 Lavaş, Göbek Aysberk, Nar Ekşisi, Acı Sos, Çeyrek Limon.</p>
+                        <p>2 Lavaş, Göbek Aysberk, Nar Ekşisi, Acı Sos, Çeyrek Limon[cite: 7].</p>
                     </div>
                     <button type="button" class="order-action-btn" onclick="modalAc('1 Kişilik Porsiyon (200 Gr)', 170)"><i class="fa-solid fa-cart-shopping"></i> Sipariş Ver</button>
                 </div>
@@ -191,7 +187,7 @@
                 <div class="food-body">
                     <div>
                         <div class="food-title-price"><h3>2 Kişilik Porsiyon (400 Gr)</h3><span class="price">300 ₺</span></div>
-                        <p>4 Lavaş, Göbek Aysberk, Nar Ekşisi, Acı Sos, Yarım Limon.</p>
+                        <p>4 Lavaş, Göbek Aysberk, Nar Ekşisi, Acı Sos, Yarım Limon[cite: 7].</p>
                     </div>
                     <button type="button" class="order-action-btn" onclick="modalAc('2 Kişilik Porsiyon (400 Gr)', 300)"><i class="fa-solid fa-cart-shopping"></i> Sipariş Ver</button>
                 </div>
@@ -202,7 +198,7 @@
                 <div class="food-body">
                     <div>
                         <div class="food-title-price"><h3>3 Kişilik Porsiyon (600 Gr)</h3><span class="price">430 ₺</span></div>
-                        <p>6 Lavaş, Göbek Aysberk, Nar Ekşisi, Acı Sos, Tam Limon.</p>
+                        <p>6 Lavaş, Göbek Aysberk, Nar Ekşisi, Acı Sos, Tam Limon[cite: 7].</p>
                     </div>
                     <button type="button" class="order-action-btn" onclick="modalAc('3 Kişilik Porsiyon (600 Gr)', 430)"><i class="fa-solid fa-cart-shopping"></i> Sipariş Ver</button>
                 </div>
@@ -213,7 +209,7 @@
                 <div class="food-body">
                     <div>
                         <div class="food-title-price"><h3>4 Kişilik Porsiyon (800 Gr)</h3><span class="price">560 ₺</span></div>
-                        <p>8 Lavaş, Göbek Aysberk, Nar Ekşisi, Acı Sos, Tam Limon.</p>
+                        <p>8 Lavaş, Göbek Aysberk, Nar Ekşisi, Acı Sos, Tam Limon[cite: 7].</p>
                     </div>
                     <button type="button" class="order-action-btn" onclick="modalAc('4 Kişilik Porsiyon (800 Gr)', 560)"><i class="fa-solid fa-cart-shopping"></i> Sipariş Ver</button>
                 </div>
@@ -224,7 +220,7 @@
                 <div class="food-body">
                     <div>
                         <div class="food-title-price"><h3>5 Kişilik Porsiyon (1000 Gr)</h3><span class="price">640 ₺</span></div>
-                        <p>10 Lavaş, Göbek Aysberk, Nar Ekşisi, Acı Sos, Tam Limon.</p>
+                        <p>10 Lavaş, Göbek Aysberk, Nar Ekşisi, Acı Sos, Tam Limon[cite: 7].</p>
                     </div>
                     <button type="button" class="order-action-btn" onclick="modalAc('5 Kişilik Porsiyon (1000 Gr)', 640)"><i class="fa-solid fa-cart-shopping"></i> Sipariş Ver</button>
                 </div>
@@ -235,7 +231,7 @@
                 <div class="food-body">
                     <div>
                         <div class="food-title-price"><h3>500 Gr. Beyaz Porsiyon</h3><span class="price">330 ₺</span></div>
-                        <p>5 Lavaş, Göbek Aysberk, Nar Ekşisi, Acı Sos, Tam Limon.</p>
+                        <p>5 Lavaş, Göbek Aysberk, Nar Ekşisi, Acı Sos, Tam Limon[cite: 7].</p>
                     </div>
                     <button type="button" class="order-action-btn" onclick="modalAc('500 Gr. Beyaz Porsiyon', 330)"><i class="fa-solid fa-cart-shopping"></i> Sipariş Ver</button>
                 </div>
@@ -246,14 +242,13 @@
                 <div class="food-body">
                     <div>
                         <div class="food-title-price"><h3>500 Gr. Turuncu Porsiyon</h3><span class="price">305 ₺</span></div>
-                        <p>Yeşilliksiz. 5 Lavaş, Nar Ekşisi, Acı Sos, Yarım Limon.</p>
+                        <p>Yeşilliksiz. 5 Lavaş, Nar Ekşisi, Acı Sos, Yarım Limon[cite: 7].</p>
                     </div>
                     <button type="button" class="order-action-btn" onclick="modalAc('500 Gr. Turuncu Porsiyon', 305)"><i class="fa-solid fa-cart-shopping"></i> Sipariş Ver</button>
                 </div>
             </div>
         </div>
 
-        <!-- KATEGORİ: ÖZEL MENÜLER & DİĞER -->
         <h2 class="section-title"><i class="fa-solid fa-star" style="color:#ff6b00;"></i> Özel Menüler & Lezzetler</h2>
         <div class="food-grid">
             <div class="food-card">
@@ -261,7 +256,7 @@
                 <div class="food-body">
                     <div>
                         <div class="food-title-price"><h3>600 Gr. Çiğ Köfte + Ayran</h3><span class="price">250 ₺</span></div>
-                        <p>600 Gr. Çiğ Köfte alana **1 Litre Ayran Hediye!**</p>
+                        <p>600 Gr. Çiğ Köfte alana **1 Litre Ayran Hediye!**[cite: 7]</p>
                     </div>
                     <button type="button" class="order-action-btn" onclick="modalAc('600 Gr. Çiğ Köfte Kampanyası', 250)"><i class="fa-solid fa-cart-shopping"></i> Sipariş Ver</button>
                 </div>
@@ -272,7 +267,7 @@
                 <div class="food-body">
                     <div>
                         <div class="food-title-price"><h3>İçli Köfte (Adet)</h3><span class="price">95 ₺</span></div>
-                        <p>Bize Özel, Size Güzel. Çıtır dış kabuk, bol kıymalı harç.</p>
+                        <p>Bize Özel, Size Güzel. Çıtır dış kabuk, bol kıymalı harç[cite: 7].</p>
                     </div>
                     <button type="button" class="order-action-btn" onclick="modalAc('İçli Köfte (Adet)', 95)"><i class="fa-solid fa-cart-shopping"></i> Sipariş Ver</button>
                 </div>
@@ -283,7 +278,7 @@
                 <div class="food-body">
                     <div>
                         <div class="food-title-price"><h3>Ciğer Dürüm</h3><span class="price">190 ₺</span></div>
-                        <p>Taze ve yumuşak kıvamıyla özel sarım lezzetli ciğer dürüm.</p>
+                        <p>Taze ve yumuşak kıvamıyla özel sarım lezzetli ciğer dürüm[cite: 7].</p>
                     </div>
                     <button type="button" class="order-action-btn" onclick="modalAc('Ciğer Dürüm', 190)"><i class="fa-solid fa-cart-shopping"></i> Sipariş Ver</button>
                 </div>
@@ -294,7 +289,7 @@
                 <div class="food-body">
                     <div>
                         <div class="food-title-price"><h3>Suşi Çiğ Köfte (150 Gr)</h3><span class="price">190 ₺</span></div>
-                        <p>Özel sunum ve kesimiyle yenilikçi suşi konseptli çiğ köfte.</p>
+                        <p>Özel sunum ve kesimiyle yenilikçi suşi konseptli çiğ köfte[cite: 7].</p>
                     </div>
                     <button type="button" class="order-action-btn" onclick="modalAc('Suşi Çiğ Köfte (150 Gr)', 190)"><i class="fa-solid fa-cart-shopping"></i> Sipariş Ver</button>
                 </div>
@@ -313,13 +308,13 @@
             <input type="hidden" id="productPriceVal" value="0">
 
             <div class="form-group">
-                <label>İlgili Şube (Adrese Göre Otomatik Seçilir)</label>
-                <select id="branchSelect" disabled style="background:#0f172a; color:#fff;">
+                <label>İlgili Şube (Adrese Göre Otomatik Seçilir, Değiştirebilirsiniz)</label>
+                <select id="branchSelect" style="background:#0f172a; color:#fff;">
                     <option value="Merkez Gülpınar Şube">Merkez Gülpınar Şube</option>
                     <option value="Feridunçelik Şube">Feridunçelik Şube</option>
                     <option value="Karapürçek Şube">Karapürçek Şube</option>
                 </select>
-                <div id="autoBranchInfo"><i class="fa-solid fa-wand-magic-sparkles"></i> Adresinize en yakın şube otomatik atandı.</div>
+                <div id="autoBranchInfo"><i class="fa-solid fa-wand-magic-sparkles"></i> Adresinize en yakın şube otomatik seçildi.</div>
             </div>
 
             <div class="form-group">
@@ -375,13 +370,13 @@
 
             if (metin.includes('feridun') || metin.includes('feridunçelik')) {
                 selectBox.value = "Feridunçelik Şube";
-                infoBox.innerHTML = '<i class="fa-solid fa-check-circle"></i> En yakın şube: <strong>Feridunçelik Şube</strong>';
+                infoBox.innerHTML = '<i class="fa-solid fa-check-circle"></i> Otomatik seçilen şube: <strong>Feridunçelik Şube</strong>';
             } else if (metin.includes('karapürçek') || metin.includes('karapurcek') || metin.includes('bahtiyar')) {
                 selectBox.value = "Karapürçek Şube";
-                infoBox.innerHTML = '<i class="fa-solid fa-check-circle"></i> En yakın şube: <strong>Karapürçek Şube</strong>';
+                infoBox.innerHTML = '<i class="fa-solid fa-check-circle"></i> Otomatik seçilen şube: <strong>Karapürçek Şube</strong>';
             } else {
                 selectBox.value = "Merkez Gülpınar Şube";
-                infoBox.innerHTML = '<i class="fa-solid fa-check-circle"></i> En yakın şube: <strong>Merkez Gülpınar Şube</strong>';
+                infoBox.innerHTML = '<i class="fa-solid fa-check-circle"></i> Otomatik seçilen şube: <strong>Merkez Gülpınar Şube</strong>';
             }
         }
 
