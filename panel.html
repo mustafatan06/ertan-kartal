@@ -17,6 +17,10 @@
         .panel-header h1 { font-size: clamp(20px, 4vw, 26px); font-weight: 800; color: #0f172a; display: flex; align-items: center; gap: 10px; }
         .panel-header h1 span { color: #ff6b00; }
 
+        /* SES AKTİFLEŞTİRME UYARI BANDI (Tarayıcı izinleri için şart) */
+        .audio-permission-banner { background: #ff6b00; color: #fff; padding: 12px 20px; border-radius: 12px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; font-weight: 600; font-size: 14px; box-shadow: 0 4px 12px rgba(255,107,0,0.3); }
+        .audio-permission-banner button { background: #fff; color: #ff6b00; border: none; padding: 6px 14px; border-radius: 6px; font-weight: 700; cursor: pointer; }
+
         /* ŞUBE SEÇİM KUTUSU */
         .branch-selector-box { display: flex; align-items: center; gap: 10px; }
         .branch-selector-box label { font-size: 14px; font-weight: 600; color: #475569; white-space: nowrap; }
@@ -69,6 +73,12 @@
 <body>
     <div class="panel-container">
         
+        <!-- SES AKTİFLEŞTİRME BUTONU (Tarayıcı kısıtını aşmak için) -->
+        <div id="audioBanner" class="audio-permission-banner">
+            <span><i class="fa-solid fa-volume-high"></i> Sesli bildirimlerin aktif çalışması için lütfen butona tıklayın:</span>
+            <button onclick="sesIzniVer()">Sesi Aktifleştir</button>
+        </div>
+
         <div class="panel-header">
             <h1><i class="fa-solid fa-chart-line" style="color:#ff6b00;"></i> Şube <span>Yönetim Paneli</span></h1>
             
@@ -93,37 +103,64 @@
         </div>
     </div>
 
-    <!-- ESKİ TİP ÇALAR SAAT RİTMİNDE 10 SANİYE BOYUNCA ARALIKLI ÇALAN ZİL SİSTEMİ -->
+    <!-- ÖNCE ZİL SESİ SONRA BAYAN SESİYLE "YENİ SİPARİŞ GELDİ" SİSTEMİ -->
     <script>
-        function eskiTipCalarSaatCal() {
+        let sesAktifMi = false;
+
+        function sesIzniVer() {
+            sesAktifMi = true;
+            document.getElementById('audioBanner').style.display = 'none';
+            // Test sesi çal
+            sesliBildirimVer();
+        }
+
+        function sesliBildirimVer() {
             try {
+                // 1. ADIM: ZİL SESİ (4 defa aralıklı)
                 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
                 
                 function mekanikZil(zaman) {
                     const osc = audioCtx.createOscillator();
                     const gain = audioCtx.createGain();
-                    osc.type = 'sawtooth'; // Keskin mekanik çalar saat tınısı
-                    osc.frequency.setValueAtTime(1318.51, audioCtx.currentTime + zaman); // E6 yüksek çan sesi
-                    osc.frequency.setValueAtTime(1046.50, audioCtx.currentTime + zaman + 0.05); // C6
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(1046.50, audioCtx.currentTime + zaman); // C6
                     
-                    gain.gain.setValueAtTime(0.35, audioCtx.currentTime + zaman);
-                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + zaman + 0.12);
+                    gain.gain.setValueAtTime(0.4, audioCtx.currentTime + zaman);
+                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + zaman + 0.2);
                     
                     osc.connect(gain);
                     gain.connect(audioCtx.destination);
                     
                     osc.start(audioCtx.currentTime + zaman);
-                    osc.stop(audioCtx.currentTime + zaman + 0.12);
+                    osc.stop(audioCtx.currentTime + zaman + 0.2);
                 }
 
-                // 10 saniye boyunca (yaklaşık her 0.3 saniyede bir çift çan darbesi) toplam 30 defa çalan çalar saat döngüsü
-                for (let i = 0; i < 30; i++) {
-                    let zamanOffset = i * 0.33;
-                    mekanikZil(zamanOffset);
-                    mekanikZil(zamanOffset + 0.08);
+                // 4 kez aralıklı zil çal
+                for(let i=0; i<4; i++) {
+                    mekanikZil(i * 0.35);
                 }
+
+                // 2. ADIM: TÜRKÇE SESLİ MESAJ (Bayan Sesi / Sentezleyici ile "Yeni Sipariş Geldi")
+                if ('speechSynthesis' in window) {
+                    setTimeout(() => {
+                        const msg = new SpeechSynthesisUtterance("Yeni sipariş geldi. Lütfen kontrol edin.");
+                        msg.lang = 'tr-TR';
+                        msg.rate = 1.0; // Konuşma hızı
+                        msg.pitch = 1.2; // Biraz daha canlı ton
+                        
+                        // Türkçe kadın sesini bulmaya çalış
+                        constvoices = window.speechSynthesis.getVoices();
+                        const trVoice = voices.find(v => v.lang.includes('tr') && (v.name.includes('Female') || v.name.includes('Zehra') || v.name.includes('Google') || v.name.includes('Turkish')));
+                        if (trVoice) {
+                            msg.voice = trVoice;
+                        }
+
+                        window.speechSynthesis.speak(msg);
+                    }, 1600); // Zil bittikten hemen sonra konuşsun
+                }
+
             } catch(e) {
-                // Tarayıcı kısıtı durumunda sessiz devam eder
+                console.log("Ses çalma hatası: ", e);
             }
         }
     </script>
@@ -203,9 +240,9 @@
 
                 filtreliSiparisler.reverse();
 
-                // Yeni sipariş gelirse 10 saniye boyunca çalar saat gibi çal
+                // Yeni sipariş gelirse ve kullanıcı ses izni verdiyse sesli bildirimi tetikle
                 if (eskiSiparisSayisi !== null && filtreliSiparisler.length > eskiSiparisSayisi) {
-                    eskiTipCalarSaatCal();
+                    sesliBildirimVer();
                 }
                 eskiSiparisSayisi = filtreliSiparisler.length;
 
@@ -243,10 +280,8 @@
                         yolaCiktiClass += ' disabled';
                         teslimDisabled = 'disabled';
                         teslimClass += ' disabled';
-                        // Teslim edilen siparişte iptal butonu GÖSTERİLMİYOR (Korumalı)
                         iptalBtnHtml = ''; 
                     } else {
-                        // Yeni Sipariş durumu
                         iptalBtnHtml = `<button type="button" class="status-btn btn-iptal" onclick="siparisIptalEt('${s.id}', '${s.status}')"><i class="fa-solid fa-ban"></i> Siparişi İptal Et</button>`;
                     }
 
