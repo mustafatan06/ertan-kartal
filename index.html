@@ -1,122 +1,132 @@
-<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ertan Kartal Çiğ Köfte | Ana Sayfa</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
     <style>
-        .hero-banner {
-            padding: 100px 20px;
-            text-align: center;
-            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-            color: white;
-            border-radius: var(--border-radius);
-            margin: 40px auto;
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
+        body { background: #0f172a; color: #f8fafc; overflow-x: hidden; }
+
+        /* NAVBAR & ŞUBE AÇILIR MENÜ */
+        header { background: #000000; border-bottom: 2px solid #ff6b00; position: sticky; top: 0; z-index: 9999; }
+        .navbar { max-width: 1200px; margin: 0 auto; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; }
+        
+        .logo { font-size: 22px; font-weight: 800; text-decoration: none; text-transform: uppercase; letter-spacing: 1px; }
+        .logo .ertan { color: #ffffff; }
+        .logo .kartal { color: #ff6b00; }
+
+        /* Sağ Üst Açılır Şube Menü Bandı */
+        .dropdown { position: relative; display: inline-block; }
+        .dropbtn { background: #ff6b00; color: white; padding: 10px 18px; font-size: 14px; font-weight: 600; border: none; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: 0.3s; }
+        .dropbtn:hover { background: #e05e00; }
+        
+        .dropdown-content { display: none; position: absolute; right: 0; background-color: #1e293b; min-width: 220px; box-shadow: 0px 8px 20px rgba(0,0,0,0.4); border-radius: 8px; overflow: hidden; z-index: 1000; border: 1px solid #334155; }
+        .dropdown-content a { color: #f8fafc; padding: 12px 16px; text-decoration: none; display: block; font-size: 14px; font-weight: 500; transition: 0.2s; border-bottom: 1px solid #334155; }
+        .dropdown-content a:last-child { border-bottom: none; }
+        .dropdown-content a:hover { background-color: #ff6b00; color: white; }
+        .dropdown.active .dropdown-content { display: block; }
+
+        /* HERO / KAPAK RESMİ ALANI */
+        .hero-section { position: relative; width: 100%; min-height: 70vh; display: flex; align-items: center; justify-content: center; text-align: center; background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.85)), url('https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1200&q=80') no-repeat center center/cover; padding: 40px 20px; }
+        .hero-content { max-width: 700px; z-index: 2; }
+        .hero-content h1 { font-size: clamp(28px, 5vw, 48px); font-weight: 800; color: #ffffff; margin-bottom: 15px; line-height: 1.2; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
+        .hero-content h1 span { color: #ff6b00; }
+        .hero-content p { font-size: clamp(14px, 2vw, 18px); color: #cbd5e1; margin-bottom: 30px; line-height: 1.5; }
+
+        /* NEON ANİMASYONLU SİPARİŞ VER BUTONU */
+        .neon-btn { display: inline-block; background: #ff6b00; color: white; padding: 16px 36px; font-size: 18px; font-weight: 700; text-decoration: none; border-radius: 50px; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 0 15px rgba(255, 107, 0, 0.6); animation: neonPulse 2s infinite; transition: 0.3s; }
+        .neon-btn:hover { background: #e05e00; transform: scale(1.05); box-shadow: 0 0 25px rgba(255, 107, 0, 0.9); }
+
+        @keyframes neonPulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 107, 0, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(255, 107, 0, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 107, 0, 0); }
         }
-        .hero-banner h1 { font-size: 45px; margin-bottom: 15px; }
-        .hero-banner h1 span { color: var(--pan-orange); }
-        .hero-banner p { font-size: 18px; color: #94a3b8; margin-bottom: 30px; max-width: 600px; margin-left: auto; margin-right: auto; }
-        .btn-cta {
-            background: var(--pan-orange);
-            color: white;
-            padding: 16px 36px;
-            border-radius: 30px;
-            font-size: 18px;
-            font-weight: 600;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            transition: 0.3s;
-            box-shadow: 0 10px 25px rgba(255, 107, 0,.3);
-        }
-        .btn-cta:hover { transform: translateY(-3px); background: #e66000; }
+
+        /* ÖZELLİKLER BÖLÜMÜ */
+        .features-container { max-width: 1100px; margin: 50px auto; padding: 0 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+        .feature-card { background: #1e293b; padding: 25px; border-radius: 12px; text-align: center; border: 1px solid #334155; transition: 0.3s; }
+        .feature-card:hover { border-color: #ff6b00; transform: translateY(-5px); }
+        .feature-card i { font-size: 36px; color: #ff6b00; margin-bottom: 15px; }
+        .feature-card h3 { font-size: 18px; color: #ffffff; margin-bottom: 8px; }
+        .feature-card p { font-size: 14px; color: #94a3b8; line-height: 1.4; }
+
+        /* FOOTER */
+        footer { background: #000000; text-align: center; padding: 20px; font-size: 13px; color: #64748b; border-top: 1px solid #1e293b; margin-top: 50px; }
     </style>
 </head>
 <body>
+
     <header>
-        <nav class="navbar container">
+        <nav class="navbar">
             <a href="index.html" class="logo">
                 <span class="ertan">ertan</span> <span class="kartal">kartal</span>
             </a>
-            <ul class="nav-links">
-                <li><a href="index.html" class="active">Ana Sayfa</a></li>
-                <li><a href="menu.html" class="menu-btn-nav"><i class="fa-solid fa-qrcode"></i> QR Menü & Sipariş</a></li>
-            </ul>
+            
+            <!-- SAĞ ÜST AÇILIR ŞUBE MENÜSÜ -->
+            <div class="dropdown" id="subeDropdown">
+                <button onclick="menuAcKapat(event)" class="dropbtn">
+                    <i class="fa-solid fa-store"></i> Şubelerimiz <i class="fa-solid fa-chevron-down" style="font-size:11px;"></i>
+                </button>
+                <div class="dropdown-content">
+                    <a href="menu.html?sube=gurpinar">Merkez Gülpınar Şube</a>
+                    <a href="menu.html?sube=feriduncelik">Feridunçelik Şube</a>
+                    <a href="menu.html?sube=karapurcek">Karapürçek Şube</a>
+                </div>
+            </div>
         </nav>
     </header>
 
-    <main class="container">
-        <section class="hero-banner">
-            <h1>Geleneksel Lezzet <span>Ertan Kartal</span></h1>
-            <p>En taze ve doyurucu çiğ köfte menülerimizle Ankara'nın her noktasındayız. Hemen menüyü inceleyin, tek tıkla kapınıza gelsin!</p>
-            <a href="menu.html" class="btn-cta"><i class="fa-solid fa-utensils"></i> Menüyü Gör & Sipariş Ver</a>
-        </section>
-    </main>
-</body>
-=======
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ertan Kartal Çiğ Köfte | Ana Sayfa</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
-    <style>
-        .hero-banner {
-            padding: 100px 20px;
-            text-align: center;
-            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-            color: white;
-            border-radius: var(--border-radius);
-            margin: 40px auto;
-        }
-        .hero-banner h1 { font-size: 45px; margin-bottom: 15px; }
-        .hero-banner h1 span { color: var(--pan-orange); }
-        .hero-banner p { font-size: 18px; color: #94a3b8; margin-bottom: 30px; max-width: 600px; margin-left: auto; margin-right: auto; }
-        .btn-cta {
-            background: var(--pan-orange);
-            color: white;
-            padding: 16px 36px;
-            border-radius: 30px;
-            font-size: 18px;
-            font-weight: 600;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            transition: 0.3s;
-            box-shadow: 0 10px 25px rgba(255, 107, 0,.3);
-        }
-        .btn-cta:hover { transform: translateY(-3px); background: #e66000; }
-    </style>
-</head>
-<body>
-    <header>
-        <nav class="navbar container">
-            <a href="index.html" class="logo">
-                <span class="ertan">ertan</span> <span class="kartal">kartal</span>
-            </a>
-            <ul class="nav-links">
-                <li><a href="index.html" class="active">Ana Sayfa</a></li>
-                <li><a href="menu.html" class="menu-btn-nav"><i class="fa-solid fa-qrcode"></i> QR Menü & Sipariş</a></li>
-            </ul>
-        </nav>
-    </header>
+    <!-- KAPAK RESMİ VE KARŞILAMA ALANI -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1>Geleneksel Lezzet, <span>Ertan Kartal</span> Kalitesiyle!</h1>
+            <p>En taze malzemeler ve şefe özel gizli sosumuzla hazırlanan enfes çiğ köfte lezzetini hemen keşfedin. QR menüden hızlıca sipariş verin.</p>
+            <a href="menu.html" class="neon-btn"><i class="fa-solid fa-utensils"></i> Sipariş Ver</a>
+        </div>
+    </section>
 
-    <main class="container">
-        <section class="hero-banner">
-            <h1>Geleneksel Lezzet <span>Ertan Kartal</span></h1>
-            <p>En taze ve doyurucu çiğ köfte menülerimizle Ankara'nın her noktasındayız. Hemen menüyü inceleyin, tek tıkla kapınıza gelsin!</p>
-            <a href="menu.html" class="btn-cta"><i class="fa-solid fa-utensils"></i> Menüyü Gör & Sipariş Ver</a>
-        </section>
-    </main>
+    <!-- ÖZELLİKLER / HAKKIMIZDA BÖLÜMÜ -->
+    <div class="features-container">
+        <div class="feature-card">
+            <i class="fa-solid fa-leaf"></i>
+            <h3>%100 Taze Malzemeler</h3>
+            <p>Günlük taze yeşillikler, özel lavaş ve kaliteli baharatlarla hazırlanan eşsiz tat.</p>
+        </div>
+        <div class="feature-card">
+            <i class="fa-solid fa-bolt"></i>
+            <h3>Anında Hızlı Teslimat</h3>
+            <p>Siparişiniz saniyesinde şube paneline düşer, sıcak ve hızlı şekilde kapınıza gelir.</p>
+        </div>
+        <div class="feature-card">
+            <i class="fa-solid fa-award"></i>
+            <h3>Hijyenik ve Güvenilir</h3>
+            <p>Sağlık ve hijyen standartlarına tam uygun tesislerde özenle üretilmektedir.</p>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Ertan Kartal Çiğ Köfte. Tüm hakları saklıdır.</p>
+    </footer>
+
+    <script>
+        // Şube Açılır Menü Kontrolü
+        function menuAcKapat(event) {
+            event.stopPropagation();
+            const dropdown = document.getElementById('subeDropdown');
+            dropdown.classList.toggle('active');
+        }
+
+        // Sayfa içinde herhangi bir yere tıklandığında menüyü kapat
+        window.addEventListener('click', () => {
+            const dropdown = document.getElementById('subeDropdown');
+            if (dropdown.classList.contains('active')) {
+                dropdown.classList.remove('active');
+            }
+        });
+    </script>
 </body>
->>>>>>> f8f3fc62d41d8699a0039eee0dc17de41019eb39
 </html>
