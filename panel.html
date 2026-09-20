@@ -76,14 +76,11 @@
     </style>
 </head>
 <body>
-    <!-- MP3 SES DOSYASI TANIMlamASI (Projede gemi-kornasi.mp3 olmalı) -->
-    <audio id="bildirimMp3" src="gemi-kornasi.mp3" preload="auto"></audio>
-
     <div class="panel-container">
         
-        <!-- SES AKTİFLEŞTİRME BUTONU -->
+        <!-- SES AKTİFLEŞTİRME UYARI BANDI -->
         <div id="audioBanner" class="audio-permission-banner">
-            <span><i class="fa-solid fa-volume-high"></i> Sesli bildirimlerin aktif çalması için lütfen butona tıklayın:</span>
+            <span><i class="fa-solid fa-volume-high"></i> 10 saniye süren uzun sesli alarmın aktif olması için lütfen butona tıklayın:</span>
             <button onclick="sesIzniVer()">Sesi Aktifleştir</button>
         </div>
 
@@ -129,7 +126,7 @@
         </div>
     </div>
 
-    <!-- MP3 ZİL SESİ + ARDINDAN BAYAN SESİYLE OKUMA SİSTEMİ -->
+    <!-- 10 SANİYE BOYUNCA 2 TUR TEKRAR EDEN TOK ALARM SESİ + ARDINDAN BAYAN SESİ -->
     <script>
         let sesAktifMi = false;
 
@@ -141,12 +138,38 @@
 
         function sesliBildirimVer() {
             try {
-                // 1. ÖNCE MP3 SES DOSYASINI ÇAL
-                const sesElemani = document.getElementById('bildirimMp3');
-                sesElemani.currentTime = 0;
-                sesElemani.play().catch(err => console.log("MP3 çalma engeli: ", err));
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                
+                // 10 saniye boyunca 2 tur aralıklı çalan güçlü alarm fonksiyonu
+                function uzunAlarmTuru(baslangicZamani) {
+                    for (let tur = 0; tur < 2; tur++) { // Sesleri 2 kez tekrar ettiren döngü
+                        let turOfseti = baslangicZamani + (tur * 4.5); // Her tur arası 4.5 saniye boşluk
+                        
+                        for (let i = 0; i < 5; i++) {
+                            let zaman = turOfseti + (i * 0.7);
+                            const osc = audioCtx.createOscillator();
+                            const gain = audioCtx.createGain();
+                            
+                            osc.type = 'sawtooth';
+                            osc.frequency.setValueAtTime(440, audioCtx.currentTime + zaman); // A4
+                            osc.frequency.setValueAtTime(880, audioCtx.currentTime + zaman + 0.25); // A5
+                            
+                            gain.gain.setValueAtTime(0.3, audioCtx.currentTime + zaman);
+                            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + zaman + 0.5);
+                            
+                            osc.connect(gain);
+                            gain.connect(audioCtx.destination);
+                            
+                            osc.start(audioCtx.currentTime + zaman);
+                            osc.stop(audioCtx.currentTime + zaman + 0.5);
+                        }
+                    }
+                }
 
-                // 2. ARDINDAN BAYAN SESİ İLE "YENİ SİPARİŞ GELDİ" OKU
+                // Alarmı başlat
+                uzunAlarmTuru(0);
+
+                // ARDINDAN BAYAN SESİ İLE "YENİ SİPARİŞ GELDİ" OKUMA
                 if ('speechSynthesis' in window) {
                     setTimeout(() => {
                         window.speechSynthesis.cancel();
@@ -160,7 +183,7 @@
                         if (trVoice) { msg.voice = trVoice; }
 
                         window.speechSynthesis.speak(msg);
-                    }, 2500); // MP3 süresine göre ayarlıdır
+                    }, 9500); // Alarm bittikten hemen sonra sesli anons girsin
                 }
 
             } catch(e) {
