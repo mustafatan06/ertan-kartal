@@ -8,42 +8,42 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
-        body { background: #0f172a; color: #f8fafc; padding: 20px; }
+        body { background: #f8fafc; color: #1e293b; padding: 20px; }
 
         .panel-container { max-width: 1200px; margin: 0 auto; }
         
         /* HEADER BAR */
-        .panel-header { background: #1e293b; border: 1px solid #334155; padding: 20px; border-radius: 16px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; flex-wrap: wrap; gap: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.4); }
-        .panel-header h1 { font-size: clamp(20px, 4vw, 26px); font-weight: 800; color: #ffffff; display: flex; align-items: center; gap: 10px; }
+        .panel-header { background: #ffffff; border: 1px solid #e2e8f0; padding: 20px; border-radius: 16px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; flex-wrap: wrap; gap: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .panel-header h1 { font-size: clamp(20px, 4vw, 26px); font-weight: 800; color: #0f172a; display: flex; align-items: center; gap: 10px; }
         .panel-header h1 span { color: #ff6b00; }
 
         /* ŞUBE SEÇİM KUTUSU */
         .branch-selector-box { display: flex; align-items: center; gap: 10px; }
-        .branch-selector-box label { font-size: 14px; font-weight: 600; color: #cbd5e1; white-space: nowrap; }
-        .branch-selector-box select { padding: 10px 15px; background: #0f172a; border: 2px solid #ff6b00; border-radius: 8px; color: #fff; font-weight: 700; font-size: 14px; outline: none; cursor: pointer; }
+        .branch-selector-box label { font-size: 14px; font-weight: 600; color: #475569; white-space: nowrap; }
+        .branch-selector-box select { padding: 10px 15px; background: #ffffff; border: 2px solid #ff6b00; border-radius: 8px; color: #0f172a; font-weight: 700; font-size: 14px; outline: none; cursor: pointer; }
 
         /* SİPARİŞLER TABLOSU / KARTLARI */
         .orders-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; }
-        .order-card { background: #1e293b; border: 1px solid #334155; border-radius: 14px; padding: 20px; display: flex; flex-direction: column; justify-content: space-between; position: relative; box-shadow: 0 8px 20px rgba(0,0,0,0.3); transition: 0.3s; }
-        .order-card:hover { border-color: #ff6b00; }
+        .order-card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 20px; display: flex; flex-direction: column; justify-content: space-between; position: relative; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: 0.3s; }
+        .order-card:hover { border-color: #ff6b00; box-shadow: 0 8px 25px rgba(255,107,0,0.15); }
         
-        .order-card-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #334155; padding-bottom: 12px; margin-bottom: 12px; }
-        .order-id { font-size: 13px; color: #94a3b8; font-weight: 600; }
-        .order-branch-badge { background: rgba(255, 107, 0, 0.15); color: #ff6b00; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 700; border: 1px solid rgba(255, 107, 0, 0.3); }
+        .order-card-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f1f5f9; padding-bottom: 12px; margin-bottom: 12px; }
+        .order-id { font-size: 13px; color: #64748b; font-weight: 600; }
+        .order-branch-badge { background: rgba(255, 107, 0, 0.1); color: #ff6b00; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 700; border: 1px solid rgba(255, 107, 0, 0.2); }
 
-        .order-body p { font-size: 14px; color: #cbd5e1; margin-bottom: 8px; line-height: 1.4; word-break: break-word; }
-        .order-body p strong { color: #ffffff; }
+        .order-body p { font-size: 14px; color: #475569; margin-bottom: 8px; line-height: 1.4; word-break: break-word; }
+        .order-body p strong { color: #0f172a; }
 
-        .order-products-box { background: #0f172a; border: 1px solid #334155; padding: 10px; border-radius: 8px; margin: 10px 0; font-size: 13px; color: #f8fafc; }
+        .order-products-box { background: #f8fafc; border: 1px solid #e2e8f0; padding: 10px; border-radius: 8px; margin: 10px 0; font-size: 13px; color: #1e293b; }
 
-        .order-footer { margin-top: 15px; border-top: 1px solid #334155; padding-top: 12px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
-        .order-status-select { padding: 8px 12px; background: #0f172a; border: 1px solid #334155; border-radius: 6px; color: #fff; font-weight: 600; font-size: 13px; outline: none; cursor: pointer; }
+        .order-footer { margin-top: 15px; border-top: 1px solid #f1f5f9; padding-top: 12px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+        .order-status-select { padding: 8px 12px; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 6px; color: #0f172a; font-weight: 600; font-size: 13px; outline: none; cursor: pointer; }
         .order-price { font-size: 16px; font-weight: 800; color: #ff6b00; }
 
-        .no-order { text-align: center; color: #94a3b8; grid-column: 1/-1; padding: 40px; font-size: 16px; background: #1e293b; border-radius: 14px; border: 1px solid #334155; }
+        .no-order { text-align: center; color: #64748b; grid-column: 1/-1; padding: 40px; font-size: 16px; background: #ffffff; border-radius: 14px; border: 1px solid #e2e8f0; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
 
         /* FOOTER İMZA */
-        .panel-footer { text-align: center; margin-top: 50px; font-size: 12px; color: #64748b; border-top: 1px solid #334155; padding-top: 20px; }
+        .panel-footer { text-align: center; margin-top: 50px; font-size: 12px; color: #64748b; border-top: 1px solid #e2e8f0; padding-top: 20px; }
     </style>
 </head>
 <body>
@@ -73,6 +73,28 @@
         </div>
     </div>
 
+    <!-- BİLDİRİM SESİ İÇİN WEB AUDIO API SYNTH (Harici dosya gerektirmez, anında çalar) -->
+    <script>
+        function bildirimZiliCal() {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(587.33, audioCtx.currentTime); // D5 nota
+                osc.frequency.setValueAtTime(880, audioCtx.currentTime + 0.15); // A5 nota
+                gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.6);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.6);
+            } catch(e) {
+                // Tarayıcı izin kısıtı varsa sessiz geç
+            }
+        }
+    </script>
+
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
@@ -93,17 +115,18 @@
         let aktifSecilenSube = localStorage.getItem('yonetim_aktif_sube') || "Merkez Gülpınar Şube";
         document.getElementById('yonetimSubeSecim').value = aktifSecilenSube;
 
+        let eskiSiparisSayisi = null;
+
         function subeDegisti() {
             aktifSecilenSube = document.getElementById('yonetimSubeSecim').value;
             localStorage.setItem('yonetim_aktif_sube', aktifSecilenSube);
+            eskiSiparisSayisi = null; // Sıfırla ki şube değişince tekrar kontrol etsin
             siparisleriDinleVeGoster();
         }
 
         function siparisDurumGuncelle(siparisId, yeniDurum) {
             db.ref('orders/' + siparisId).update({ status: yeniDurum })
-                .then(() => {
-                    // Başarılı
-                })
+                .then(() => {})
                 .catch((err) => {
                     alert("Durum güncellenirken hata oluştu: " + err.message);
                 });
@@ -123,14 +146,18 @@
                 let filtreliSiparisler = [];
 
                 Object.values(tumSiparisler).forEach(siparis => {
-                    // Sadece seçili şubeye ait siparişleri alıyoruz (Çakışmayı önleyen ana mantık)
                     if (siparis.branch === aktifSecilenSube) {
                         filtreliSiparisler.push(siparis);
                     }
                 });
 
-                // En yeni sipariş en üstte görünmesi için ters çeviriyoruz
                 filtreliSiparisler.reverse();
+
+                // Eğer yeni sipariş geldiyse (sayı arttıysa veya ilk yüklemeden sonra yeni eklenmişse) ses çal
+                if (eskiSiparisSayisi !== null && filtreliSiparisler.length > eskiSiparisSayisi) {
+                    bildirimZiliCal();
+                }
+                eskiSiparisSayisi = filtreliSiparisler.length;
 
                 if (filtreliSiparisler.length === 0) {
                     listeDiv.innerHTML = `<div class="no-order"><strong>${aktifSecilenSube}</strong> için şu anda aktif sipariş yok.</div>`;
@@ -171,7 +198,6 @@
             });
         }
 
-        // Sayfa açıldığında dinlemeyi başlat
         siparisleriDinleVeGoster();
     </script>
 </body>
