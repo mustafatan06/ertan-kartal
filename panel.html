@@ -80,7 +80,7 @@
         
         <!-- SES AKTİFLEŞTİRME UYARI BANDI -->
         <div id="audioBanner" class="audio-permission-banner">
-            <span><i class="fa-solid fa-volume-high"></i> Yemeksepeti tarzı çan sesi ve sesli bildirimler için lütfen butona tıklayın:</span>
+            <span><i class="fa-solid fa-volume-high"></i> Çan sesi ve sesli bildirimlerin aktif çalması için lütfen butona tıklayın:</span>
             <button onclick="sesIzniVer()">Sesi Aktifleştir</button>
         </div>
 
@@ -126,7 +126,7 @@
         </div>
     </div>
 
-    <!-- YEMEKSEPETİ / TRENDYOL TARZI "DİN-DON" ÇAN SESİ + BAYAN SESLİ ASİSTAN -->
+    <!-- 2 KEZ ARKA ARKAYA (ÇAN + SESLİ ANONS BİTİNCE İKİNCİ TUR) TEKRAR EDEN SİSTEM -->
     <script>
         let sesAktifMi = false;
 
@@ -136,20 +136,19 @@
             sesliBildirimVer();
         }
 
-        function sesliBildirimVer() {
+        function tek TurBildirimCal(callback) {
             try {
                 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
                 
-                // Yemeksepeti / Trendyol tarzı çift tonlu "Din-Don" çan simülasyonu
                 function yemeksepetiCani(frekans, zaman) {
                     const osc = audioCtx.createOscillator();
                     const gain = audioCtx.createGain();
                     
-                    osc.type = 'sine'; // Yumuşak ve net çan tonu
+                    osc.type = 'sine';
                     osc.frequency.setValueAtTime(frekans, audioCtx.currentTime + zaman);
                     
                     gain.gain.setValueAtTime(0.5, audioCtx.currentTime + zaman);
-                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + zaman + 0.8); // Çanın yankılanma süresi
+                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + zaman + 0.8);
                     
                     osc.connect(gain);
                     gain.connect(audioCtx.destination);
@@ -158,15 +157,14 @@
                     osc.stop(audioCtx.currentTime + zaman + 0.8);
                 }
 
-                // Din (İnce ton) - Don (Kalın ton)
-                yemeksepetiCani(1046.50, 0.0);  // C6 (Din)
-                yemeksepetiCani(783.99, 0.35); // G5 (Don)
-                yemeksepetiCani(1046.50, 0.70); // C6 (Din tekrar)
+                // Çan Sesleri (Din - Don - Din)
+                yemeksepetiCani(1046.50, 0.0);  
+                yemeksepetiCani(783.99, 0.35); 
+                yemeksepetiCani(1046.50, 0.70); 
 
-                // ARDINDAN BAYAN SESİ İLE "YENİ SİPARİŞ GELDİ" OKUMA
+                // Bayan Sesiyle Okuma
                 if ('speechSynthesis' in window) {
                     setTimeout(() => {
-                        window.speechSynthesis.cancel();
                         const msg = new SpeechSynthesisUtterance("Yeni sipariş geldi. Lütfen kontrol edin.");
                         msg.lang = 'tr-TR';
                         msg.rate = 0.95;
@@ -176,13 +174,29 @@
                         const trVoice = voices.find(v => v.lang.startsWith('tr') || v.lang.includes('TR'));
                         if (trVoice) { msg.voice = trVoice; }
 
+                        msg.onend = () => {
+                            if (callback) callback(); // 1. tur bittiğinde 2. turu tetikle
+                        };
+
                         window.speechSynthesis.speak(msg);
-                    }, 1600); // Çan çaldıktan hemen sonra konuşsun
+                    }, 1600);
+                } else {
+                    if (callback) setTimeout(callback, 3000);
                 }
 
             } catch(e) {
-                console.log("Ses hatası: ", e);
+                if (callback) callback();
             }
+        }
+
+        function sesliBildirimVer() {
+            // 1. Tur Bildirim
+            tekTurBildirimCal(() => {
+                // 1. Tur tamamen bittikten sonra 1 saniye bekleyip 2. Turu başlat
+                setTimeout(() => {
+                    tekTurBildirimCal(null);
+                }, 1000);
+            });
         }
 
         if ('speechSynthesis' in window) {
