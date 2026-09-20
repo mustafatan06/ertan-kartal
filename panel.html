@@ -68,21 +68,22 @@
         .btn-iptal { background: #ef4444; width: 100%; margin-top: 5px; font-size: 12px; padding: 8px; }
         .btn-iptal:hover { background: #dc2626; }
 
-        /* PASİF / BASILMIŞ KİLİTLİ BUTON (GRİ) */
         .status-btn.disabled, .status-btn:disabled { background: #cbd5e1 !important; color: #64748b !important; cursor: not-allowed; box-shadow: none; opacity: 0.7; }
 
         .no-order { text-align: center; color: #64748b; grid-column: 1/-1; padding: 40px; font-size: 16px; background: #ffffff; border-radius: 14px; border: 1px solid #e2e8f0; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
 
-        /* FOOTER İMZA */
         .panel-footer { text-align: center; margin-top: 30px; font-size: 12px; color: #64748b; border-top: 1px solid #e2e8f0; padding-top: 20px; }
     </style>
 </head>
 <body>
+    <!-- MP3 SES DOSYASI TANIMlamASI (Projede gemi-kornasi.mp3 olmalı) -->
+    <audio id="bildirimMp3" src="gemi-kornasi.mp3" preload="auto"></audio>
+
     <div class="panel-container">
         
         <!-- SES AKTİFLEŞTİRME BUTONU -->
         <div id="audioBanner" class="audio-permission-banner">
-            <span><i class="fa-solid fa-volume-high"></i> Gemi kornası ve sesli bildirimler için lütfen butona tıklayın:</span>
+            <span><i class="fa-solid fa-volume-high"></i> Sesli bildirimlerin aktif çalması için lütfen butona tıklayın:</span>
             <button onclick="sesIzniVer()">Sesi Aktifleştir</button>
         </div>
 
@@ -128,7 +129,7 @@
         </div>
     </div>
 
-    <!-- GEMİ KORNASI (SHIP HORN HIGH GAIN) + ARDINDAN BAYAN SESİYLE "YENİ SİPARİŞ GELDİ" -->
+    <!-- MP3 ZİL SESİ + ARDINDAN BAYAN SESİYLE OKUMA SİSTEMİ -->
     <script>
         let sesAktifMi = false;
 
@@ -140,33 +141,12 @@
 
         function sesliBildirimVer() {
             try {
-                // 1. GEMİ KORNASI EFEKTİ (Tok, yüksek kazançlı kalın frekanslar)[cite: 1]
-                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                
-                function gemiKornasi(zaman, sure) {
-                    const osc = audioCtx.createOscillator();
-                    const gain = audioCtx.createGain();
-                    
-                    osc.type = 'sawtooth'; // Gemi kornasının tok ve baskın yapısı için testere dalga
-                    // Kalın gemi kornası frekansları (High Gain tınısı)
-                    osc.frequency.setValueAtTime(130.81, audioCtx.currentTime + zaman); // C3
-                    osc.frequency.setValueAtTime(196.00, audioCtx.currentTime + zaman + 0.1); // G3
-                    
-                    gain.gain.setValueAtTime(0.5, audioCtx.currentTime + zaman);
-                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + zaman + sure);
-                    
-                    osc.connect(gain);
-                    gain.connect(audioCtx.destination);
-                    
-                    osc.start(audioCtx.currentTime + zaman);
-                    osc.stop(audioCtx.currentTime + zaman + sure);
-                }
+                // 1. ÖNCE MP3 SES DOSYASINI ÇAL
+                const sesElemani = document.getElementById('bildirimMp3');
+                sesElemani.currentTime = 0;
+                sesElemani.play().catch(err => console.log("MP3 çalma engeli: ", err));
 
-                // Kornayı çift nefes olarak çal
-                gemiKornasi(0.0, 0.8);
-                gemiKornasi(0.9, 0.8);
-
-                // 2. BAYAN SESİ İLE SESLİ BİLDİRİM OKUMA
+                // 2. ARDINDAN BAYAN SESİ İLE "YENİ SİPARİŞ GELDİ" OKU
                 if ('speechSynthesis' in window) {
                     setTimeout(() => {
                         window.speechSynthesis.cancel();
@@ -180,7 +160,7 @@
                         if (trVoice) { msg.voice = trVoice; }
 
                         window.speechSynthesis.speak(msg);
-                    }, 1900); // Gemi kornası bittikten hemen sonra konuşsun
+                    }, 2500); // MP3 süresine göre ayarlıdır
                 }
 
             } catch(e) {
