@@ -3,102 +3,73 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profesyonel Şube Yönetim Paneli | Ertan Kartal</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>Şube Yönetim Paneli | Uçan Paket Sepeti</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body { font-family: 'Poppins', sans-serif; background: #f1f5f9; margin: 0; padding: 20px; color: #1e293b; }
-        .container { max-width: 1100px; margin: 0 auto; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
+        body { background: #0f172a; color: #f8fafc; padding: 20px; }
+
+        .panel-container { max-width: 1200px; margin: 0 auto; }
         
-        .panel-header { background: white; padding: 20px; border-radius: 14px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; margin-bottom: 20px; gap: 15px; }
-        .panel-header h1 { color: #ff6b00; margin: 0; font-size: 22px; }
+        /* HEADER BAR */
+        .panel-header { background: #1e293b; border: 1px solid #334155; padding: 20px; border-radius: 16px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; flex-wrap: wrap; gap: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.4); }
+        .panel-header h1 { font-size: clamp(20px, 4vw, 26px); font-weight: 800; color: #ffffff; display: flex; align-items: center; gap: 10px; }
+        .panel-header h1 span { color: #ff6b00; }
+
+        /* ŞUBE SEÇİM KUTUSU */
+        .branch-selector-box { display: flex; align-items: center; gap: 10px; }
+        .branch-selector-box label { font-size: 14px; font-weight: 600; color: #cbd5e1; white-space: nowrap; }
+        .branch-selector-box select { padding: 10px 15px; background: #0f172a; border: 2px solid #ff6b00; border-radius: 8px; color: #fff; font-weight: 700; font-size: 14px; outline: none; cursor: pointer; }
+
+        /* SİPARİŞLER TABLOSU / KARTLARI */
+        .orders-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; }
+        .order-card { background: #1e293b; border: 1px solid #334155; border-radius: 14px; padding: 20px; display: flex; flex-direction: column; justify-content: space-between; position: relative; box-shadow: 0 8px 20px rgba(0,0,0,0.3); transition: 0.3s; }
+        .order-card:hover { border-color: #ff6b00; }
         
-        .controls { display: flex; gap: 15px; align-items: center; flex-wrap: wrap; }
-        select { padding: 10px 15px; border: 2px solid #e2e8f0; border-radius: 8px; font-weight: 600; background: #fff; cursor: pointer; color: #334155; }
+        .order-card-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #334155; padding-bottom: 12px; margin-bottom: 12px; }
+        .order-id { font-size: 13px; color: #94a3b8; font-weight: 600; }
+        .order-branch-badge { background: rgba(255, 107, 0, 0.15); color: #ff6b00; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 700; border: 1px solid rgba(255, 107, 0, 0.3); }
 
-        #sesAcBtn { background: #10b981; color: white; border: none; padding: 10px 16px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 14px; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 10px rgba(16, 185, 129, 0.2); }
-        #sesAcBtn:hover { background: #059669; }
+        .order-body p { font-size: 14px; color: #cbd5e1; margin-bottom: 8px; line-height: 1.4; word-break: break-word; }
+        .order-body p strong { color: #ffffff; }
 
-        .tabs { display: flex; gap: 10px; margin-bottom: 20px; }
-        .tab-btn { padding: 10px 20px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; background: #e2e8f0; color: #475569; transition: 0.2s; }
-        .tab-btn.active { background: #ff6b00; color: white; }
+        .order-products-box { background: #0f172a; border: 1px solid #334155; padding: 10px; border-radius: 8px; margin: 10px 0; font-size: 13px; color: #f8fafc; }
 
-        .order-card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 15px; border-left: 6px solid #ff6b00; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; animation: yeniAnimasyon 0.5s ease; }
-        @keyframes yeniAnimasyon {
-            0% { transform: scale(0.98); opacity: 0; background: #fff7ed; }
-            100% { transform: scale(1); opacity: 1; background: white; }
-        }
+        .order-footer { margin-top: 15px; border-top: 1px solid #334155; padding-top: 12px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+        .order-status-select { padding: 8px 12px; background: #0f172a; border: 1px solid #334155; border-radius: 6px; color: #fff; font-weight: 600; font-size: 13px; outline: none; cursor: pointer; }
+        .order-price { font-size: 16px; font-weight: 800; color: #ff6b00; }
 
-        .order-info h3 { margin: 0 0 6px 0; color: #1e293b; font-size: 17px; }
-        .order-info p { margin: 3px 0; color: #64748b; font-size: 14px; }
-        
-        .order-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-        .action-btn { padding: 8px 12px; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 12px; }
-        .btn-hazirlaniyor { background: #f59e0b; color: white; }
-        .btn-yolaycikti { background: #3b82f6; color: white; }
-        .btn-teslim { background: #10b981; color: white; }
-        .btn-sil { background: #ef4444; color: white; }
-        
-        .badge { background: #fef3c7; color: #d97706; padding: 6px 12px; border-radius: 20px; font-weight: 600; font-size: 12px; }
-        .badge.completed { background: #d1fae5; color: #065f46; }
+        .no-order { text-align: center; color: #94a3b8; grid-column: 1/-1; padding: 40px; font-size: 16px; background: #1e293b; border-radius: 14px; border: 1px solid #334155; }
 
-        .footer-summary { background: #1e293b; color: white; padding: 20px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; margin-top: 30px; font-weight: 600; }
-        .footer-summary span { color: #ff6b00; font-size: 20px; }
-
-        #bildirimKutusu {
-            display: none;
-            background: #ff6b00;
-            color: white;
-            padding: 15px 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            font-weight: 700;
-            font-size: 16px;
-            text-align: center;
-            box-shadow: 0 4px 15px rgba(255,107,0,0.4);
-            animation: yanipSoner 0.8s infinite alternate;
-        }
-        @keyframes yanipSoner {
-            0% { opacity: 0.8; transform: scale(1); }
-            100% { opacity: 1; transform: scale(1.01); background: #ea580c; }
-        }
+        /* FOOTER İMZA */
+        .panel-footer { text-align: center; margin-top: 50px; font-size: 12px; color: #64748b; border-top: 1px solid #334155; padding-top: 20px; }
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="panel-container">
+        
         <div class="panel-header">
-            <h1><i class="fa-solid fa-store"></i> Ertan Kartal Yönetim Paneli</h1>
-            <div class="controls">
-                <button type="button" id="sesAcBtn" onclick="sesKilidiniAc()">
-                    <i class="fa-solid fa-volume-high"></i> Ses Bildirimini Aç
-                </button>
-
-                <label for="branchFilter" style="font-weight: 600; font-size: 14px;">Şube Seç:</label>
-                <select id="branchFilter" onchange="ekraniYenile()">
-                    <option value="Tümü">Tüm Şubeler</option>
-                    <option value="Merkez Şube">Merkez Şube</option>
+            <h1><i class="fa-solid fa-chart-line" style="color:#ff6b00;"></i> Şube <span>Yönetim Paneli</span></h1>
+            
+            <div class="branch-selector-box">
+                <label><i class="fa-solid fa-store"></i> Aktif Şubeniz:</label>
+                <select id="yonetimSubeSecim" onchange="subeDegisti()">
+                    <option value="Merkez Gülpınar Şube">Merkez Gülpınar Şube</option>
                     <option value="Feridunçelik Şube">Feridunçelik Şube</option>
                     <option value="Karapürçek Şube">Karapürçek Şube</option>
                 </select>
             </div>
         </div>
 
-        <div id="bildirimKutusu">
-            <i class="fa-solid fa-bell"></i> 🔔 DİKKAT! YENİ BİR SİPARİŞ GELDİ! 🔔
+        <!-- SİPARİŞLERİN LİSTELENECEĞİ ALAN -->
+        <div id="subeSiparisleriListesi" class="orders-grid">
+            <div class="no-order">Siparişler yükleniyor...</div>
         </div>
 
-        <div class="tabs">
-            <button class="tab-btn active" id="tabGelen" onclick="sekmeDegis('gelen')">Aktif Siparişler</button>
-            <button class="tab-btn" id="tabGecmis" onclick="sekmeDegis('gecmis')">Geçmiş / Tamamlananlar</button>
-        </div>
-
-        <div id="siparisListesiContainer">
-            <p style="color: #64748b;">Siparişler yükleniyor...</p>
-        </div>
-
-        <div class="footer-summary">
-            <div>Toplam Gösterilen Sipariş: <span id="toplamAdet">0</span></div>
-            <div>Total Tutar / Ciro: <span id="toplamCiro">0 ₺</span></div>
+        <div class="panel-footer">
+            <p>&copy; 2026 Uçan Paket Sepeti. Tüm hakları saklıdır.</p>
+            <p style="margin-top: 6px; color: #ff6b00; font-weight: 600; letter-spacing: 0.5px;">TAN MEDYA TASARIM Tarafından Kurulmuştur.</p>
         </div>
     </div>
 
@@ -119,161 +90,89 @@
         if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
         const db = firebase.database();
 
-        let aktifSekme = 'gelen';
-        let hamVeriler = {};
-        let ilkYukleme = true;
-        let sesKilidiAcildi = false;
+        let aktifSecilenSube = localStorage.getItem('yonetim_aktif_sube') || "Merkez Gülpınar Şube";
+        document.getElementById('yonetimSubeSecim').value = aktifSecilenSube;
 
-        function sesKilidiniAc() {
-            try {
-                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                if (audioCtx.state === 'suspended') { audioCtx.resume(); }
-                
-                // Test sesi
-                notCal(audioCtx, 659.25, 0, 0.15);
-                notCal(audioCtx, 783.99, 0.15, 0.25);
-
-                sesKilidiAcildi = true;
-                const btn = document.getElementById('sesAcBtn');
-                btn.style.background = '#059669';
-                btn.innerHTML = '<i class="fa-solid fa-check"></i> Ses Bildirimi Aktif';
-            } catch(e) {
-                alert("Ses kilidi açılamadı.");
-            }
+        function subeDegisti() {
+            aktifSecilenSube = document.getElementById('yonetimSubeSecim').value;
+            localStorage.setItem('yonetim_aktif_sube', aktifSecilenSube);
+            siparisleriDinleVeGoster();
         }
 
-        // Dikkat Çekici Çift Çalarlı Ding-Dong Zil Sesi Motoru
-        function zilSesiCal() {
-            if (!sesKilidiAcildi) return;
-            try {
-                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                if (audioCtx.state === 'suspended') { audioCtx.resume(); }
-
-                // 1. Ding Tonu
-                notCal(audioCtx, 587.33, 0.0, 0.2);
-                // 2. Dong Tonu (Daha yüksek ve net)
-                notCal(audioCtx, 880.00, 0.25, 0.4);
-                // 3. Ekstra Vurgu Tonu
-                notCal(audioCtx, 1046.50, 0.5, 0.4);
-            } catch(e) {}
+        function siparisDurumGuncelle(siparisId, yeniDurum) {
+            db.ref('orders/' + siparisId).update({ status: yeniDurum })
+                .then(() => {
+                    // Başarılı
+                })
+                .catch((err) => {
+                    alert("Durum güncellenirken hata oluştu: " + err.message);
+                });
         }
 
-        function notCal(ctx, frekans, baslangicZamani, sure) {
-            const osc = ctx.createOscillator();
-            const gain = ctx.createGain();
-            osc.type = 'triangle'; // Daha tok ve dikkat çekici ses tipi
-            osc.frequency.setValueAtTime(frekans, ctx.currentTime + baslangicZamani);
-            
-            gain.gain.setValueAtTime(0.4, ctx.currentTime + baslangicZamani);
-            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + baslangicZamani + sure);
-            
-            osc.connect(gain);
-            gain.connect(ctx.destination);
-            
-            osc.start(ctx.currentTime + baslangicZamani);
-            osc.stop(ctx.currentTime + baslangicZamani + sure);
-        }
+        function siparisleriDinleVeGoster() {
+            db.ref('orders').on('value', (snapshot) => {
+                const listeDiv = document.getElementById('subeSiparisleriListesi');
+                listeDiv.innerHTML = '';
 
-        function sekmeDegis(sekme) {
-            aktifSekme = sekme;
-            document.getElementById('tabGelen').classList.toggle('active', sekme === 'gelen');
-            document.getElementById('tabGecmis').classList.toggle('active', sekme === 'gecmis');
-            ekraniYenile();
-        }
-
-        // ANLIK DİNLEYİCİ: .onDEĞİŞİKLİK VEYA .on('child_added') İLE ANINDA YAKALAMA
-        db.ref('orders').on('value', (snapshot) => {
-            const yeniVeri = snapshot.val() || {};
-            
-            // Eğer ilk yüklemeden sonra yeni bir sipariş eklendiyse (veya veri sayısı arttıysa) ses çal
-            if (!ilkYukleme) {
-                let eskiKeys = Object.keys(hamVeriler);
-                let yeniKeys = Object.keys(yeniVeri);
-                
-                // Yeni bir ID eklendiyse
-                let yeniSiparisVarMi = yeniKeys.some(k => !eskiKeys.includes(k));
-                
-                if (yeniSiparisVarMi) {
-                    const bKutusu = document.getElementById('bildirimKutusu');
-                    bKutusu.style.display = 'block';
-                    setTimeout(() => { bKutusu.style.display = 'none'; }, 8000);
-                    zilSesiCal();
+                if (!snapshot.exists()) {
+                    listeDiv.innerHTML = '<div class="no-order">Şubenize gelen aktif sipariş bulunmuyor.</div>';
+                    return;
                 }
-            }
 
-            hamVeriler = yeniVeri;
-            ilkYukleme = false;
-            ekraniYenile();
-        });
+                const tumSiparisler = snapshot.val();
+                let filtreliSiparisler = [];
 
-        function ekraniYenile() {
-            const secilenSube = document.getElementById('branchFilter').value;
-            const container = document.getElementById('siparisListesiContainer');
-            
-            let dizi = [];
-            Object.keys(hamVeriler).forEach(key => {
-                dizi.push({ firebaseKey: key, ...hamVeriler[key] });
-            });
-            dizi.reverse(); // En yeni sipariş en üstte
+                Object.values(tumSiparisler).forEach(siparis => {
+                    // Sadece seçili şubeye ait siparişleri alıyoruz (Çakışmayı önleyen ana mantık)
+                    if (siparis.branch === aktifSecilenSube) {
+                        filtreliSiparisler.push(siparis);
+                    }
+                });
 
-            let filtrelenmis = dizi.filter(s => {
-                let aktifDurumlar = (s.status === 'Yeni Sipariş' || s.status === 'Hazırlanıyor' || s.status === 'Yola Çıktı');
-                let gecmisDurumlar = (s.status === 'Teslim Edildi');
+                // En yeni sipariş en üstte görünmesi için ters çeviriyoruz
+                filtreliSiparisler.reverse();
 
-                let sekmeUyumlu = (aktifSekme === 'gelen') ? aktifDurumlar : gecmisDurumlar;
-                let subeUyumlu = (secilenSube === 'Tümü') || (s.branch === secilenSube);
-                return sekmeUyumlu && subeUyumlu;
-            });
+                if (filtreliSiparisler.length === 0) {
+                    listeDiv.innerHTML = `<div class="no-order"><strong>${aktifSecilenSube}</strong> için şu anda aktif sipariş yok.</div>`;
+                    return;
+                }
 
-            if (filtrelenmis.length === 0) {
-                container.innerHTML = `<p style="color: #64748b; background: white; padding: 25px; border-radius: 10px; text-align: center;">Bu kategoride henüz sipariş bulunmuyor.</p>`;
-                document.getElementById('toplamAdet').textContent = '0';
-                document.getElementById('toplamCiro').textContent = '0 ₺';
-                return;
-            }
-
-            let html = '';
-            let ciro = 0;
-
-            filtrelenmis.forEach(s => {
-                ciro += (s.price || 0);
-                const badgeClass = s.status === 'Teslim Edildi' ? 'badge completed' : 'badge';
-                
-                html += `
-                    <div class="order-card">
-                        <div class="order-info">
-                            <h3>${s.product} — <span style="color:#ff6b00;">${s.branch}</span></h3>
-                            <p><strong>Müşteri:</strong> ${s.name} (${s.phone})</p>
-                            <p><strong>Adres:</strong> ${s.address}</p>
-                            <p><strong>Tutar:</strong> <span style="color: #10b981; font-weight:700;">${s.price || 0} ₺</span> | <strong>Saat:</strong> ${s.time} (${s.date})</p>
+                filtreliSiparisler.forEach(s => {
+                    const card = document.createElement('div');
+                    card.className = 'order-card';
+                    card.innerHTML = `
+                        <div>
+                            <div class="order-card-header">
+                                <span class="order-id"><i class="fa-regular fa-clock"></i> ${s.date} - ${s.time}</span>
+                                <span class="order-branch-badge">${s.branch}</span>
+                            </div>
+                            <div class="order-body">
+                                <p><strong>Müşteri:</strong> ${s.name}</p>
+                                <p><strong>Telefon:</strong> <a href="tel:${s.phone}" style="color:#ff6b00; text-decoration:none;">${s.phone}</a></p>
+                                <p><strong>Adres:</strong> ${s.address}</p>
+                                <div class="order-products-box">
+                                    <strong>Sipariş İçeriği:</strong><br>
+                                    ${s.product}
+                                </div>
+                            </div>
                         </div>
-                        <div class="order-actions">
-                            <span class="${badgeClass}">${s.status}</span>
-                            ${aktifSekme === 'gelen' ? `
-                                <button class="action-btn btn-hazirlaniyor" onclick="durumGuncelle('${s.firebaseKey}', 'Hazırlanıyor')">Hazırlanıyor</button>
-                                <button class="action-btn btn-yolaycikti" onclick="durumGuncelle('${s.firebaseKey}', 'Yola Çıktı')">Yola Çıktı</button>
-                                <button class="action-btn btn-teslim" onclick="durumGuncelle('${s.firebaseKey}', 'Teslim Edildi')">Teslim Et</button>
-                            ` : ''}
-                            <button class="action-btn btn-sil" onclick="siparisSil('${s.firebaseKey}')"><i class="fa-solid fa-trash"></i></button>
+                        <div class="order-footer">
+                            <span class="order-price">${s.price} ₺</span>
+                            <select class="order-status-select" onchange="siparisDurumGuncelle('${s.id}', this.value)">
+                                <option value="Yeni Sipariş" ${s.status === 'Yeni Sipariş' ? 'selected' : ''}>Yeni Sipariş</option>
+                                <option value="Hazırlanıyor" ${s.status === 'Hazırlanıyor' ? 'selected' : ''}>Hazırlanıyor</option>
+                                <option value="Yola Çıktı" ${s.status === 'Yola Çıktı' ? 'selected' : ''}>Yola Çıktı</option>
+                                <option value="Teslim Edildi" ${s.status === 'Teslim Edildi' ? 'selected' : ''}>Teslim Edildi</option>
+                            </select>
                         </div>
-                    </div>
-                `;
+                    `;
+                    listeDiv.appendChild(card);
+                });
             });
-
-            container.innerHTML = html;
-            document.getElementById('toplamAdet').textContent = filtrelenmis.length;
-            document.getElementById('toplamCiro').textContent = ciro + ' ₺';
         }
 
-        window.durumGuncelle = function(key, yeniDurum) {
-            db.ref('orders/' + key).update({ status: yeniDurum });
-        };
-
-        window.siparisSil = function(key) {
-            if(confirm("Bu siparişi silmek istediğinize emin misiniz?")) {
-                db.ref('orders/' + key).remove();
-            }
-        };
+        // Sayfa açıldığında dinlemeyi başlat
+        siparisleriDinleVeGoster();
     </script>
 </body>
 </html>
