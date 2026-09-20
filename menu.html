@@ -36,9 +36,9 @@
         .food-card { background: #1e293b; border-radius: 14px; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; border: 1px solid #334155; transition: 0.3s; }
         .food-card:hover { transform: translateY(-5px); border-color: #ff6b00; box-shadow: 0 10px 25px rgba(255, 107, 0, 0.2); }
 
-        /* GÖRSEL ÇERÇEVESİ (KIRPIKLIK ÖNLEYİCİ CONTAIN AYARI) */
-        .food-img-container { width: 100%; height: 190px; background: #090d16; overflow: hidden; display: flex; align-items: center; justify-content: center; position: relative; border-bottom: 1px solid #334155; padding: 8px; }
-        .food-img { width: 100%; height: 100%; object-fit: contain; transition: transform 0.3s ease; }
+        /* GÖRSEL ÇERÇEVESİ (TURUNCU ŞIK ÇERÇEVE & COVER GÖRÜNÜM) */
+        .food-img-container { width: 100%; height: 180px; background: #0f172a; overflow: hidden; display: flex; align-items: center; justify-content: center; position: relative; border-bottom: 2px solid #ff6b00; box-shadow: inset 0 0 10px rgba(255,107,0,0.3); }
+        .food-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease; }
         .food-card:hover .food-img { transform: scale(1.05); }
 
         .food-body { padding: 20px; display: flex; flex-direction: column; flex-grow: 1; justify-content: space-between; }
