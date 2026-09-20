@@ -16,6 +16,10 @@
         .controls { display: flex; gap: 15px; align-items: center; flex-wrap: wrap; }
         select { padding: 10px 15px; border: 2px solid #e2e8f0; border-radius: 8px; font-weight: 600; background: #fff; cursor: pointer; color: #334155; }
 
+        /* Ses Aktif Etme Butonu */
+        #sesAcBtn { background: #10b981; color: white; border: none; padding: 10px 16px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 14px; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 10px rgba(16, 185, 129, 0.2); }
+        #sesAcBtn:hover { background: #059669; }
+
         .tabs { display: flex; gap: 10px; margin-bottom: 20px; }
         .tab-btn { padding: 10px 20px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; background: #e2e8f0; color: #475569; transition: 0.2s; }
         .tab-btn.active { background: #ff6b00; color: white; }
@@ -23,7 +27,7 @@
         .order-card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 15px; border-left: 6px solid #ff6b00; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; animation: yeniAnimasyon 0.5s ease; }
         @keyframes yeniAnimasyon {
             0% { transform: scale(0.98); opacity: 0; background: #fff7ed; }
-            100% { transform: scale(1); opacity: 1; background: #white; }
+            100% { transform: scale(1); opacity: 1; background: white; }
         }
 
         .order-info h3 { margin: 0 0 6px 0; color: #1e293b; font-size: 17px; }
@@ -60,6 +64,11 @@
         <div class="panel-header">
             <h1><i class="fa-solid fa-store"></i> Ertan Kartal Yönetim Paneli</h1>
             <div class="controls">
+                <!-- SES KİLİDİNİ AÇAN BUTON -->
+                <button type="button" id="sesAcBtn" onclick="sesKilidiniAc()">
+                    <i class="fa-solid fa-volume-high"></i> Ses Bildirimini Aç
+                </button>
+
                 <label for="branchFilter" style="font-weight: 600; font-size: 14px;">Şube Seç:</label>
                 <select id="branchFilter" onchange="ekraniYenile()">
                     <option value="Tümü">Tüm Şubeler</option>
@@ -109,8 +118,37 @@
         let aktifSekme = 'gelen';
         let hamVeriler = {};
         let eskiSayi = -1;
+        let sesKilidiAcildi = false;
+
+        function sesKilidiniAc() {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+                // Test sesi çal
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(523.25, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.3);
+
+                sesKilidiAcildi = true;
+                const btn = document.getElementById('sesAcBtn');
+                btn.style.background = '#059669';
+                btn.innerHTML = '<i class="fa-solid fa-check"></i> Ses Bildirimi Aktif';
+            } catch(e) {
+                alert("Tarayıcı ses izni verilemedi.");
+            }
+        }
 
         function bildirimSesiCal() {
+            if (!sesKilidiAcildi) return; // Kullanıcı butona basmadıysa çalmaz
             try {
                 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
                 const osc = audioCtx.createOscillator();
@@ -118,12 +156,12 @@
                 osc.type = 'sine';
                 osc.frequency.setValueAtTime(587.33, audioCtx.currentTime);
                 osc.frequency.setValueAtTime(880, audioCtx.currentTime + 0.15);
-                gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
+                gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.6);
                 osc.connect(gain);
                 gain.connect(audioCtx.destination);
                 osc.start();
-                osc.stop(audioCtx.currentTime + 0.5);
+                osc.stop(audioCtx.currentTime + 0.6);
             } catch(e) {}
         }
 
@@ -145,7 +183,7 @@
 
             if (eskiSayi !== -1 && toplamYeni > eskiSayi) {
                 const bKutusu = document.getElementById('bildirimKutusu');
-                bKutusu.style.display = 'block';
+                bKupusu.style.display = 'block';
                 setTimeout(() => { bKutusu.style.display = 'none'; }, 6000);
                 bildirimSesiCal();
             }
