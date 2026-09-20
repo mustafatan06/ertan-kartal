@@ -10,71 +10,71 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
         body { background: #0f172a; color: #f8fafc; overflow-x: hidden; }
 
-        /* NAVBAR */
+        /* NAVBAR (MOBİL UYUMLU) */
         header { background: #000000; border-bottom: 2px solid #ff6b00; position: sticky; top: 0; z-index: 9999; }
-        .navbar { max-width: 1200px; margin: 0 auto; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-size: 20px; font-weight: 800; text-decoration: none; text-transform: uppercase; letter-spacing: 0.5px; }
+        .navbar { max-width: 1200px; margin: 0 auto; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+        .logo { font-size: clamp(18px, 4vw, 22px); font-weight: 800; text-decoration: none; text-transform: uppercase; letter-spacing: 0.5px; }
         .logo .ucan { color: #ffffff; }
         .logo .paket { color: #ff6b00; }
-        .nav-links { list-style: none; display: flex; gap: 20px; }
-        .nav-links a { color: #cbd5e1; text-decoration: none; font-weight: 500; transition: 0.3s; }
+        .nav-links { list-style: none; display: flex; gap: 15px; flex-wrap: wrap; }
+        .nav-links a { color: #cbd5e1; text-decoration: none; font-weight: 500; font-size: 14px; transition: 0.3s; }
         .nav-links a:hover, .nav-links a.active { color: #ff6b00; }
 
-        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 15px; }
 
         /* BAŞLIK ALANI */
-        .hero-banner { text-align: center; padding: 40px 20px; background: linear-gradient(135deg, #1e293b, #000000); border-radius: 16px; border: 1px solid #334155; margin-bottom: 30px; }
-        .hero-banner h1 { font-size: clamp(22px, 4vw, 36px); font-weight: 800; color: #ffffff; margin-bottom: 10px; }
+        .hero-banner { text-align: center; padding: 30px 15px; background: linear-gradient(135deg, #1e293b, #000000); border-radius: 16px; border: 1px solid #334155; margin-bottom: 25px; }
+        .hero-banner h1 { font-size: clamp(20px, 4vw, 32px); font-weight: 800; color: #ffffff; margin-bottom: 8px; line-height: 1.3; }
         .hero-banner h1 span { color: #ff6b00; }
-        .hero-banner p { color: #94a3b8; font-size: 15px; }
+        .hero-banner p { color: #94a3b8; font-size: clamp(13px, 2.5vw, 15px); }
 
         /* KATEGORİ BAŞLIKLARI */
-        .section-title { font-size: 24px; font-weight: 700; color: #ffffff; margin: 40px 0 20px 0; border-left: 5px solid #ff6b00; padding-left: 12px; display: flex; align-items: center; gap: 10px; }
+        .section-title { font-size: clamp(20px, 4vw, 24px); font-weight: 700; color: #ffffff; margin: 30px 0 15px 0; border-left: 5px solid #ff6b00; padding-left: 10px; display: flex; align-items: center; gap: 10px; }
 
-        /* ÜRÜN IZGARASI VE KARTLARI */
-        .food-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+        /* ÜRÜN IZGARASI VE KARTLARI (MOBİL ESNEK) */
+        .food-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; }
         .food-card { background: #1e293b; border-radius: 14px; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; border: 1px solid #334155; transition: 0.3s; }
-        .food-card:hover { transform: translateY(-5px); border-color: #ff6b00; box-shadow: 0 10px 25px rgba(255, 107, 0, 0.2); }
+        .food-card:hover { border-color: #ff6b00; box-shadow: 0 8px 20px rgba(255, 107, 0, 0.2); }
 
-        /* GÖRSEL ÇERÇEVESİ (TURUNCU ŞIK ÇERÇEVE & COVER GÖRÜNÜM) */
-        .food-img-container { width: 100%; height: 180px; background: #0f172a; overflow: hidden; display: flex; align-items: center; justify-content: center; position: relative; border-bottom: 2px solid #ff6b00; box-shadow: inset 0 0 10px rgba(255,107,0,0.3); }
+        /* GÖRSEL ÇERÇEVESİ (TURUNCU ÇERÇEVELİ) */
+        .food-img-container { width: 100%; height: 170px; background: #0f172a; overflow: hidden; display: flex; align-items: center; justify-content: center; position: relative; border-bottom: 2px solid #ff6b00; box-shadow: inset 0 0 10px rgba(255,107,0,0.3); }
         .food-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease; }
         .food-card:hover .food-img { transform: scale(1.05); }
 
-        .food-body { padding: 20px; display: flex; flex-direction: column; flex-grow: 1; justify-content: space-between; }
-        .food-title-price { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; gap: 10px; }
-        .food-title-price h3 { font-size: 16px; color: #ffffff; font-weight: 700; }
-        .price { font-size: 18px; color: #ff6b00; font-weight: 800; white-space: nowrap; background: rgba(255, 107, 0, 0.1); padding: 4px 10px; border-radius: 8px; }
-        .food-body p { font-size: 13px; color: #94a3b8; margin-bottom: 20px; line-height: 1.5; }
+        .food-body { padding: 15px; display: flex; flex-direction: column; flex-grow: 1; justify-content: space-between; }
+        .food-title-price { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; gap: 8px; flex-wrap: wrap; }
+        .food-title-price h3 { font-size: 15px; color: #ffffff; font-weight: 700; word-break: break-word; }
+        .price { font-size: 16px; color: #ff6b00; font-weight: 800; white-space: nowrap; background: rgba(255, 107, 0, 0.1); padding: 3px 8px; border-radius: 6px; }
+        .food-body p { font-size: 12px; color: #94a3b8; margin-bottom: 15px; line-height: 1.4; word-break: break-word; }
 
         /* SİPARİŞ VER BUTONU */
-        .order-action-btn { width: 100%; background: #ff6b00; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 700; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.3s; text-transform: uppercase; }
-        .order-action-btn:hover { background: #e05e00; box-shadow: 0 0 15px rgba(255, 107, 0, 0.5); }
+        .order-action-btn { width: 100%; background: #ff6b00; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 700; font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.3s; text-transform: uppercase; }
+        .order-action-btn:hover { background: #e05e00; }
 
-        /* MODAL (SİPARİŞ PENCERESİ) */
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 99999; padding: 15px; }
-        .modal-content { background: #1e293b; color: #f8fafc; padding: 30px; border-radius: 16px; width: 100%; max-width: 450px; box-shadow: 0 15px 35px rgba(0,0,0,0.5); border: 1px solid #334155; position: relative; }
-        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #334155; padding-bottom: 10px; }
-        .modal-header h3 { color: #ffffff; font-size: 18px; }
+        /* MODAL (MOBİL UYUMLU PENCERE) */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); justify-content: center; align-items: center; z-index: 99999; padding: 15px; overflow-y: auto; }
+        .modal-content { background: #1e293b; color: #f8fafc; padding: 20px; border-radius: 16px; width: 100%; max-width: 420px; box-shadow: 0 15px 35px rgba(0,0,0,0.5); border: 1px solid #334155; position: relative; max-height: 90vh; overflow-y: auto; }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid #334155; padding-bottom: 8px; }
+        .modal-header h3 { color: #ffffff; font-size: 16px; word-break: break-word; }
         .close-btn { font-size: 24px; cursor: pointer; color: #94a3b8; transition: 0.2s; }
         .close-btn:hover { color: #ff6b00; }
 
-        .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: #cbd5e1; }
-        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px; background: #0f172a; border: 1px solid #334155; border-radius: 8px; color: #fff; font-size: 14px; outline: none; cursor: pointer; }
+        .form-group { margin-bottom: 12px; }
+        .form-group label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 5px; color: #cbd5e1; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px; background: #0f172a; border: 1px solid #334155; border-radius: 8px; color: #fff; font-size: 14px; outline: none; }
         .form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color: #ff6b00; }
 
-        #firebaseBtn { width: 100%; background: #ff6b00; color: white; border: none; padding: 14px; border-radius: 8px; font-weight: 700; font-size: 16px; cursor: pointer; margin-top: 10px; transition: 0.3s; }
+        #firebaseBtn { width: 100%; background: #ff6b00; color: white; border: none; padding: 13px; border-radius: 8px; font-weight: 700; font-size: 15px; cursor: pointer; margin-top: 10px; transition: 0.3s; }
         #firebaseBtn:hover { background: #e05e00; }
 
-        #autoBranchInfo { font-size: 12px; color: #10b981; background: rgba(16, 185, 129, 0.1); padding: 8px 12px; border-radius: 6px; margin-top: 6px; font-weight: 600; display: none; border: 1px solid rgba(16, 185, 129, 0.2); }
+        #autoBranchInfo { font-size: 11px; color: #10b981; background: rgba(16, 185, 129, 0.1); padding: 6px 10px; border-radius: 6px; margin-top: 5px; font-weight: 600; display: none; border: 1px solid rgba(16, 185, 129, 0.2); }
 
         /* CANLI TAKİP KUTUSU */
-        #canliTakipKutusu { display: none; background: #1e293b; border: 2px solid #ff6b00; padding: 20px; border-radius: 14px; margin-bottom: 30px; text-align: center; box-shadow: 0 10px 25px rgba(255,107,0,0.15); }
-        #canliTakipKutusu h3 { color: #ff6b00; margin-bottom: 8px; }
+        #canliTakipKutusu { display: none; background: #1e293b; border: 2px solid #ff6b00; padding: 15px; border-radius: 12px; margin-bottom: 25px; text-align: center; box-shadow: 0 8px 20px rgba(255,107,0,0.15); }
+        #canliTakipKutusu h3 { color: #ff6b00; margin-bottom: 6px; font-size: 16px; }
 
         /* FOOTER */
-        footer { background: #000000; text-align: center; padding: 25px 20px; font-size: 13px; color: #64748b; border-top: 1px solid #334155; margin-top: 50px; }
+        footer { background: #000000; text-align: center; padding: 20px 15px; font-size: 12px; color: #64748b; border-top: 1px solid #334155; margin-top: 40px; }
     </style>
 </head>
 <body>
@@ -96,8 +96,8 @@
 
         <div id="canliTakipKutusu">
             <h3><i class="fa-solid fa-person-biking"></i> Sipariş Durumunuz</h3>
-            <p id="durumMetni" style="font-size: 18px; font-weight: 700; color: #ffffff;">Siparişiniz kontrol ediliyor...</p>
-            <p style="font-size: 13px; color: #94a3b8; margin-top: 5px;">Sayfayı yenileseniz bile durumunuz buradan canlı takip edilir.</p>
+            <p id="durumMetni" style="font-size: 16px; font-weight: 700; color: #ffffff;">Siparişiniz kontrol ediliyor...</p>
+            <p style="font-size: 12px; color: #94a3b8; margin-top: 4px;">Sayfayı yenileseniz bile durumunuz buradan canlı takip edilir.</p>
         </div>
 
         <!-- KATEGORİ: PAN DÜRÜMLER -->
@@ -322,7 +322,7 @@
             <input type="hidden" id="productPriceVal" value="0">
 
             <div class="form-group">
-                <label>İlgili Şube (Adrese Göre Otomatik Seçilir, Değiştirebilirsiniz)</label>
+                <label>İlgili Şube (Adrese Göre Otomatik Seçilir)</label>
                 <select id="branchSelect" style="background:#0f172a; color:#fff;">
                     <option value="Merkez Gülpınar Şube">Merkez Gülpınar Şube</option>
                     <option value="Feridunçelik Şube">Feridunçelik Şube</option>
@@ -350,7 +350,7 @@
 
     <footer>
         <p>&copy; 2026 Uçan Paket Sepeti. Tüm hakları saklıdır.</p>
-        <p style="margin-top: 8px; color: #ff6b00; font-weight: 600; letter-spacing: 0.5px;">TAN MEDYA TASARIM Tarafından Kurulmuştur.</p>
+        <p style="margin-top: 6px; color: #ff6b00; font-weight: 600; letter-spacing: 0.5px;">TAN MEDYA TASARIM Tarafından Kurulmuştur.</p>
     </footer>
 
     <!-- Firebase SDK -->
