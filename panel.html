@@ -80,7 +80,7 @@
         
         <!-- SES AKTİFLEŞTİRME UYARI BANDI -->
         <div id="audioBanner" class="audio-permission-banner">
-            <span><i class="fa-solid fa-volume-high"></i> 10 saniye süren uzun sesli alarmın aktif olması için lütfen butona tıklayın:</span>
+            <span><i class="fa-solid fa-volume-high"></i> Yemeksepeti tarzı çan sesi ve sesli bildirimler için lütfen butona tıklayın:</span>
             <button onclick="sesIzniVer()">Sesi Aktifleştir</button>
         </div>
 
@@ -126,7 +126,7 @@
         </div>
     </div>
 
-    <!-- 10 SANİYE BOYUNCA 2 TUR TEKRAR EDEN TOK ALARM SESİ + ARDINDAN BAYAN SESİ -->
+    <!-- YEMEKSEPETİ / TRENDYOL TARZI "DİN-DON" ÇAN SESİ + BAYAN SESLİ ASİSTAN -->
     <script>
         let sesAktifMi = false;
 
@@ -140,34 +140,28 @@
             try {
                 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
                 
-                // 10 saniye boyunca 2 tur aralıklı çalan güçlü alarm fonksiyonu
-                function uzunAlarmTuru(baslangicZamani) {
-                    for (let tur = 0; tur < 2; tur++) { // Sesleri 2 kez tekrar ettiren döngü
-                        let turOfseti = baslangicZamani + (tur * 4.5); // Her tur arası 4.5 saniye boşluk
-                        
-                        for (let i = 0; i < 5; i++) {
-                            let zaman = turOfseti + (i * 0.7);
-                            const osc = audioCtx.createOscillator();
-                            const gain = audioCtx.createGain();
-                            
-                            osc.type = 'sawtooth';
-                            osc.frequency.setValueAtTime(440, audioCtx.currentTime + zaman); // A4
-                            osc.frequency.setValueAtTime(880, audioCtx.currentTime + zaman + 0.25); // A5
-                            
-                            gain.gain.setValueAtTime(0.3, audioCtx.currentTime + zaman);
-                            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + zaman + 0.5);
-                            
-                            osc.connect(gain);
-                            gain.connect(audioCtx.destination);
-                            
-                            osc.start(audioCtx.currentTime + zaman);
-                            osc.stop(audioCtx.currentTime + zaman + 0.5);
-                        }
-                    }
+                // Yemeksepeti / Trendyol tarzı çift tonlu "Din-Don" çan simülasyonu
+                function yemeksepetiCani(frekans, zaman) {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    
+                    osc.type = 'sine'; // Yumuşak ve net çan tonu
+                    osc.frequency.setValueAtTime(frekans, audioCtx.currentTime + zaman);
+                    
+                    gain.gain.setValueAtTime(0.5, audioCtx.currentTime + zaman);
+                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + zaman + 0.8); // Çanın yankılanma süresi
+                    
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    
+                    osc.start(audioCtx.currentTime + zaman);
+                    osc.stop(audioCtx.currentTime + zaman + 0.8);
                 }
 
-                // Alarmı başlat
-                uzunAlarmTuru(0);
+                // Din (İnce ton) - Don (Kalın ton)
+                yemeksepetiCani(1046.50, 0.0);  // C6 (Din)
+                yemeksepetiCani(783.99, 0.35); // G5 (Don)
+                yemeksepetiCani(1046.50, 0.70); // C6 (Din tekrar)
 
                 // ARDINDAN BAYAN SESİ İLE "YENİ SİPARİŞ GELDİ" OKUMA
                 if ('speechSynthesis' in window) {
@@ -183,7 +177,7 @@
                         if (trVoice) { msg.voice = trVoice; }
 
                         window.speechSynthesis.speak(msg);
-                    }, 9500); // Alarm bittikten hemen sonra sesli anons girsin
+                    }, 1600); // Çan çaldıktan hemen sonra konuşsun
                 }
 
             } catch(e) {
