@@ -20,7 +20,12 @@
         .tab-btn { padding: 10px 20px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; background: #e2e8f0; color: #475569; transition: 0.2s; }
         .tab-btn.active { background: #ff6b00; color: white; }
 
-        .order-card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 15px; border-left: 6px solid #ff6b00; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
+        .order-card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 15px; border-left: 6px solid #ff6b00; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; animation: yeniAnimasyon 0.5s ease; }
+        @keyframes yeniAnimasyon {
+            0% { transform: scale(0.98); opacity: 0; background: #fff7ed; }
+            100% { transform: scale(1); opacity: 1; background: #white; }
+        }
+
         .order-info h3 { margin: 0 0 6px 0; color: #1e293b; font-size: 17px; }
         .order-info p { margin: 3px 0; color: #64748b; font-size: 14px; }
         
@@ -56,7 +61,7 @@
             <h1><i class="fa-solid fa-store"></i> Ertan Kartal Yönetim Paneli</h1>
             <div class="controls">
                 <label for="branchFilter" style="font-weight: 600; font-size: 14px;">Şube Seç:</label>
-                <select id="branchFilter" onchange="paneliGuncelle()">
+                <select id="branchFilter" onchange="ekraniYenile()">
                     <option value="Tümü">Tüm Şubeler</option>
                     <option value="Merkez Şube">Merkez Şube</option>
                     <option value="Feridunçelik Şube">Feridunçelik Şube</option>
@@ -66,7 +71,7 @@
         </div>
 
         <div id="bildirimKutusu">
-            <i class="fa-solid fa-bell"></i> 🔔 Dikkat! Sisteme Yeni Bir Sipariş Düştü!
+            <i class="fa-solid fa-bell"></i> 🔔 Dikkat! Panele Yeni Bir Sipariş Düştü!
         </div>
 
         <div class="tabs">
@@ -75,7 +80,7 @@
         </div>
 
         <div id="siparisListesiContainer">
-            <p style="color: #64748b;">Yükleniyor...</p>
+            <p style="color: #64748b;">Siparişler yükleniyor...</p>
         </div>
 
         <div class="footer-summary">
@@ -84,26 +89,39 @@
         </div>
     </div>
 
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     <script>
+        const firebaseConfig = {
+          apiKey: "AIzaSyDMIz96KNZF-7zWGRuI-2fvQ72fZImHtUw",
+          authDomain: "eretankartal.firebaseapp.com",
+          databaseURL: "https://eretankartal-default-rtdb.europe-west1.firebasedatabase.app",
+          projectId: "eretankartal",
+          storageBucket: "eretankartal.firebasestorage.app",
+          messagingSenderId: "775846519838",
+          appId: "1:775846519838:web:75b1d7dfb4ef942a3f7a0f"
+        };
+
+        if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
+        const db = firebase.database();
+
         let aktifSekme = 'gelen';
-        let eskiSiparisVerisi = "";
+        let hamVeriler = {};
+        let eskiSayi = -1;
 
         function bildirimSesiCal() {
             try {
                 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
                 const osc = audioCtx.createOscillator();
                 const gain = audioCtx.createGain();
-                
                 osc.type = 'sine';
                 osc.frequency.setValueAtTime(587.33, audioCtx.currentTime);
                 osc.frequency.setValueAtTime(880, audioCtx.currentTime + 0.15);
-                
                 gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
                 gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
-                
                 osc.connect(gain);
                 gain.connect(audioCtx.destination);
-                
                 osc.start();
                 osc.stop(audioCtx.currentTime + 0.5);
             } catch(e) {}
@@ -113,29 +131,40 @@
             aktifSekme = sekme;
             document.getElementById('tabGelen').classList.toggle('active', sekme === 'gelen');
             document.getElementById('tabGecmis').classList.toggle('active', sekme === 'gecmis');
-            paneliGuncelle();
+            ekraniYenile();
         }
 
-        function paneliGuncelle() {
+        db.ref('orders').on('value', (snapshot) => {
+            const data = snapshot.val();
+            hamVeriler = data || {};
+
+            let toplamYeni = 0;
+            Object.values(hamVeriler).forEach(s => {
+                if(s.status === 'Yeni Sipariş') toplamYeni++;
+            });
+
+            if (eskiSayi !== -1 && toplamYeni > eskiSayi) {
+                const bKutusu = document.getElementById('bildirimKutusu');
+                bKutusu.style.display = 'block';
+                setTimeout(() => { bKutusu.style.display = 'none'; }, 6000);
+                bildirimSesiCal();
+            }
+            eskiSayi = toplamYeni;
+
+            ekraniYenile();
+        });
+
+        function ekraniYenile() {
             const secilenSube = document.getElementById('branchFilter').value;
             const container = document.getElementById('siparisListesiContainer');
-            const hammaddeSiparisler = localStorage.getItem('ertan_orders') || "[]";
             
-            if (eskiSiparisVerisi !== "" && hammaddeSiparisler !== eskiSiparisVerisi) {
-                let eskiParsed = JSON.parse(eskiSiparisVerisi || "[]");
-                let yeniParsed = JSON.parse(hammaddeSiparisler);
-                if (yeniParsed.length > eskiParsed.length) {
-                    const bKutusu = document.getElementById('bildirimKutusu');
-                    bKutusu.style.display = 'block';
-                    setTimeout(() => { bKutusu.style.display = 'none'; }, 6000);
-                    bildirimSesiCal();
-                }
-            }
-            eskiSiparisVerisi = hammaddeSiparisler;
+            let dizi = [];
+            Object.keys(hamVeriler).forEach(key => {
+                dizi.push({ firebaseKey: key, ...hamVeriler[key] });
+            });
+            dizi.reverse();
 
-            let siparisler = JSON.parse(hammaddeSiparisler);
-
-            let filtrelenmis = siparisler.filter(s => {
+            let filtrelenmis = dizi.filter(s => {
                 let sekmeUyumlu = (aktifSekme === 'gelen') ? (s.status === 'Yeni Sipariş') : (s.status === 'Tamamlandı');
                 let subeUyumlu = (secilenSube === 'Tümü') || (s.branch === secilenSube);
                 return sekmeUyumlu && subeUyumlu;
@@ -165,8 +194,8 @@
                         </div>
                         <div class="order-actions">
                             <span class="${badgeClass}">${s.status}</span>
-                            ${aktifSekme === 'gelen' ? `<button class="action-btn btn-tamamla" onclick="siparisDurumGuncelle(${s.id}, 'Tamamlandı')">Tamamla</button>` : ''}
-                            <button class="action-btn btn-sil" onclick="siparisSil(${s.id})"><i class="fa-solid fa-trash"></i></button>
+                            ${aktifSekme === 'gelen' ? `<button class="action-btn btn-tamamla" onclick="durumGuncelle('${s.firebaseKey}', 'Tamamlandı')">Tamamla</button>` : ''}
+                            <button class="action-btn btn-sil" onclick="siparisSil('${s.firebaseKey}')"><i class="fa-solid fa-trash"></i></button>
                         </div>
                     </div>
                 `;
@@ -177,31 +206,15 @@
             document.getElementById('toplamCiro').textContent = ciro + ' ₺';
         }
 
-        window.siparisDurumGuncelle = function(id, yeniDurum) {
-            let siparisler = JSON.parse(localStorage.getItem('ertan_orders')) || [];
-            siparisler = siparisler.map(s => {
-                if(s.id === id) s.status = yeniDurum;
-                return s;
-            });
-            localStorage.setItem('ertan_orders', JSON.stringify(siparisler));
-            paneliGuncelle();
+        window.durumGuncelle = function(key, yeniDurum) {
+            db.ref('orders/' + key).update({ status: yeniDurum });
         };
 
-        window.siparisSil = function(id) {
+        window.siparisSil = function(key) {
             if(confirm("Bu siparişi silmek istediğinize emin misiniz?")) {
-                let siparisler = JSON.parse(localStorage.getItem('ertan_orders')) || [];
-                siparisler = siparisler.filter(s => s.id !== id);
-                localStorage.setItem('ertan_orders', JSON.stringify(siparisler));
-                paneliGuncelle();
+                db.ref('orders/' + key).remove();
             }
         };
-
-        paneliGuncelle();
-
-        // Her saniye hafızayı tarar
-        setInterval(() => {
-            paneliGuncelle();
-        }, 1000);
     </script>
 </body>
 </html>

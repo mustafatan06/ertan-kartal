@@ -27,37 +27,20 @@
             position: relative;
             z-index: 1000000 !important;
         }
-        .food-card {
-            cursor: pointer;
-            transition: 0.3s;
+        .food-card { cursor: pointer; transition: 0.3s; }
+        .food-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(255,107,0,0.15); border: 2px solid #ff6b00; }
+        #firebaseBtn {
+            width: 100%; background: #ff6b00 !important; color: white !important; border: none !important;
+            padding: 16px !important; border-radius: 10px !important; font-weight: 700 !important;
+            font-size: 16px !important; cursor: pointer !important; margin-top: 15px; display: block !important;
         }
-        .food-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(255,107,0,0.15);
-            border: 2px solid #ff6b00;
-        }
-        #kesinSiparisBtn {
-            width: 100%;
-            background: #ff6b00 !important;
-            color: white !important;
-            border: none !important;
-            padding: 16px !important;
-            border-radius: 10px !important;
-            font-weight: 700 !important;
-            font-size: 16px !important;
-            cursor: pointer !important;
-            margin-top: 15px;
-            display: block !important;
-        }
-        #kesinSiparisBtn:hover { background: #e66000 !important; }
+        #firebaseBtn:hover { background: #e66000 !important; }
     </style>
 </head>
 <body>
     <header>
         <nav class="navbar container">
-            <a href="index.html" class="logo">
-                <span class="ertan">ertan</span> <span class="kartal">kartal</span>
-            </a>
+            <a href="index.html" class="logo"><span class="ertan">ertan</span> <span class="kartal">kartal</span></a>
             <ul class="nav-links">
                 <li><a href="index.html">Ana Sayfa</a></li>
                 <li><a href="menu.html" class="active">QR Menü</a></li>
@@ -71,7 +54,6 @@
             <p>Ürüne tıklayarak hemen siparişini oluşturabilirsin.</p>
         </section>
 
-        <!-- KATEGORİ FİLTRELERİ -->
         <div class="filter-container">
             <button class="filter-btn active" data-filter="all">Tümü</button>
             <button class="filter-btn" data-filter="durum">Dürümler</button>
@@ -79,51 +61,35 @@
             <button class="filter-btn" data-filter="icecek">İçecekler</button>
         </div>
 
-        <!-- ÜRÜNLER LİSTESİ -->
         <div class="food-grid">
             <div class="food-card" data-category="durum" onclick="modalAc('Klasik Dürüm Çiğ Köfte', 90)">
                 <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=600&q=80" alt="Klasik Dürüm" class="food-img">
                 <div class="food-body">
-                    <div class="food-title-price">
-                        <h3>Klasik Dürüm Çiğ Köfte</h3>
-                        <span class="price">90 ₺</span>
-                    </div>
+                    <div class="food-title-price"><h3>Klasik Dürüm Çiğ Köfte</h3><span class="price">90 ₺</span></div>
                     <p>Özel lavaş içerisinde bol çiğ köfte, taze marul, nane, roka ve özel nar ekşisi sosuyla.</p>
                     <button type="button" class="order-btn"><i class="fa-solid fa-cart-shopping"></i> Hemen Sipariş Ver</button>
                 </div>
             </div>
-
             <div class="food-card" data-category="durum" onclick="modalAc('Özel Soslu Mega Dürüm', 130)">
-                <img src="https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&w=600&q=80" alt="Özel Soslu Mega Dürüm" class="food-img">
+                <img src="https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&w=600&q=80" alt="Mega Dürüm" class="food-img">
                 <div class="food-body">
-                    <div class="food-title-price">
-                        <h3>Özel Soslu Mega Dürüm</h3>
-                        <span class="price">130 ₺</span>
-                    </div>
+                    <div class="food-title-price"><h3>Özel Soslu Mega Dürüm</h3><span class="price">130 ₺</span></div>
                     <p>Ekstra doyurucu kalın lavaş, yoğun çiğ köfte ve şefe özel acı sos seçeneğiyle.</p>
                     <button type="button" class="order-btn"><i class="fa-solid fa-cart-shopping"></i> Hemen Sipariş Ver</button>
                 </div>
             </div>
-
             <div class="food-card" data-category="porsiyon" onclick="modalAc('Ertan Kartal Porsiyon (Orta)', 180)">
-                <img src="https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80" alt="Porsiyon Tabak" class="food-img">
+                <img src="https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80" alt="Porsiyon" class="food-img">
                 <div class="food-body">
-                    <div class="food-title-price">
-                        <h3>Ertan Kartal Porsiyon (Orta)</h3>
-                        <span class="price">180 ₺</span>
-                    </div>
+                    <div class="food-title-price"><h3>Ertan Kartal Porsiyon (Orta)</h3><span class="price">180 ₺</span></div>
                     <p>Özenle sıkılmış çiğ köfteler, zengin yeşillik tabağı, limon ve lavaş hediyeli.</p>
                     <button type="button" class="order-btn"><i class="fa-solid fa-cart-shopping"></i> Hemen Sipariş Ver</button>
                 </div>
             </div>
-
             <div class="food-card" data-category="icecek" onclick="modalAc('Kola / Ayran (Büyük Boy)', 35)">
-                <img src="https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=600&q=80" alt="Ayran" class="food-img">
+                <img src="https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=600&q=80" alt="İçecek" class="food-img">
                 <div class="food-body">
-                    <div class="food-title-price">
-                        <h3>Kola / Ayran (Büyük Boy)</h3>
-                        <span class="price">35 ₺</span>
-                    </div>
+                    <div class="food-title-price"><h3>Kola / Ayran (Büyük Boy)</h3><span class="price">35 ₺</span></div>
                     <p>Buz gibi köpüklü yayık ayranı veya kutu kola seçeneğiyle.</p>
                     <button type="button" class="order-btn"><i class="fa-solid fa-cart-shopping"></i> Hemen Sipariş Ver</button>
                 </div>
@@ -131,7 +97,6 @@
         </div>
     </main>
 
-    <!-- SİPARİŞ MODALI -->
     <div id="orderModal" class="modal">
         <div class="modal-content">
             <div class="modal-header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
@@ -159,14 +124,30 @@
             </div>
             <div class="form-group" style="margin-bottom:15px;">
                 <label style="display:block; font-size:13px; font-weight:600; margin-bottom:5px;">Teslimat Adresi *</label>
-                <textarea id="customerAddress" rows="3" placeholder="Mahalle, Cadde, Ada, Sokak, No, Daire..." style="width:100%; padding:10px; border:2px solid #e2e8f0; border-radius:8px;"></textarea>
+                <textarea id="customerAddress" rows="3" placeholder="Mahalle, Cadde, Sokak, No..." style="width:100%; padding:10px; border:2px solid #e2e8f0; border-radius:8px;"></textarea>
             </div>
 
-            <button type="button" id="kesinSiparisBtn" onclick="siparişiKesinVer()">Siparişi Onayla ve Gönder</button>
+            <button type="button" id="firebaseBtn" onclick="firebaseyeSiparisGonder()">Siparişi Onayla ve Gönder</button>
         </div>
     </div>
 
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     <script>
+        const firebaseConfig = {
+          apiKey: "AIzaSyDMIz96KNZF-7zWGRuI-2fvQ72fZImHtUw",
+          authDomain: "eretankartal.firebaseapp.com",
+          databaseURL: "https://eretankartal-default-rtdb.europe-west1.firebasedatabase.app",
+          projectId: "eretankartal",
+          storageBucket: "eretankartal.firebasestorage.app",
+          messagingSenderId: "775846519838",
+          appId: "1:775846519838:web:75b1d7dfb4ef942a3f7a0f"
+        };
+
+        if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
+        const db = firebase.database();
+
         function modalAc(ad, fiyat) {
             document.getElementById('modalProductName').textContent = ad + " (" + fiyat + " ₺)";
             document.getElementById('productPriceVal').value = fiyat;
@@ -177,7 +158,7 @@
             document.getElementById('orderModal').style.display = 'none';
         }
 
-        function siparişiKesinVer() {
+        function firebaseyeSiparisGonder() {
             const sube = document.getElementById('branchSelect').value;
             const isim = document.getElementById('customerName').value.trim();
             const telefon = document.getElementById('customerPhone').value.trim();
@@ -202,53 +183,18 @@
                 date: new Date().toLocaleDateString('tr-TR')
             };
 
-            // Yerel hafızaya kaydet
-            let siparisler = JSON.parse(localStorage.getItem('ertan_orders')) || [];
-            siparisler.unshift(yeniSiparis);
-            localStorage.setItem('ertan_orders', JSON.stringify(siparisler));
-            localStorage.setItem('ertan_trigger', Date.now());
-
-            // Garanti olması için işletme WhatsApp hattına da anında fırlat
-            const isletmeTelefonu = "905010901722"; // İşletme hattı
-            const mesaj = `*🔔 YENİ SİPARİŞ - ERTAN KARTAL*%0A%0A` +
-                          `📍 *Şube:* ${sube}%0A` +
-                          `🍔 *Ürün:* ${urun}%0A` +
-                          `👤 *Ad Soyad:* ${isim}%0A` +
-                          `📞 *Telefon:* ${telefon}%0A` +
-                          `🏠 *Adres:* ${adres}`;
-
-            alert("Tebrikler! Siparişiniz başarıyla alındı.");
-            modalKapat();
-
-            document.getElementById('customerName').value = '';
-            document.getElementById('customerPhone').value = '';
-            document.getElementById('customerAddress').value = '';
-
-            // WhatsApp'a yönlendir
-            window.open(`https://wa.me/${isletmeTelefonu}?text=${mesaj}`, '_blank');
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const filterButtons = document.querySelectorAll('.filter-btn');
-            const foodCards = document.querySelectorAll('.food-card');
-
-            filterButtons.forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    filterButtons.forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
-                    const filterValue = btn.getAttribute('data-filter');
-
-                    foodCards.forEach(card => {
-                        if(filterValue === 'all' || card.getAttribute('data-category') === filterValue) {
-                            card.style.display = 'flex';
-                        } else {
-                            card.style.display = 'none';
-                        }
-                    });
+            db.ref('orders').push(yeniSiparis)
+                .then(() => {
+                    alert("Tebrikler! Siparişiniz alındı ve şube paneline iletildi.");
+                    modalKapat();
+                    document.getElementById('customerName').value = '';
+                    document.getElementById('customerPhone').value = '';
+                    document.getElementById('customerAddress').value = '';
+                })
+                .catch((err) => {
+                    alert("Hata oluştu: " + err.message);
                 });
-            });
-        });
+        }
     </script>
 </body>
 </html>
