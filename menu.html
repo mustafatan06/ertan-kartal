@@ -36,7 +36,7 @@
             box-shadow: 0 10px 25px rgba(255,107,0,0.15);
             border: 2px solid #ff6b00;
         }
-        #netSiparisBtn {
+        #panelAktifBtn {
             width: 100%;
             background: #ff6b00 !important;
             color: white !important;
@@ -49,7 +49,7 @@
             margin-top: 15px;
             display: block !important;
         }
-        #netSiparisBtn:hover { background: #e66000 !important; }
+        #panelAktifBtn:hover { background: #e66000 !important; }
     </style>
 </head>
 <body>
@@ -160,8 +160,8 @@
                 <textarea id="customerAddress" rows="3" placeholder="Mahalle, Cadde, Ada, Sokak, No, Daire..." style="width:100%; padding:10px; border:2px solid #e2e8f0; border-radius:8px;"></textarea>
             </div>
 
-            <!-- %100 Çalışan Kesin Buton -->
-            <button type="button" id="netSiparisBtn" onclick="siparişiSimdiGonder()">Siparişi Onayla ve Gönder</button>
+            <!-- Panel Uyumlu Aktif Buton -->
+            <button type="button" id="panelAktifBtn" onclick="panelSiparisGonder()">Siparişi Onayla ve Gönder</button>
         </div>
     </div>
 
@@ -175,7 +175,7 @@
             document.getElementById('orderModal').style.display = 'none';
         }
 
-        function siparişiSimdiGonder() {
+        function panelSiparisGonder() {
             const sube = document.getElementById('branchSelect').value;
             const isim = document.getElementById('customerName').value.trim();
             const telefon = document.getElementById('customerPhone').value.trim();
@@ -206,12 +206,12 @@
                 time: new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })
             };
 
-            // Yerel depolamaya kaydet ve admin paneline tetik at
+            // Siparişi panel.html'in okuyacağı ortak hafızaya kaydet
             let siparisler = JSON.parse(localStorage.getItem('ertan_orders')) || [];
             siparisler.unshift(yeniSiparis);
             localStorage.setItem('ertan_orders', JSON.stringify(siparisler));
 
-            alert("Harika! Siparişiniz başarıyla alındı.");
+            alert("Tebrikler! Siparişiniz alındı ve panele iletildi.");
             modalKapat();
 
             // Formu temizle
