@@ -36,13 +36,13 @@
 
         .order-products-box { background: #f8fafc; border: 1px solid #e2e8f0; padding: 10px; border-radius: 8px; margin: 10px 0; font-size: 13px; color: #1e293b; }
 
-        /* DURUM BUTONLARI ALANI */
-        .order-footer { margin-top: 15px; border-top: 1px solid #f1f5f9; padding-top: 12px; display: flex; flex-direction: column; gap: 12px; }
+        /* DURUM VE İPTAL BUTONLARI ALANI */
+        .order-footer { margin-top: 15px; border-top: 1px solid #f1f5f9; padding-top: 12px; display: flex; flex-direction: column; gap: 10px; }
         .order-price-status { display: flex; justify-content: space-between; align-items: center; }
         .order-price { font-size: 16px; font-weight: 800; color: #ff6b00; }
         
-        .status-buttons-container { display: flex; gap: 8px; flex-wrap: wrap; }
-        .status-btn { flex: 1; padding: 10px 6px; border: none; border-radius: 8px; font-weight: 700; font-size: 12px; cursor: pointer; transition: 0.2s; color: #fff; display: flex; align-items: center; justify-content: center; gap: 5px; }
+        .status-buttons-container { display: flex; gap: 6px; flex-wrap: wrap; }
+        .status-btn { flex: 1; padding: 9px 4px; border: none; border-radius: 8px; font-weight: 700; font-size: 11px; cursor: pointer; transition: 0.2s; color: #fff; display: flex; align-items: center; justify-content: center; gap: 4px; }
         
         /* BUTON RENKLERİ */
         .btn-hazirlaniyor { background: #f59e0b; }
@@ -53,6 +53,9 @@
 
         .btn-teslim { background: #10b981; }
         .btn-teslim:hover { background: #059669; }
+
+        .btn-iptal { background: #ef4444; width: 100%; margin-top: 5px; font-size: 12px; padding: 8px; }
+        .btn-iptal:hover { background: #dc2626; }
 
         /* PASİF / BASILMIŞ KİLİTLİ BUTON (GRİ) */
         .status-btn.disabled, .status-btn:disabled { background: #cbd5e1 !important; color: #64748b !important; cursor: not-allowed; box-shadow: none; opacity: 0.7; }
@@ -90,36 +93,35 @@
         </div>
     </div>
 
-    <!-- GERÇEKÇİ 3 DEFA ARALIKLI ZİL SESİ SİSTEMİ -->
+    <!-- ÇALAR SAAT GİBİ 4 DEFA ARKA ARKAYA NET ZİL SESİ -->
     <script>
-        function zilSesiCal() {
+        function calarSaatZiliCal() {
             try {
                 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
                 
-                function tekZil(zaman) {
+                function tekBip(zaman) {
                     const osc = audioCtx.createOscillator();
                     const gain = audioCtx.createGain();
-                    osc.type = 'sine';
-                    // Zil frekansı (Tiz ve parlak)
-                    osc.frequency.setValueAtTime(1046.50, audioCtx.currentTime + zaman); // C6 nota
-                    osc.frequency.exponentialRampToValueAtTime(587.33, audioCtx.currentTime + zaman + 0.3);
+                    osc.type = 'square'; // Çalar saat tarzı keskin ses
+                    osc.frequency.setValueAtTime(880, audioCtx.currentTime + zaman); // A5
                     
-                    gain.gain.setValueAtTime(0.3, audioCtx.currentTime + zaman);
-                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + zaman + 0.4);
+                    gain.gain.setValueAtTime(0.2, audioCtx.currentTime + zaman);
+                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + zaman + 0.12);
                     
                     osc.connect(gain);
                     gain.connect(audioCtx.destination);
                     
                     osc.start(audioCtx.currentTime + zaman);
-                    osc.stop(audioCtx.currentTime + zaman + 0.4);
+                    osc.stop(audioCtx.currentTime + zaman + 0.12);
                 }
 
-                // Aralıklı olarak 3 defa çal
-                tekZil(0.0);
-                tekZil(0.35);
-                tekZil(0.70);
+                // Çalar saat gibi 4 defa arka arkaya hızlı bip
+                tekBip(0.0);
+                tekBip(0.18);
+                tekBip(0.36);
+                tekBip(0.54);
             } catch(e) {
-                // Tarayıcı kısıtlaması durumunda sessiz devam eder
+                // Tarayıcı kısıtı varsa sessiz geç
             }
         }
     </script>
@@ -161,6 +163,18 @@
                 });
         }
 
+        function siparisIptalEt(siparisId) {
+            if (confirm("Bu siparişi iptal etmek istediğinize emin misiniz?")) {
+                db.ref('orders/' + siparisId).remove()
+                    .then(() => {
+                        alert("Sipariş başarıyla iptal edildi ve kaldırıldı.");
+                    })
+                    .catch((err) => {
+                        alert("İptal edilirken hata oluştu: " + err.message);
+                    });
+            }
+        }
+
         function siparisleriDinleVeGoster() {
             db.ref('orders').on('value', (snapshot) => {
                 const listeDiv = document.getElementById('subeSiparisleriListesi');
@@ -182,9 +196,9 @@
 
                 filtreliSiparisler.reverse();
 
-                // Yeni sipariş gelirse 3 defa arka arkaya zil çal
+                // Yeni sipariş gelirse çalar saat gibi 4 defa çal
                 if (eskiSiparisSayisi !== null && filtreliSiparisler.length > eskiSiparisSayisi) {
-                    zilSesiCal();
+                    calarSaatZiliCal();
                 }
                 eskiSiparisSayisi = filtreliSiparisler.length;
 
@@ -197,7 +211,6 @@
                     const card = document.createElement('div');
                     card.className = 'order-card';
 
-                    // Duruma göre butonların aktiflik / renk durumunu ayarlıyoruz
                     let hazirlaniyorDisabled = '';
                     let hazirlaniyorClass = 'status-btn btn-hazirlaniyor';
                     let yolaCiktiDisabled = '';
@@ -254,6 +267,9 @@
                                     <i class="fa-solid fa-check"></i> Teslim Edildi
                                 </button>
                             </div>
+                            <button type="button" class="status-btn btn-iptal" onclick="siparisIptalEt('${s.id}')">
+                                <i class="fa-solid fa-ban"></i> Siparişi İptal Et
+                            </button>
                         </div>
                     `;
                     listeDiv.appendChild(card);
