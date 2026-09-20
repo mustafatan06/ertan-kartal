@@ -93,19 +93,20 @@
         </div>
     </div>
 
-    <!-- ÇALAR SAAT GİBİ 4 DEFA ARKA ARKAYA NET ZİL SESİ -->
+    <!-- ESKİ TİP ÇALAR SAAT RİTMİNDE 10 SANİYE BOYUNCA ARALIKLI ÇALAN ZİL SİSTEMİ -->
     <script>
-        function calarSaatZiliCal() {
+        function eskiTipCalarSaatCal() {
             try {
                 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
                 
-                function tekBip(zaman) {
+                function mekanikZil(zaman) {
                     const osc = audioCtx.createOscillator();
                     const gain = audioCtx.createGain();
-                    osc.type = 'square'; // Çalar saat tarzı keskin ses
-                    osc.frequency.setValueAtTime(880, audioCtx.currentTime + zaman); // A5
+                    osc.type = 'sawtooth'; // Keskin mekanik çalar saat tınısı
+                    osc.frequency.setValueAtTime(1318.51, audioCtx.currentTime + zaman); // E6 yüksek çan sesi
+                    osc.frequency.setValueAtTime(1046.50, audioCtx.currentTime + zaman + 0.05); // C6
                     
-                    gain.gain.setValueAtTime(0.2, audioCtx.currentTime + zaman);
+                    gain.gain.setValueAtTime(0.35, audioCtx.currentTime + zaman);
                     gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + zaman + 0.12);
                     
                     osc.connect(gain);
@@ -115,13 +116,14 @@
                     osc.stop(audioCtx.currentTime + zaman + 0.12);
                 }
 
-                // Çalar saat gibi 4 defa arka arkaya hızlı bip
-                tekBip(0.0);
-                tekBip(0.18);
-                tekBip(0.36);
-                tekBip(0.54);
+                // 10 saniye boyunca (yaklaşık her 0.3 saniyede bir çift çan darbesi) toplam 30 defa çalan çalar saat döngüsü
+                for (let i = 0; i < 30; i++) {
+                    let zamanOffset = i * 0.33;
+                    mekanikZil(zamanOffset);
+                    mekanikZil(zamanOffset + 0.08);
+                }
             } catch(e) {
-                // Tarayıcı kısıtı varsa sessiz geç
+                // Tarayıcı kısıtı durumunda sessiz devam eder
             }
         }
     </script>
@@ -163,7 +165,12 @@
                 });
         }
 
-        function siparisIptalEt(siparisId) {
+        function siparisIptalEt(siparisId, mevcutDurum) {
+            if (mevcutDurum === 'Teslim Edildi') {
+                alert("Teslim edilen siparişler iptal edilemez!");
+                return;
+            }
+
             if (confirm("Bu siparişi iptal etmek istediğinize emin misiniz?")) {
                 db.ref('orders/' + siparisId).remove()
                     .then(() => {
@@ -196,9 +203,9 @@
 
                 filtreliSiparisler.reverse();
 
-                // Yeni sipariş gelirse çalar saat gibi 4 defa çal
+                // Yeni sipariş gelirse 10 saniye boyunca çalar saat gibi çal
                 if (eskiSiparisSayisi !== null && filtreliSiparisler.length > eskiSiparisSayisi) {
-                    calarSaatZiliCal();
+                    eskiTipCalarSaatCal();
                 }
                 eskiSiparisSayisi = filtreliSiparisler.length;
 
@@ -217,15 +224,18 @@
                     let yolaCiktiClass = 'status-btn btn-yolacikti';
                     let teslimDisabled = '';
                     let teslimClass = 'status-btn btn-teslim';
+                    let iptalBtnHtml = '';
 
                     if (s.status === 'Hazırlanıyor') {
                         hazirlaniyorDisabled = 'disabled';
                         hazirlaniyorClass += ' disabled';
+                        iptalBtnHtml = `<button type="button" class="status-btn btn-iptal" onclick="siparisIptalEt('${s.id}', '${s.status}')"><i class="fa-solid fa-ban"></i> Siparişi İptal Et</button>`;
                     } else if (s.status === 'Yola Çıktı') {
                         hazirlaniyorDisabled = 'disabled';
                         hazirlaniyorClass += ' disabled';
                         yolaCiktiDisabled = 'disabled';
                         yolaCiktiClass += ' disabled';
+                        iptalBtnHtml = `<button type="button" class="status-btn btn-iptal" onclick="siparisIptalEt('${s.id}', '${s.status}')"><i class="fa-solid fa-ban"></i> Siparişi İptal Et</button>`;
                     } else if (s.status === 'Teslim Edildi') {
                         hazirlaniyorDisabled = 'disabled';
                         hazirlaniyorClass += ' disabled';
@@ -233,6 +243,11 @@
                         yolaCiktiClass += ' disabled';
                         teslimDisabled = 'disabled';
                         teslimClass += ' disabled';
+                        // Teslim edilen siparişte iptal butonu GÖSTERİLMİYOR (Korumalı)
+                        iptalBtnHtml = ''; 
+                    } else {
+                        // Yeni Sipariş durumu
+                        iptalBtnHtml = `<button type="button" class="status-btn btn-iptal" onclick="siparisIptalEt('${s.id}', '${s.status}')"><i class="fa-solid fa-ban"></i> Siparişi İptal Et</button>`;
                     }
 
                     card.innerHTML = `
@@ -267,9 +282,7 @@
                                     <i class="fa-solid fa-check"></i> Teslim Edildi
                                 </button>
                             </div>
-                            <button type="button" class="status-btn btn-iptal" onclick="siparisIptalEt('${s.id}')">
-                                <i class="fa-solid fa-ban"></i> Siparişi İptal Et
-                            </button>
+                            ${iptalBtnHtml}
                         </div>
                     `;
                     listeDiv.appendChild(card);
