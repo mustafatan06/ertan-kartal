@@ -38,7 +38,6 @@
 
         .food-img-container { width: 100%; height: 180px; background: #0f172a; overflow: hidden; display: flex; align-items: center; justify-content: center; position: relative; border-bottom: 1px solid #334155; }
         .food-img { width: 100%; height: 100%; object-fit: cover; }
-        .img-placeholder-text { position: absolute; font-size: 13px; color: #64748b; font-weight: 500; text-align: center; display: flex; align-items: center; gap: 6px; }
 
         .food-body { padding: 20px; display: flex; flex-direction: column; flex-grow: 1; justify-content: space-between; }
         .food-title-price { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; gap: 10px; }
@@ -71,6 +70,9 @@
         /* CANLI TAKİP KUTUSU */
         #canliTakipKutusu { display: none; background: #1e293b; border: 2px solid #ff6b00; padding: 20px; border-radius: 14px; margin-bottom: 30px; text-align: center; box-shadow: 0 10px 25px rgba(255,107,0,0.15); }
         #canliTakipKutusu h3 { color: #ff6b00; margin-bottom: 8px; }
+
+        /* FOOTER */
+        footer { background: #000000; text-align: center; padding: 25px 20px; font-size: 13px; color: #64748b; border-top: 1px solid #334155; margin-top: 50px; }
     </style>
 </head>
 <body>
@@ -96,17 +98,17 @@
             <p style="font-size: 13px; color: #94a3b8; margin-top: 5px;">Sayfayı yenileseniz bile durumunuz buradan canlı takip edilir.</p>
         </div>
 
+        <!-- KATEGORİ: PAN DÜRÜMLER -->
         <h2 class="section-title"><i class="fa-solid fa-fire" style="color:#ff6b00;"></i> Pan Dürümler</h2>
         <div class="food-grid">
             <div class="food-card">
                 <div class="food-img-container">
-                    <span class="img-placeholder-text"><i class="fa-solid fa-camera"></i> Görsel Ekle</span>
-                    <img src="" alt="Pan Klasik Dürüm" class="food-img">
+                    <img src="images/pan-klasik.jpg" alt="Pan Klasik Dürüm" class="food-img">
                 </div>
                 <div class="food-body">
                     <div>
                         <div class="food-title-price"><h3>Pan Klasik Dürüm</h3><span class="price">95 ₺</span></div>
-                        <p>90 Gram Tek Lavaş. Doritoslu, İstediğiniz Malzeme ile[cite: 7].</p>
+                        <p>90 Gram Tek Lavaş. Doritoslu, İstediğiniz Malzeme ile.</p>
                     </div>
                     <button type="button" class="order-action-btn" onclick="modalAc('Pan Klasik Dürüm', 95)"><i class="fa-solid fa-cart-shopping"></i> Sipariş Ver</button>
                 </div>
@@ -114,13 +116,12 @@
 
             <div class="food-card">
                 <div class="food-img-container">
-                    <span class="img-placeholder-text"><i class="fa-solid fa-camera"></i> Görsel Ekle</span>
-                    <img src="" alt="Pan Mega Dürüm" class="food-img">
+                    <img src="images/pan-mega.jpg" alt="Pan Mega Dürüm" class="food-img">
                 </div>
                 <div class="food-body">
                     <div>
                         <div class="food-title-price"><h3>Pan Mega Dürüm</h3><span class="price">105 ₺</span></div>
-                        <p>125 Gram Tek Lavaş. Doritoslu, İstediğiniz Malzeme ile[cite: 7].</p>
+                        <p>125 Gram Tek Lavaş. Doritoslu, İstediğiniz Malzeme ile.</p>
                     </div>
                     <button type="button" class="order-action-btn" onclick="modalAc('Pan Mega Dürüm', 105)"><i class="fa-solid fa-cart-shopping"></i> Sipariş Ver</button>
                 </div>
@@ -128,13 +129,12 @@
 
             <div class="food-card">
                 <div class="food-img-container">
-                    <span class="img-placeholder-text"><i class="fa-solid fa-camera"></i> Görsel Ekle</span>
-                    <img src="" alt="Pan Süper Mega Dürüm" class="food-img">
+                    <img src="images/pan-super-mega.jpg" alt="Pan Süper Mega Dürüm" class="food-img">
                 </div>
                 <div class="food-body">
                     <div>
                         <div class="food-title-price"><h3>Pan Süper Mega Dürüm</h3><span class="price">120 ₺</span></div>
-                        <p>150 Gram Çift Lavaş. Doritoslu, İstediğiniz Malzeme ile[cite: 7].</p>
+                        <p>150 Gram Çift Lavaş. Doritoslu, İstediğiniz Malzeme ile.</p>
                     </div>
                     <button type="button" class="order-action-btn" onclick="modalAc('Pan Süper Mega Dürüm', 120)"><i class="fa-solid fa-cart-shopping"></i> Sipariş Ver</button>
                 </div>
@@ -142,13 +142,12 @@
 
             <div class="food-card">
                 <div class="food-img-container">
-                    <span class="img-placeholder-text"><i class="fa-solid fa-camera"></i> Görsel Ekle</span>
-                    <img src="" alt="Pan Double Dürüm" class="food-img">
+                    <img src="images/pan-double.jpg" alt="Pan Double Dürüm" class="food-img">
                 </div>
                 <div class="food-body">
                     <div>
                         <div class="food-title-price"><h3>Pan Double Dürüm</h3><span class="price">140 ₺</span></div>
-                        <p>175 Gram Çift Lavaş. Doritoslu, İstediğiniz Malzeme ile[cite: 7].</p>
+                        <p>175 Gram Çift Lavaş. Doritoslu, İstediğiniz Malzeme ile.</p>
                     </div>
                     <button type="button" class="order-action-btn" onclick="modalAc('Pan Double Dürüm', 140)"><i class="fa-solid fa-cart-shopping"></i> Sipariş Ver</button>
                 </div>
@@ -156,140 +155,141 @@
 
             <div class="food-card">
                 <div class="food-img-container">
-                    <span class="img-placeholder-text"><i class="fa-solid fa-camera"></i> Görsel Ekle</span>
-                    <img src="" alt="Pan Bazuka Dürüm" class="food-img">
+                    <img src="images/pan-bazuka.jpg" alt="Pan Bazuka Dürüm" class="food-img">
                 </div>
                 <div class="food-body">
                     <div>
                         <div class="food-title-price"><h3>Pan Bazuka Dürüm</h3><span class="price">160 ₺</span></div>
-                        <p>200 Gram Çift Lavaş. Doritoslu, İstediğiniz Malzeme ile[cite: 7].</p>
+                        <p>200 Gram Çift Lavaş. Doritoslu, İstediğiniz Malzeme ile.</p>
                     </div>
                     <button type="button" class="order-action-btn" onclick="modalAc('Pan Bazuka Dürüm', 160)"><i class="fa-solid fa-cart-shopping"></i> Sipariş Ver</button>
                 </div>
             </div>
         </div>
 
+        <!-- KATEGORİ: PAN PORSİYON MENÜLER -->
         <h2 class="section-title"><i class="fa-solid fa-utensils" style="color:#ff6b00;"></i> Pan Porsiyon Menüler</h2>
         <div class="food-grid">
             <div class="food-card">
-                <div class="food-img-container"><span class="img-placeholder-text"><i class="fa-solid fa-camera"></i> Görsel Ekle</span></div>
+                <div class="food-img-container"><img src="images/porsiyon-1k.jpg" alt="1 Kişilik Porsiyon" class="food-img"></div>
                 <div class="food-body">
                     <div>
                         <div class="food-title-price"><h3>1 Kişilik Porsiyon (200 Gr)</h3><span class="price">170 ₺</span></div>
-                        <p>2 Lavaş, Göbek Aysberk, Nar Ekşisi, Acı Sos, Çeyrek Limon[cite: 7].</p>
+                        <p>2 Lavaş, Göbek Aysberk, Nar Ekşisi, Acı Sos, Çeyrek Limon.</p>
                     </div>
                     <button type="button" class="order-action-btn" onclick="modalAc('1 Kişilik Porsiyon (200 Gr)', 170)"><i class="fa-solid fa-cart-shopping"></i> Sipariş Ver</button>
                 </div>
             </div>
 
             <div class="food-card">
-                <div class="food-img-container"><span class="img-placeholder-text"><i class="fa-solid fa-camera"></i> Görsel Ekle</span></div>
+                <div class="food-img-container"><img src="images/porsiyon-2k.jpg" alt="2 Kişilik Porsiyon" class="food-img"></div>
                 <div class="food-body">
                     <div>
                         <div class="food-title-price"><h3>2 Kişilik Porsiyon (400 Gr)</h3><span class="price">300 ₺</span></div>
-                        <p>4 Lavaş, Göbek Aysberk, Nar Ekşisi, Acı Sos, Yarım Limon[cite: 7].</p>
+                        <p>4 Lavaş, Göbek Aysberk, Nar Ekşisi, Acı Sos, Yarım Limon.</p>
                     </div>
                     <button type="button" class="order-action-btn" onclick="modalAc('2 Kişilik Porsiyon (400 Gr)', 300)"><i class="fa-solid fa-cart-shopping"></i> Sipariş Ver</button>
                 </div>
             </div>
 
             <div class="food-card">
-                <div class="food-img-container"><span class="img-placeholder-text"><i class="fa-solid fa-camera"></i> Görsel Ekle</span></div>
+                <div class="food-img-container"><img src="images/porsiyon-3k.jpg" alt="3 Kişilik Porsiyon" class="food-img"></div>
                 <div class="food-body">
                     <div>
                         <div class="food-title-price"><h3>3 Kişilik Porsiyon (600 Gr)</h3><span class="price">430 ₺</span></div>
-                        <p>6 Lavaş, Göbek Aysberk, Nar Ekşisi, Acı Sos, Tam Limon[cite: 7].</p>
+                        <p>6 Lavaş, Göbek Aysberk, Nar Ekşisi, Acı Sos, Tam Limon.</p>
                     </div>
                     <button type="button" class="order-action-btn" onclick="modalAc('3 Kişilik Porsiyon (600 Gr)', 430)"><i class="fa-solid fa-cart-shopping"></i> Sipariş Ver</button>
                 </div>
             </div>
 
             <div class="food-card">
-                <div class="food-img-container"><span class="img-placeholder-text"><i class="fa-solid fa-camera"></i> Görsel Ekle</span></div>
+                <div class="food-img-container"><img src="images/porsiyon-4k.jpg" alt="4 Kişilik Porsiyon" class="food-img"></div>
                 <div class="food-body">
                     <div>
                         <div class="food-title-price"><h3>4 Kişilik Porsiyon (800 Gr)</h3><span class="price">560 ₺</span></div>
-                        <p>8 Lavaş, Göbek Aysberk, Nar Ekşisi, Acı Sos, Tam Limon[cite: 7].</p>
+                        <p>8 Lavaş, Göbek Aysberk, Nar Ekşisi, Acı Sos, Tam Limon.</p>
                     </div>
                     <button type="button" class="order-action-btn" onclick="modalAc('4 Kişilik Porsiyon (800 Gr)', 560)"><i class="fa-solid fa-cart-shopping"></i> Sipariş Ver</button>
                 </div>
             </div>
 
             <div class="food-card">
-                <div class="food-img-container"><span class="img-placeholder-text"><i class="fa-solid fa-camera"></i> Görsel Ekle</span></div>
+                <div class="food-img-container"><img src="images/porsiyon-5k.jpg" alt="5 Kişilik Porsiyon" class="food-img"></div>
                 <div class="food-body">
                     <div>
                         <div class="food-title-price"><h3>5 Kişilik Porsiyon (1000 Gr)</h3><span class="price">640 ₺</span></div>
-                        <p>10 Lavaş, Göbek Aysberk, Nar Ekşisi, Acı Sos, Tam Limon[cite: 7].</p>
+                        <p>10 Lavaş, Göbek Aysberk, Nar Ekşisi, Acı Sos, Tam Limon.</p>
                     </div>
                     <button type="button" class="order-action-btn" onclick="modalAc('5 Kişilik Porsiyon (1000 Gr)', 640)"><i class="fa-solid fa-cart-shopping"></i> Sipariş Ver</button>
                 </div>
             </div>
 
             <div class="food-card">
-                <div class="food-img-container"><span class="img-placeholder-text"><i class="fa-solid fa-camera"></i> Görsel Ekle</span></div>
+                <div class="food-img-container"><img src="images/porsiyon-beyaz-500g.jpg" alt="Beyaz Porsiyon" class="food-img"></div>
                 <div class="food-body">
                     <div>
                         <div class="food-title-price"><h3>500 Gr. Beyaz Porsiyon</h3><span class="price">330 ₺</span></div>
-                        <p>5 Lavaş, Göbek Aysberk, Nar Ekşisi, Acı Sos, Tam Limon[cite: 7].</p>
+                        <p>5 Lavaş, Göbek Aysberk, Nar Ekşisi, Acı Sos, Tam Limon.</p>
                     </div>
                     <button type="button" class="order-action-btn" onclick="modalAc('500 Gr. Beyaz Porsiyon', 330)"><i class="fa-solid fa-cart-shopping"></i> Sipariş Ver</button>
                 </div>
             </div>
 
             <div class="food-card">
-                <div class="food-img-container"><span class="img-placeholder-text"><i class="fa-solid fa-camera"></i> Görsel Ekle</span></div>
+                <div class="food-img-container"><img src="images/porsiyon-turuncu-500g.jpg" alt="Turuncu Porsiyon" class="food-img"></div>
                 <div class="food-body">
                     <div>
                         <div class="food-title-price"><h3>500 Gr. Turuncu Porsiyon</h3><span class="price">305 ₺</span></div>
-                        <p>Yeşilliksiz. 5 Lavaş, Nar Ekşisi, Acı Sos, Yarım Limon[cite: 7].</p>
+                        <p>Yeşilliksiz. 5 Lavaş, Nar Ekşisi, Acı Sos, Yarım Limon.</p>
                     </div>
                     <button type="button" class="order-action-btn" onclick="modalAc('500 Gr. Turuncu Porsiyon', 305)"><i class="fa-solid fa-cart-shopping"></i> Sipariş Ver</button>
                 </div>
             </div>
         </div>
 
+        <!-- KATEGORİ: ÖZEL MENÜLER & DİĞER -->
         <h2 class="section-title"><i class="fa-solid fa-star" style="color:#ff6b00;"></i> Özel Menüler & Lezzetler</h2>
         <div class="food-grid">
             <div class="food-card">
-                <div class="food-img-container"><span class="img-placeholder-text"><i class="fa-solid fa-camera"></i> Görsel Ekle</span></div>
+                <div class="food-img-container"><img src="images/kampanya-600gr.jpg" alt="600 Gr Kampanya" class="food-img"></div>
                 <div class="food-body">
                     <div>
                         <div class="food-title-price"><h3>600 Gr. Çiğ Köfte + Ayran</h3><span class="price">250 ₺</span></div>
-                        <p>600 Gr. Çiğ Köfte alana **1 Litre Ayran Hediye!**[cite: 7]</p>
+                        <p>600 Gr. Çiğ Köfte alana **1 Litre Ayran Hediye!**</p>
                     </div>
                     <button type="button" class="order-action-btn" onclick="modalAc('600 Gr. Çiğ Köfte Kampanyası', 250)"><i class="fa-solid fa-cart-shopping"></i> Sipariş Ver</button>
                 </div>
             </div>
 
             <div class="food-card">
-                <div class="food-img-container"><span class="img-placeholder-text"><i class="fa-solid fa-camera"></i> Görsel Ekle</span></div>
+                <div class="food-img-container"><img src="images/icli-kofte.jpg" alt="İçli Köfte" class="food-img"></div>
                 <div class="food-body">
                     <div>
                         <div class="food-title-price"><h3>İçli Köfte (Adet)</h3><span class="price">95 ₺</span></div>
-                        <p>Bize Özel, Size Güzel. Çıtır dış kabuk, bol kıymalı harç[cite: 7].</p>
+                        <p>Bize Özel, Size Güzel. Çıtır dış kabuk, bol kıymalı harç.</p>
                     </div>
                     <button type="button" class="order-action-btn" onclick="modalAc('İçli Köfte (Adet)', 95)"><i class="fa-solid fa-cart-shopping"></i> Sipariş Ver</button>
                 </div>
             </div>
 
             <div class="food-card">
-                <div class="food-img-container"><span class="img-placeholder-text"><i class="fa-solid fa-camera"></i> Görsel Ekle</span></div>
+                <div class="food-img-container"><img src="images/ciger-durum.jpg" alt="Ciğer Dürüm" class="food-img"></div>
                 <div class="food-body">
                     <div>
                         <div class="food-title-price"><h3>Ciğer Dürüm</h3><span class="price">190 ₺</span></div>
-                        <p>Taze ve yumuşak kıvamıyla özel sarım lezzetli ciğer dürüm[cite: 7].</p>
+                        <p>Taze ve yumuşak kıvamıyla özel sarım lezzetli ciğer dürüm.</p>
                     </div>
                     <button type="button" class="order-action-btn" onclick="modalAc('Ciğer Dürüm', 190)"><i class="fa-solid fa-cart-shopping"></i> Sipariş Ver</button>
                 </div>
             </div>
 
             <div class="food-card">
-                <div class="food-img-container"><span class="img-placeholder-text"><i class="fa-solid fa-camera"></i> Görsel Ekle</span></div>
+                <div class="food-img-container"><img src="images/susi-cigkofte.jpg" alt="Suşi Çiğ Köfte" class="food-img"></div>
                 <div class="food-body">
                     <div>
                         <div class="food-title-price"><h3>Suşi Çiğ Köfte (150 Gr)</h3><span class="price">190 ₺</span></div>
-                        <p>Özel sunum ve kesimiyle yenilikçi suşi konseptli çiğ köfte[cite: 7].</p>
+                        <p>Özel sunum ve kesimiyle yenilikçi suşi konseptli çiğ köfte.</p>
                     </div>
                     <button type="button" class="order-action-btn" onclick="modalAc('Suşi Çiğ Köfte (150 Gr)', 190)"><i class="fa-solid fa-cart-shopping"></i> Sipariş Ver</button>
                 </div>
@@ -333,6 +333,11 @@
             <button type="button" id="firebaseBtn" onclick="firebaseyeSiparisGonder()">Siparişi Onayla ve Gönder</button>
         </div>
     </div>
+
+    <footer>
+        <p>&copy; 2026 Ertan Kartal Çiğ Köfte. Tüm hakları saklıdır.</p>
+        <p style="margin-top: 8px; color: #ff6b00; font-weight: 600; letter-spacing: 0.5px;">TAN MEDYA TASARIM Tarafından Kurulmuştur.</p>
+    </footer>
 
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
