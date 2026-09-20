@@ -197,7 +197,7 @@
                 address: adres,
                 product: urun,
                 price: fiyat,
-                status: "Yeni Sipariş", // "Yeni Sipariş" veya "Geçmiş"
+                status: "Yeni Sipariş",
                 time: new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' }),
                 date: new Date().toLocaleDateString('tr-TR')
             };
@@ -205,8 +205,9 @@
             let siparisler = JSON.parse(localStorage.getItem('ertan_orders')) || [];
             siparisler.unshift(yeniSiparis);
             localStorage.setItem('ertan_orders', JSON.stringify(siparisler));
+            localStorage.setItem('ertan_trigger', Date.now()); // Anlık tetikleme sinyali
 
-            alert("Harika! Siparişiniz başarıyla alındı ve şube paneline iletildi.");
+            alert("Tebrikler! Siparişiniz başarıyla alındı ve şube paneline iletildi.");
             modalKapat();
 
             document.getElementById('customerName').value = '';
