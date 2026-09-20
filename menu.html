@@ -183,6 +183,7 @@
                 date: new Date().toLocaleDateString('tr-TR')
             };
 
+            // Direkt Firebase'e yazıyoruz (WhatsApp tamamen kaldırıldı)
             db.ref('orders').push(yeniSiparis)
                 .then(() => {
                     alert("Tebrikler! Siparişiniz alındı ve şube paneline iletildi.");
