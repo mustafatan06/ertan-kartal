@@ -22,13 +22,43 @@
 
         .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
 
-        /* HERO SECTION */
-        .hero { text-align: center; padding: 60px 20px; background: linear-gradient(135deg, #1e293b, #000000); border-radius: 16px; border: 1px solid #334155; margin: 30px 0; }
-        .hero h1 { font-size: clamp(24px, 4vw, 38px); font-weight: 800; color: #ffffff; margin-bottom: 15px; }
+        /* HERO SECTION & DEVASA NEON BUTON */
+        .hero { text-align: center; padding: 70px 20px; background: linear-gradient(135deg, #1e293b, #000000); border-radius: 20px; border: 1px solid #334155; margin: 30px 0; box-shadow: 0 15px 35px rgba(0,0,0,0.5); }
+        .hero h1 { font-size: clamp(28px, 4.5vw, 44px); font-weight: 800; color: #ffffff; margin-bottom: 15px; }
         .hero h1 span { color: #ff6b00; }
-        .hero p { color: #94a3b8; font-size: 16px; margin-bottom: 30px; }
-        .cta-btn { background: #ff6b00; color: white; padding: 14px 30px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 16px; transition: 0.3s; display: inline-block; }
-        .cta-btn:hover { background: #e05e00; box-shadow: 0 0 20px rgba(255, 107, 0, 0.4); }
+        .hero p { color: #94a3b8; font-size: 17px; margin-bottom: 40px; }
+
+        /* NEON YANIP SÖNEN DEVASA BUTON */
+        .cta-btn { 
+            background: linear-gradient(135deg, #ff6b00, #ff8833); 
+            color: white; 
+            padding: 20px 45px; 
+            border-radius: 14px; 
+            text-decoration: none; 
+            font-weight: 800; 
+            font-size: 20px; 
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: inline-flex; 
+            align-items: center; 
+            gap: 12px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 25px rgba(255, 107, 0, 0.6), inset 0 0 15px rgba(255, 255, 255, 0.3);
+            animation: neonGlowPulse 2s infinite;
+            border: 2px solid #ffaa66;
+        }
+
+        .cta-btn:hover { 
+            background: linear-gradient(135deg, #e05e00, #ff6b00);
+            transform: scale(1.05) translateY(-3px); 
+            box-shadow: 0 0 45px rgba(255, 107, 0, 0.9), inset 0 0 20px rgba(255, 255, 255, 0.5);
+        }
+
+        @keyframes neonGlowPulse {
+            0% { box-shadow: 0 0 15px rgba(255, 107, 0, 0.5), inset 0 0 10px rgba(255, 255, 255, 0.2); }
+            50% { box-shadow: 0 0 40px rgba(255, 107, 0, 0.9), inset 0 0 20px rgba(255, 255, 255, 0.4); }
+            100% { box-shadow: 0 0 15px rgba(255, 107, 0, 0.5), inset 0 0 10px rgba(255, 255, 255, 0.2); }
+        }
 
         /* MÜŞTERİ YORUM VE PUANLAMA SİSTEMİ STİLLERİ */
         .section-title { font-size: 24px; font-weight: 700; color: #ffffff; margin: 40px 0 20px 0; border-left: 5px solid #ff6b00; padding-left: 12px; display: flex; align-items: center; gap: 10px; }
@@ -84,7 +114,7 @@
         <section class="hero">
             <h1>Uçan Paket Sepeti ile <span>Lezzet Kapında</span></h1>
             <p>Eşsiz lezzetlerimiz, taze malzemelerimiz ve en hızlı kurye ağımızla hizmetinizdeyiz.</p>
-            <a href="menu.html" class="cta-btn"><i class="fa-solid fa-utensils"></i> Hemen Sipariş Ver</a>
+            <a href="menu.html" class="cta-btn"><i class="fa-solid fa-cart-shopping"></i> Hemen Sipariş Ver</a>
         </section>
 
         <!-- MÜŞTERİ YORUM & PUANLAMA BÖLÜMÜ -->
