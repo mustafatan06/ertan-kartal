@@ -20,7 +20,12 @@
         .tab-btn { padding: 10px 20px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; background: #e2e8f0; color: #475569; transition: 0.2s; }
         .tab-btn.active { background: #ff6b00; color: white; }
 
-        .order-card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 15px; border-left: 6px solid #ff6b00; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
+        .order-card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 15px; border-left: 6px solid #ff6b00; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; animation: yeniAnimasyon 0.5s ease; }
+        @keyframes yeniAnimasyon {
+            0% { transform: scale(0.98); opacity: 0; background: #fff7ed; }
+            100% { transform: scale(1); opacity: 1; background: #white; }
+        }
+
         .order-info h3 { margin: 0 0 6px 0; color: #1e293b; font-size: 17px; }
         .order-info p { margin: 3px 0; color: #64748b; font-size: 14px; }
         
@@ -36,6 +41,24 @@
 
         .footer-summary { background: #1e293b; color: white; padding: 20px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; margin-top: 30px; font-weight: 600; }
         .footer-summary span { color: #ff6b00; font-size: 20px; }
+
+        /* Bildirim Banner Tasarımı */
+        #bildirimKutusu {
+            display: none;
+            background: #ff6b00;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-weight: 600;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(255,107,0,0.3);
+            animation: pulseBlink 1s infinite alternate;
+        }
+        @keyframes pulseBlink {
+            0% { opacity: 0.9; }
+            100% { opacity: 1; transform: scale(1.01); }
+        }
     </style>
 </head>
 <body>
@@ -51,6 +74,11 @@
                     <option value="Karapürçek Şube">Karapürçek Şube</option>
                 </select>
             </div>
+        </div>
+
+        <!-- YENİ SİPARİŞ GELDİĞİNDE BELİREN GÖRSEL BİLDİRİM BANNERI -->
+        <div id="bildirimKutusu">
+            <i class="fa-solid fa-bell"></i> 🔔 Dikkat! Sisteme Yeni Bir Sipariş Düştü!
         </div>
 
         <div class="tabs">
@@ -70,6 +98,31 @@
 
     <script>
         let aktifSekme = 'gelen';
+        let eskiSiparisSayisi = -1;
+
+        // BİLDİRİM SESİ ÇALMA MOTORU (Web Audio API - Harici dosya gerektirmez)
+        function bildirimSesiCal() {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(587.33, audioCtx.currentTime); // D5 nota frekansı
+                osc.frequency.setValueAtTime(880, audioCtx.currentTime + 0.15); // A5 nota frekansı
+                
+                gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
+                
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.5);
+            } catch(e) {
+                console.log("Ses çalınamadı: ", e);
+            }
+        }
 
         function sekmeDegis(sekme) {
             aktifSekme = sekme;
@@ -78,10 +131,24 @@
             paneliGuncelle();
         }
 
-        function paneliGuncelle() {
+        function paneliGuncelle(yeniSiparisGeldiMi = false) {
             const secilenSube = document.getElementById('branchFilter').value;
             const container = document.getElementById('siparisListesiContainer');
             let siparisler = JSON.parse(localStorage.getItem('ertan_orders')) || [];
+
+            // Yeni sipariş sayısını kontrol et (Sesli & Görsel bildirim tetikleyicisi)
+            let yeniGelenSayisi = siparisler.filter(s => s.status === 'Yeni Sipariş').length;
+            
+            if (eskiSiparisSayisi !== -1 && yeniGelenSayisi > eskiSiparisSayisi) {
+                // Görsel uyarıyı göster
+                const bKutusu = document.getElementById('bildirimKutusu');
+                bKutusu.style.display = 'block';
+                setTimeout(() => { bKutusu.style.display = 'none'; }, 6000);
+                
+                // Sesli uyarıyı çal
+                bildirimSesiCal();
+            }
+            eskiSiparisSayisi = yeniGelenSayisi;
 
             let filtrelenmis = siparisler.filter(s => {
                 let sekmeUyumlu = (aktifSekme === 'gelen') ? (s.status === 'Yeni Sipariş') : (s.status === 'Tamamlandı');
@@ -146,6 +213,7 @@
 
         paneliGuncelle();
 
+        // Anlık senkronizasyon (Menüden sipariş geldiğinde anında sesli/görsel uyarı verir)
         window.addEventListener('storage', (e) => {
             if (e.key === 'ertan_orders' || e.key === 'ertan_trigger') {
                 paneliGuncelle();
