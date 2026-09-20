@@ -36,7 +36,18 @@
         }
         #firebaseBtn:hover { background: #e66000 !important; }
 
-        /* Canlı Takip Ekran Kutusu */
+        /* Otomatik tespit edilen şube bilgilendirme kutusu */
+        #autoBranchInfo {
+            font-size: 12px;
+            color: #059669;
+            background: #d1fae5;
+            padding: 6px 10px;
+            border-radius: 6px;
+            margin-top: 5px;
+            font-weight: 600;
+            display: none;
+        }
+
         #canliTakipKutusu {
             display: none;
             background: #fff7ed;
@@ -66,7 +77,7 @@
             <p>Ürüne tıklayarak hemen siparişini oluşturabilirsin.</p>
         </section>
 
-        <!-- SİPARİŞ TAKİP EKRANI (Sayfa yenilense bile kaybolmaz) -->
+        <!-- SİPARİŞ TAKİP EKRANI -->
         <div id="canliTakipKutusu">
             <h3><i class="fa-solid fa-person-biking"></i> Sipariş Durumunuz</h3>
             <p id="durumMetni" style="font-size: 18px; font-weight: 700; color: #1e293b;">Siparişiniz kontrol ediliyor...</p>
@@ -126,13 +137,15 @@
             <input type="hidden" id="productPriceVal" value="0">
 
             <div class="form-group" style="margin-bottom:12px;">
-                <label style="display:block; font-size:13px; font-weight:600; margin-bottom:5px;">Şube Seçin *</label>
-                <select id="branchSelect" style="width:100%; padding:10px; border:2px solid #e2e8f0; border-radius:8px;">
-                    <option value="Merkez Şube">Merkez Şube</option>
+                <label style="display:block; font-size:13px; font-weight:600; margin-bottom:5px;">İlgili Şube (Adrese Göre Otomatik Seçilir) *</label>
+                <select id="branchSelect" style="width:100%; padding:10px; border:2px solid #e2e8f0; border-radius:8px; background:#f8fafc;" disabled>
+                    <option value="Merkez Gülpınar Şube">Merkez Gülpınar Şube</option>
                     <option value="Feridunçelik Şube">Feridunçelik Şube</option>
                     <option value="Karapürçek Şube">Karapürçek Şube</option>
                 </select>
+                <div id="autoBranchInfo"><i class="fa-solid fa-wand-magic-sparkles"></i> Adresinize en yakın şube otomatik atandı.</div>
             </div>
+
             <div class="form-group" style="margin-bottom:12px;">
                 <label style="display:block; font-size:13px; font-weight:600; margin-bottom:5px;">İsim Soyisim *</label>
                 <input type="text" id="customerName" placeholder="İsim Soyisim" style="width:100%; padding:10px; border:2px solid #e2e8f0; border-radius:8px;">
@@ -142,8 +155,8 @@
                 <input type="tel" id="customerPhone" placeholder="05XXXXXXXXX" style="width:100%; padding:10px; border:2px solid #e2e8f0; border-radius:8px;">
             </div>
             <div class="form-group" style="margin-bottom:15px;">
-                <label style="display:block; font-size:13px; font-weight:600; margin-bottom:5px;">Teslimat Adresi *</label>
-                <textarea id="customerAddress" rows="3" placeholder="Mahalle, Cadde, Sokak, No..." style="width:100%; padding:10px; border:2px solid #e2e8f0; border-radius:8px;"></textarea>
+                <label style="display:block; font-size:13px; font-weight:600; margin-bottom:5px;">Teslimat Adresi (Mahalle, Cadde, Sokak) *</label>
+                <textarea id="customerAddress" rows="3" placeholder="Örn: Feridunçelik Mah. 12. Cadde..." style="width:100%; padding:10px; border:2px solid #e2e8f0; border-radius:8px;" oninput="adreseGoreSubeSec(this.value)"></textarea>
             </div>
 
             <button type="button" id="firebaseBtn" onclick="firebaseyeSiparisGonder()">Siparişi Onayla ve Gönder</button>
@@ -167,14 +180,54 @@
         if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
         const db = firebase.database();
 
+        // URL üzerinden şube parametresi gelmişse (Ana sayfadaki menüden tıklandıysa) ilk değeri ayarla
+        const urlParams = new URLSearchParams(window.location.search);
+        const gelenSubeParam = urlParams.get('sube');
+
         function modalAc(ad, fiyat) {
             document.getElementById('modalProductName').textContent = ad + " (" + fiyat + " ₺)";
             document.getElementById('productPriceVal').value = fiyat;
             document.getElementById('orderModal').style.display = 'flex';
+            
+            // Eğer URL'den özel şube seçilip gelinmişse onu baz al, yoksa adrese bırak
+            if(gelenSubeParam === 'feriduncelik') {
+                secilenSubeyiAyarla("Feridunçelik Şube", "URL tercihine göre atandı.");
+            } else if(gelenSubeParam === 'karapurcek') {
+                secilenSubeyiAyarla("Karapürçek Şube", "URL tercihine göre atandı.");
+            } else if(gelenSubeParam === 'gurpinar') {
+                secilenSubeyiAyarla("Merkez Gülpınar Şube", "URL tercihine göre atandı.");
+            }
         }
 
         function modalKapat() {
             document.getElementById('orderModal').style.display = 'none';
+        }
+
+        // AKILLI ADRES ANALİZİ İLE ŞUBE TESPİT ETME
+        function adreseGoreSubeSec(adresMetni) {
+            const metin = adresMetni.toLowerCase();
+            const selectBox = document.getElementById('branchSelect');
+            const infoBox = document.getElementById('autoBranchInfo');
+
+            infoBox.style.display = 'block';
+
+            if (metin.includes('feridun') || metin.includes('feridunçelik')) {
+                selectBox.value = "Feridunçelik Şube";
+                infoBox.innerHTML = '<i class="fa-solid fa-check-circle"></i> Adresinize en yakın şube: <strong>Feridunçelik Şube</strong>';
+            } else if (metin.includes('karapürçek') || metin.includes('karapurcek') || metin.includes('bahtiyar')) {
+                selectBox.value = "Karapürçek Şube";
+                infoBox.innerHTML = '<i class="fa-solid fa-check-circle"></i> Adresinize en yakın şube: <strong>Karapürçek Şube</strong>';
+            } else {
+                selectBox.value = "Merkez Gülpınar Şube";
+                infoBox.innerHTML = '<i class="fa-solid fa-check-circle"></i> Adresinize en yakın şube: <strong>Merkez Gülpınar Şube</strong>';
+            }
+        }
+
+        function secilenSubeyiAyarla(subeAdi, aciklama) {
+            document.getElementById('branchSelect').value = subeAdi;
+            const infoBox = document.getElementById('autoBranchInfo');
+            infoBox.style.display = 'block';
+            infoBox.innerHTML = `<i class="fa-solid fa-check-circle"></i> ${aciklama} <strong>${subeAdi}</strong>`;
         }
 
         function firebaseyeSiparisGonder() {
@@ -206,10 +259,8 @@
 
             db.ref('orders/' + siparisId).set(yeniSiparis)
                 .then(() => {
-                    // Sipariş ID'sini telefonda kalıcı hafızaya kaydet
                     localStorage.setItem('aktif_siparis_id', siparisId);
-
-                    alert("Tebrikler! Siparişiniz alındı ve şube paneline iletildi.");
+                    alert(`Tebrikler! Siparişiniz başarıyla alındı ve ${sube} paneline iletildi.`);
                     modalKapat();
                     document.getElementById('customerName').value = '';
                     document.getElementById('customerPhone').value = '';
@@ -238,18 +289,15 @@
                         durumElementi.style.color = '#10b981';
                     }
                 } else {
-                    // Sipariş silindiyse takip ekranını gizle
                     document.getElementById('canliTakipKutusu').style.display = 'none';
                     localStorage.removeItem('aktif_siparis_id');
                 }
             });
         }
 
-        // SAYFA YENİLENDİĞİNDE VEYA KAPATILIP AÇILDIĞINDA ESKİ SİPARİŞİ OTOMATİK GETİR
         window.addEventListener('DOMContentLoaded', () => {
             const kayitliId = localStorage.getItem('aktif_siparis_id');
             if (kayitliId) {
-                // Firebase'den bu sipariş hâlâ duruyor mu kontrol et
                 db.ref('orders/' + kayitliId).once('value', (snapshot) => {
                     if (snapshot.exists()) {
                         document.getElementById('canliTakipKutusu').style.display = 'block';
