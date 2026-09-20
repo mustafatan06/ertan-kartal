@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ertan Kartal Çiğ Köfte | Ana Sayfa</title>
+    <title>Uçan Paket Sepeti | Ana Sayfa</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -13,9 +13,9 @@
         /* NAVBAR */
         header { background: #000000; border-bottom: 2px solid #ff6b00; position: sticky; top: 0; z-index: 9999; }
         .navbar { max-width: 1200px; margin: 0 auto; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-size: 22px; font-weight: 800; text-decoration: none; text-transform: uppercase; letter-spacing: 1px; }
-        .logo .ertan { color: #ffffff; }
-        .logo .kartal { color: #ff6b00; }
+        .logo { font-size: 20px; font-weight: 800; text-decoration: none; text-transform: uppercase; letter-spacing: 0.5px; }
+        .logo .ucan { color: #ffffff; }
+        .logo .paket { color: #ff6b00; }
         .nav-links { list-style: none; display: flex; gap: 20px; }
         .nav-links a { color: #cbd5e1; text-decoration: none; font-weight: 500; transition: 0.3s; }
         .nav-links a:hover, .nav-links a.active { color: #ff6b00; }
@@ -24,7 +24,7 @@
 
         /* HERO SECTION */
         .hero { text-align: center; padding: 60px 20px; background: linear-gradient(135deg, #1e293b, #000000); border-radius: 16px; border: 1px solid #334155; margin: 30px 0; }
-        .hero h1 { font-size: clamp(26px, 4vw, 40px); font-weight: 800; color: #ffffff; margin-bottom: 15px; }
+        .hero h1 { font-size: clamp(24px, 4vw, 38px); font-weight: 800; color: #ffffff; margin-bottom: 15px; }
         .hero h1 span { color: #ff6b00; }
         .hero p { color: #94a3b8; font-size: 16px; margin-bottom: 30px; }
         .cta-btn { background: #ff6b00; color: white; padding: 14px 30px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 16px; transition: 0.3s; display: inline-block; }
@@ -72,7 +72,7 @@
 <body>
     <header>
         <nav class="navbar">
-            <a href="index.html" class="logo"><span class="ertan">ertan</span> <span class="kartal">kartal</span></a>
+            <a href="index.html" class="logo"><span class="ucan">Uçan Paket</span> <span class="paket">Sepeti</span></a>
             <ul class="nav-links">
                 <li><a href="index.html" class="active">Ana Sayfa</a></li>
                 <li><a href="menu.html">Sipariş Ekranı</a></li>
@@ -82,8 +82,8 @@
 
     <main class="container">
         <section class="hero">
-            <h1>Ertan Kartal Çiğ Köfteye Hoş Geldiniz</h1>
-            <p>Eşsiz lezzetimiz, taze malzemelerimiz ve hızlı servisimizle kapınızdayız.</p>
+            <h1>Uçan Paket Sepeti ile <span>Lezzet Kapında</span></h1>
+            <p>Eşsiz lezzetlerimiz, taze malzemelerimiz ve en hızlı kurye ağımızla hizmetinizdeyiz.</p>
             <a href="menu.html" class="cta-btn"><i class="fa-solid fa-utensils"></i> Hemen Sipariş Ver</a>
         </section>
 
@@ -154,7 +154,7 @@
     </main>
 
     <footer>
-        <p>&copy; 2026 Ertan Kartal Çiğ Köfte. Tüm hakları saklıdır.</p>
+        <p>&copy; 2026 Uçan Paket Sepeti. Tüm hakları saklıdır.</p>
         <p style="margin-top: 8px; color: #ff6b00; font-weight: 600; letter-spacing: 0.5px;">TAN MEDYA TASARIM Tarafından Kurulmuştur.</p>
     </footer>
 
@@ -223,7 +223,6 @@
                 });
         }
 
-        // YORUMLARI ANLIK DİNLE VE LİSTELE
         db.ref('reviews').on('value', (snapshot) => {
             const listeDiv = document.getElementById('reviewsList');
             listeDiv.innerHTML = '';
@@ -234,7 +233,7 @@
             }
 
             const veriler = snapshot.val();
-            const arrayVeri = Object.values(veriler).reverse(); // En yeni yorum üstte
+            const arrayVeri = Object.values(veriler).reverse();
 
             arrayVeri.forEach(r => {
                 const card = document.createElement('div');
