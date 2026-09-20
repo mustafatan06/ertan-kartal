@@ -20,12 +20,7 @@
         .tab-btn { padding: 10px 20px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; background: #e2e8f0; color: #475569; transition: 0.2s; }
         .tab-btn.active { background: #ff6b00; color: white; }
 
-        .order-card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 15px; border-left: 6px solid #ff6b00; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; animation: yeniAnimasyon 0.5s ease; }
-        @keyframes yeniAnimasyon {
-            0% { transform: scale(0.98); opacity: 0; background: #fff7ed; }
-            100% { transform: scale(1); opacity: 1; background: #white; }
-        }
-
+        .order-card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 15px; border-left: 6px solid #ff6b00; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
         .order-info h3 { margin: 0 0 6px 0; color: #1e293b; font-size: 17px; }
         .order-info p { margin: 3px 0; color: #64748b; font-size: 14px; }
         
@@ -111,9 +106,7 @@
                 
                 osc.start();
                 osc.stop(audioCtx.currentTime + 0.5);
-            } catch(e) {
-                console.log("Ses çalınamadı", e);
-            }
+            } catch(e) {}
         }
 
         function sekmeDegis(sekme) {
@@ -128,7 +121,6 @@
             const container = document.getElementById('siparisListesiContainer');
             const hammaddeSiparisler = localStorage.getItem('ertan_orders') || "[]";
             
-            // Eğer yeni sipariş eklendiyse ses çal ve görsel uyarı ver
             if (eskiSiparisVerisi !== "" && hammaddeSiparisler !== eskiSiparisVerisi) {
                 let eskiParsed = JSON.parse(eskiSiparisVerisi || "[]");
                 let yeniParsed = JSON.parse(hammaddeSiparisler);
@@ -204,10 +196,9 @@
             }
         };
 
-        // Sayfa açıldığında ilk yükleme
         paneliGuncelle();
 
-        // CANLI TARAYICI DÖNGÜSÜ: Her 1 saniyede bir hafızayı kontrol eder (Siparişin düşmeme ihtimalini tamamen sıfırlar)
+        // Her saniye hafızayı tarar
         setInterval(() => {
             paneliGuncelle();
         }, 1000);

@@ -36,7 +36,7 @@
             box-shadow: 0 10px 25px rgba(255,107,0,0.15);
             border: 2px solid #ff6b00;
         }
-        #proSiparisBtn {
+        #kesinSiparisBtn {
             width: 100%;
             background: #ff6b00 !important;
             color: white !important;
@@ -49,7 +49,7 @@
             margin-top: 15px;
             display: block !important;
         }
-        #proSiparisBtn:hover { background: #e66000 !important; }
+        #kesinSiparisBtn:hover { background: #e66000 !important; }
     </style>
 </head>
 <body>
@@ -162,7 +162,7 @@
                 <textarea id="customerAddress" rows="3" placeholder="Mahalle, Cadde, Ada, Sokak, No, Daire..." style="width:100%; padding:10px; border:2px solid #e2e8f0; border-radius:8px;"></textarea>
             </div>
 
-            <button type="button" id="proSiparisBtn" onclick="siparihiPaneleGonder()">Siparişi Onayla ve Gönder</button>
+            <button type="button" id="kesinSiparisBtn" onclick="siparişiKesinVer()">Siparişi Onayla ve Gönder</button>
         </div>
     </div>
 
@@ -177,7 +177,7 @@
             document.getElementById('orderModal').style.display = 'none';
         }
 
-        function siparihiPaneleGonder() {
+        function siparişiKesinVer() {
             const sube = document.getElementById('branchSelect').value;
             const isim = document.getElementById('customerName').value.trim();
             const telefon = document.getElementById('customerPhone').value.trim();
@@ -202,17 +202,30 @@
                 date: new Date().toLocaleDateString('tr-TR')
             };
 
+            // Yerel hafızaya kaydet
             let siparisler = JSON.parse(localStorage.getItem('ertan_orders')) || [];
             siparisler.unshift(yeniSiparis);
             localStorage.setItem('ertan_orders', JSON.stringify(siparisler));
-            localStorage.setItem('ertan_trigger', Date.now()); // Anlık tetikleme sinyali
+            localStorage.setItem('ertan_trigger', Date.now());
 
-            alert("Tebrikler! Siparişiniz başarıyla alındı ve şube paneline iletildi.");
+            // Garanti olması için işletme WhatsApp hattına da anında fırlat
+            const isletmeTelefonu = "905010901722"; // İşletme hattı
+            const mesaj = `*🔔 YENİ SİPARİŞ - ERTAN KARTAL*%0A%0A` +
+                          `📍 *Şube:* ${sube}%0A` +
+                          `🍔 *Ürün:* ${urun}%0A` +
+                          `👤 *Ad Soyad:* ${isim}%0A` +
+                          `📞 *Telefon:* ${telefon}%0A` +
+                          `🏠 *Adres:* ${adres}`;
+
+            alert("Tebrikler! Siparişiniz başarıyla alındı.");
             modalKapat();
 
             document.getElementById('customerName').value = '';
             document.getElementById('customerPhone').value = '';
             document.getElementById('customerAddress').value = '';
+
+            // WhatsApp'a yönlendir
+            window.open(`https://wa.me/${isletmeTelefonu}?text=${mesaj}`, '_blank');
         }
 
         document.addEventListener('DOMContentLoaded', () => {
