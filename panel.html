@@ -29,12 +29,12 @@
         .order-info h3 { margin: 0 0 6px 0; color: #1e293b; font-size: 17px; }
         .order-info p { margin: 3px 0; color: #64748b; font-size: 14px; }
         
-        .order-actions { display: flex; gap: 10px; align-items: center; }
-        .action-btn { padding: 8px 14px; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 13px; }
-        .btn-tamamla { background: #10b981; color: white; }
-        .btn-tamamla:hover { background: #059669; }
+        .order-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+        .action-btn { padding: 8px 12px; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 12px; }
+        .btn-hazirlaniyor { background: #f59e0b; color: white; }
+        .btn-yolaycikti { background: #3b82f6; color: white; }
+        .btn-teslim { background: #10b981; color: white; }
         .btn-sil { background: #ef4444; color: white; }
-        .btn-sil:hover { background: #dc2626; }
         
         .badge { background: #fef3c7; color: #d97706; padding: 6px 12px; border-radius: 20px; font-weight: 600; font-size: 12px; }
         .badge.completed { background: #d1fae5; color: #065f46; }
@@ -75,8 +75,8 @@
         </div>
 
         <div class="tabs">
-            <button class="tab-btn active" id="tabGelen" onclick="sekmeDegis('gelen')">Gelen Siparişler</button>
-            <button class="tab-btn" id="tabGecmis" onclick="sekmeDegis('gecmis')">Geçmiş / Tamamlanan Siparişler</button>
+            <button class="tab-btn active" id="tabGelen" onclick="sekmeDegis('gelen')">Aktif Siparişler</button>
+            <button class="tab-btn" id="tabGecmis" onclick="sekmeDegis('gecmis')">Geçmiş / Tamamlananlar</button>
         </div>
 
         <div id="siparisListesiContainer">
@@ -165,7 +165,10 @@
             dizi.reverse();
 
             let filtrelenmis = dizi.filter(s => {
-                let sekmeUyumlu = (aktifSekme === 'gelen') ? (s.status === 'Yeni Sipariş') : (s.status === 'Tamamlandı');
+                let aktifDurumlar = (s.status === 'Yeni Sipariş' || s.status === 'Hazırlanıyor' || s.status === 'Yola Çıktı');
+                let gecmisDurumlar = (s.status === 'Teslim Edildi');
+
+                let sekmeUyumlu = (aktifSekme === 'gelen') ? aktifDurumlar : gecmisDurumlar;
                 let subeUyumlu = (secilenSube === 'Tümü') || (s.branch === secilenSube);
                 return sekmeUyumlu && subeUyumlu;
             });
@@ -182,7 +185,7 @@
 
             filtrelenmis.forEach(s => {
                 ciro += (s.price || 0);
-                const badgeClass = s.status === 'Tamamlandı' ? 'badge completed' : 'badge';
+                const badgeClass = s.status === 'Teslim Edildi' ? 'badge completed' : 'badge';
                 
                 html += `
                     <div class="order-card">
@@ -194,7 +197,11 @@
                         </div>
                         <div class="order-actions">
                             <span class="${badgeClass}">${s.status}</span>
-                            ${aktifSekme === 'gelen' ? `<button class="action-btn btn-tamamla" onclick="durumGuncelle('${s.firebaseKey}', 'Tamamlandı')">Tamamla</button>` : ''}
+                            ${aktifSekme === 'gelen' ? `
+                                <button class="action-btn btn-hazirlaniyor" onclick="durumGuncelle('${s.firebaseKey}', 'Hazırlanıyor')">Hazırlanıyor</button>
+                                <button class="action-btn btn-yolaycikti" onclick="durumGuncelle('${s.firebaseKey}', 'Yola Çıktı')">Yola Çıktı</button>
+                                <button class="action-btn btn-teslim" onclick="durumGuncelle('${s.firebaseKey}', 'Teslim Edildi')">Teslim Et</button>
+                            ` : ''}
                             <button class="action-btn btn-sil" onclick="siparisSil('${s.firebaseKey}')"><i class="fa-solid fa-trash"></i></button>
                         </div>
                     </div>

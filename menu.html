@@ -35,6 +35,18 @@
             font-size: 16px !important; cursor: pointer !important; margin-top: 15px; display: block !important;
         }
         #firebaseBtn:hover { background: #e66000 !important; }
+
+        /* Canlı Takip Ekran Kutusu */
+        #canliTakipKutusu {
+            display: none;
+            background: #fff7ed;
+            border: 2px solid #ff6b00;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 25px;
+            text-align: center;
+        }
+        #canliTakipKutusu h3 { color: #ff6b00; margin-bottom: 10px; }
     </style>
 </head>
 <body>
@@ -54,7 +66,14 @@
             <p>Ürüne tıklayarak hemen siparişini oluşturabilirsin.</p>
         </section>
 
-        <div class="filter-container">
+        <!-- SİPARİŞ VERİLDİKTEN SONRA GÖRÜnen CANLI TAKİP EKRANI -->
+        <div id="canliTakipKutusu">
+            <h3><i class="fa-solid fa-person-biking"></i> Sipariş Durumunuz</h3>
+            <p id="durumMetni" style="font-size: 18px; font-weight: 700; color: #1e293b;">Sipariş Alındı, onay bekleniyor...</p>
+            <p style="font-size: 13px; color: #64748b; margin-top: 5px;">Bu ekran üzerinden siparişinizin durumunu canlı takip edebilirsiniz.</p>
+        </div>
+
+        <div class="filter-container" style="margin-top: 20px;">
             <button class="filter-btn active" data-filter="all">Tümü</button>
             <button class="filter-btn" data-filter="durum">Dürümler</button>
             <button class="filter-btn" data-filter="porsiyon">Porsiyon & Menüler</button>
@@ -148,6 +167,8 @@
         if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
         const db = firebase.database();
 
+        let aktifSiparisId = null;
+
         function modalAc(ad, fiyat) {
             document.getElementById('modalProductName').textContent = ad + " (" + fiyat + " ₺)";
             document.getElementById('productPriceVal').value = fiyat;
@@ -170,8 +191,11 @@
             if(!telefon || telefon.length < 10) { alert("Lütfen geçerli bir telefon numarası giriniz."); return; }
             if(!adres) { alert("Lütfen teslimat adresinizi giriniz."); return; }
 
+            const siparisId = Date.now();
+            aktifSiparisId = siparisId;
+
             const yeniSiparis = {
-                id: Date.now(),
+                id: siparisId,
                 branch: sube,
                 name: isim,
                 phone: telefon,
@@ -183,18 +207,39 @@
                 date: new Date().toLocaleDateString('tr-TR')
             };
 
-            // Direkt Firebase'e yazıyoruz (WhatsApp tamamen kaldırıldı)
-            db.ref('orders').push(yeniSiparis)
+            db.ref('orders/' + siparisId).set(yeniSiparis)
                 .then(() => {
                     alert("Tebrikler! Siparişiniz alındı ve şube paneline iletildi.");
                     modalKapat();
                     document.getElementById('customerName').value = '';
                     document.getElementById('customerPhone').value = '';
                     document.getElementById('customerAddress').value = '';
+
+                    // Canlı takip kutusunu göster ve dinlemeye başla
+                    document.getElementById('canliTakipKutusu').style.display = 'block';
+                    musteriDurumDinle(siparisId);
                 })
                 .catch((err) => {
                     alert("Hata oluştu: " + err.message);
                 });
+        }
+
+        function musteriDurumDinle(siparisId) {
+            db.ref('orders/' + siparisId).on('value', (snapshot) => {
+                const veri = snapshot.val();
+                if (veri && veri.status) {
+                    const durumElementi = document.getElementById('durumMetni');
+                    durumElementi.textContent = veri.status;
+
+                    if (veri.status === 'Hazırlanıyor') {
+                        durumElementi.style.color = '#f59e0b';
+                    } else if (veri.status === 'Yola Çıktı') {
+                        durumElementi.style.color = '#3b82f6';
+                    } else if (veri.status === 'Teslim Edildi') {
+                        durumElementi.style.color = '#10b981';
+                    }
+                }
+            });
         }
     </script>
 </body>
