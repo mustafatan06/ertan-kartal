@@ -26,7 +26,7 @@
         .branch-selector-box label { font-size: 14px; font-weight: 600; color: #475569; white-space: nowrap; }
         .branch-selector-box select { padding: 10px 15px; background: #ffffff; border: 2px solid #ff6b00; border-radius: 8px; color: #0f172a; font-weight: 700; font-size: 14px; outline: none; cursor: pointer; }
 
-        /* GÜNLÜK SATIŞ ANALİZ KUTUSU (EN ALT) */
+        /* GÜNLÜK SATIŞ ANALİZ KUTUSU */
         .daily-analytics-box { background: linear-gradient(135deg, #1e293b, #0f172a); border: 2px solid #ff6b00; border-radius: 16px; padding: 20px 25px; margin-top: 40px; color: #ffffff; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; box-shadow: 0 10px 30px rgba(255,107,0,0.15); }
         .analytics-item { display: flex; align-items: center; gap: 15px; }
         .analytics-item i { font-size: 32px; color: #ff6b00; background: rgba(255,107,0,0.15); padding: 12px; border-radius: 12px; }
@@ -82,7 +82,7 @@
         
         <!-- SES AKTİFLEŞTİRME BUTONU -->
         <div id="audioBanner" class="audio-permission-banner">
-            <span><i class="fa-solid fa-volume-high"></i> Sesli bildirimlerin aktif çalması için lütfen butona tıklayın:</span>
+            <span><i class="fa-solid fa-volume-high"></i> Gemi kornası ve sesli bildirimler için lütfen butona tıklayın:</span>
             <button onclick="sesIzniVer()">Sesi Aktifleştir</button>
         </div>
 
@@ -104,7 +104,7 @@
             <div class="no-order">Siparişler yükleniyor...</div>
         </div>
 
-        <!-- GÜNLÜK SATIŞ VE CİRO ANALİZİ (EN ALT KISIM) -->
+        <!-- GÜNLÜK SATIŞ VE CİRO ANALİZİ -->
         <div class="daily-analytics-box">
             <div class="analytics-item">
                 <i class="fa-solid fa-wallet"></i>
@@ -128,7 +128,7 @@
         </div>
     </div>
 
-    <!-- KESİN ÇALAN KUSURSUZ ZİL + SESLİ OKUMA SİSTEMİ -->
+    <!-- GEMİ KORNASI (SHIP HORN HIGH GAIN) + ARDINDAN BAYAN SESİYLE "YENİ SİPARİŞ GELDİ" -->
     <script>
         let sesAktifMi = false;
 
@@ -140,33 +140,36 @@
 
         function sesliBildirimVer() {
             try {
-                // 1. ZİL SESİ (4 defa aralıklı)
+                // 1. GEMİ KORNASI EFEKTİ (Tok, yüksek kazançlı kalın frekanslar)[cite: 1]
                 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
                 
-                function mekanikZil(zaman) {
+                function gemiKornasi(zaman, sure) {
                     const osc = audioCtx.createOscillator();
                     const gain = audioCtx.createGain();
-                    osc.type = 'triangle';
-                    osc.frequency.setValueAtTime(1046.50, audioCtx.currentTime + zaman);
                     
-                    gain.gain.setValueAtTime(0.4, audioCtx.currentTime + zaman);
-                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + zaman + 0.2);
+                    osc.type = 'sawtooth'; // Gemi kornasının tok ve baskın yapısı için testere dalga
+                    // Kalın gemi kornası frekansları (High Gain tınısı)
+                    osc.frequency.setValueAtTime(130.81, audioCtx.currentTime + zaman); // C3
+                    osc.frequency.setValueAtTime(196.00, audioCtx.currentTime + zaman + 0.1); // G3
+                    
+                    gain.gain.setValueAtTime(0.5, audioCtx.currentTime + zaman);
+                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + zaman + sure);
                     
                     osc.connect(gain);
                     gain.connect(audioCtx.destination);
                     
                     osc.start(audioCtx.currentTime + zaman);
-                    osc.stop(audioCtx.currentTime + zaman + 0.2);
+                    osc.stop(audioCtx.currentTime + zaman + sure);
                 }
 
-                for(let i=0; i<4; i++) {
-                    mekanikZil(i * 0.35);
-                }
+                // Kornayı çift nefes olarak çal
+                gemiKornasi(0.0, 0.8);
+                gemiKornasi(0.9, 0.8);
 
-                // 2. SESLİ MESAJ (Bayan Sesi ile "Yeni Sipariş Geldi")
+                // 2. BAYAN SESİ İLE SESLİ BİLDİRİM OKUMA
                 if ('speechSynthesis' in window) {
                     setTimeout(() => {
-                        window.speechSynthesis.cancel(); // Önceki takılmaları temizle
+                        window.speechSynthesis.cancel();
                         const msg = new SpeechSynthesisUtterance("Yeni sipariş geldi. Lütfen kontrol edin.");
                         msg.lang = 'tr-TR';
                         msg.rate = 0.95;
@@ -177,7 +180,7 @@
                         if (trVoice) { msg.voice = trVoice; }
 
                         window.speechSynthesis.speak(msg);
-                    }, 1500);
+                    }, 1900); // Gemi kornası bittikten hemen sonra konuşsun
                 }
 
             } catch(e) {
@@ -185,7 +188,6 @@
             }
         }
 
-        // Ses motoru ses listesini yüklediğinde hazır hale getir
         if ('speechSynthesis' in window) {
             window.speechSynthesis.onvoiceschanged = () => {
                 window.speechSynthesis.getVoices();
@@ -269,7 +271,6 @@
                     if (siparis.branch === aktifSecilenSube) {
                         filtreliSiparisler.push(siparis);
 
-                        // Sadece bugüne ait (açılışından kapanışına kadar) satışları hesapla
                         if (siparis.date === bugununTarihi) {
                             bugunCiro += (parseFloat(siparis.price) || 0);
                             bugunAdet += 1;
@@ -277,13 +278,11 @@
                     }
                 });
 
-                // Ciro ve adet analizini güncelle
                 document.getElementById('toplamCiroText').textContent = bugunCiro + ' ₺';
                 document.getElementById('toplamAdetText').textContent = bugunAdet + ' Adet';
 
                 filtreliSiparisler.reverse();
 
-                // Yeni sipariş gelince sesli bildirimi tetikle
                 if (eskiSiparisSayisi !== null && filtreliSiparisler.length > eskiSiparisSayisi) {
                     sesliBildirimVer();
                 }
