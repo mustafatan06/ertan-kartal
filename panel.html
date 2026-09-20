@@ -22,7 +22,7 @@
         .branch-selector-box label { font-size: 14px; font-weight: 600; color: #475569; white-space: nowrap; }
         .branch-selector-box select { padding: 10px 15px; background: #ffffff; border: 2px solid #ff6b00; border-radius: 8px; color: #0f172a; font-weight: 700; font-size: 14px; outline: none; cursor: pointer; }
 
-        /* SİPARİŞLER TABLOSU / KARTLARI */
+        /* SİPARİŞLER KARTLARI */
         .orders-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; }
         .order-card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 20px; display: flex; flex-direction: column; justify-content: space-between; position: relative; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: 0.3s; }
         .order-card:hover { border-color: #ff6b00; box-shadow: 0 8px 25px rgba(255,107,0,0.15); }
@@ -36,9 +36,26 @@
 
         .order-products-box { background: #f8fafc; border: 1px solid #e2e8f0; padding: 10px; border-radius: 8px; margin: 10px 0; font-size: 13px; color: #1e293b; }
 
-        .order-footer { margin-top: 15px; border-top: 1px solid #f1f5f9; padding-top: 12px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
-        .order-status-select { padding: 8px 12px; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 6px; color: #0f172a; font-weight: 600; font-size: 13px; outline: none; cursor: pointer; }
+        /* DURUM BUTONLARI ALANI */
+        .order-footer { margin-top: 15px; border-top: 1px solid #f1f5f9; padding-top: 12px; display: flex; flex-direction: column; gap: 12px; }
+        .order-price-status { display: flex; justify-content: space-between; align-items: center; }
         .order-price { font-size: 16px; font-weight: 800; color: #ff6b00; }
+        
+        .status-buttons-container { display: flex; gap: 8px; flex-wrap: wrap; }
+        .status-btn { flex: 1; padding: 10px 6px; border: none; border-radius: 8px; font-weight: 700; font-size: 12px; cursor: pointer; transition: 0.2s; color: #fff; display: flex; align-items: center; justify-content: center; gap: 5px; }
+        
+        /* BUTON RENKLERİ */
+        .btn-hazirlaniyor { background: #f59e0b; }
+        .btn-hazirlaniyor:hover { background: #d97706; }
+
+        .btn-yolacikti { background: #3b82f6; }
+        .btn-yolacikti:hover { background: #2563eb; }
+
+        .btn-teslim { background: #10b981; }
+        .btn-teslim:hover { background: #059669; }
+
+        /* PASİF / BASILMIŞ KİLİTLİ BUTON (GRİ) */
+        .status-btn.disabled, .status-btn:disabled { background: #cbd5e1 !important; color: #64748b !important; cursor: not-allowed; box-shadow: none; opacity: 0.7; }
 
         .no-order { text-align: center; color: #64748b; grid-column: 1/-1; padding: 40px; font-size: 16px; background: #ffffff; border-radius: 14px; border: 1px solid #e2e8f0; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
 
@@ -73,24 +90,36 @@
         </div>
     </div>
 
-    <!-- BİLDİRİM SESİ İÇİN WEB AUDIO API SYNTH (Harici dosya gerektirmez, anında çalar) -->
+    <!-- GERÇEKÇİ 3 DEFA ARALIKLI ZİL SESİ SİSTEMİ -->
     <script>
-        function bildirimZiliCal() {
+        function zilSesiCal() {
             try {
                 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(587.33, audioCtx.currentTime); // D5 nota
-                osc.frequency.setValueAtTime(880, audioCtx.currentTime + 0.15); // A5 nota
-                gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.6);
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-                osc.start();
-                osc.stop(audioCtx.currentTime + 0.6);
+                
+                function tekZil(zaman) {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'sine';
+                    // Zil frekansı (Tiz ve parlak)
+                    osc.frequency.setValueAtTime(1046.50, audioCtx.currentTime + zaman); // C6 nota
+                    osc.frequency.exponentialRampToValueAtTime(587.33, audioCtx.currentTime + zaman + 0.3);
+                    
+                    gain.gain.setValueAtTime(0.3, audioCtx.currentTime + zaman);
+                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + zaman + 0.4);
+                    
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    
+                    osc.start(audioCtx.currentTime + zaman);
+                    osc.stop(audioCtx.currentTime + zaman + 0.4);
+                }
+
+                // Aralıklı olarak 3 defa çal
+                tekZil(0.0);
+                tekZil(0.35);
+                tekZil(0.70);
             } catch(e) {
-                // Tarayıcı izin kısıtı varsa sessiz geç
+                // Tarayıcı kısıtlaması durumunda sessiz devam eder
             }
         }
     </script>
@@ -120,7 +149,7 @@
         function subeDegisti() {
             aktifSecilenSube = document.getElementById('yonetimSubeSecim').value;
             localStorage.setItem('yonetim_aktif_sube', aktifSecilenSube);
-            eskiSiparisSayisi = null; // Sıfırla ki şube değişince tekrar kontrol etsin
+            eskiSiparisSayisi = null;
             siparisleriDinleVeGoster();
         }
 
@@ -153,9 +182,9 @@
 
                 filtreliSiparisler.reverse();
 
-                // Eğer yeni sipariş geldiyse (sayı arttıysa veya ilk yüklemeden sonra yeni eklenmişse) ses çal
+                // Yeni sipariş gelirse 3 defa arka arkaya zil çal
                 if (eskiSiparisSayisi !== null && filtreliSiparisler.length > eskiSiparisSayisi) {
-                    bildirimZiliCal();
+                    zilSesiCal();
                 }
                 eskiSiparisSayisi = filtreliSiparisler.length;
 
@@ -167,11 +196,37 @@
                 filtreliSiparisler.forEach(s => {
                     const card = document.createElement('div');
                     card.className = 'order-card';
+
+                    // Duruma göre butonların aktiflik / renk durumunu ayarlıyoruz
+                    let hazirlaniyorDisabled = '';
+                    let hazirlaniyorClass = 'status-btn btn-hazirlaniyor';
+                    let yolaCiktiDisabled = '';
+                    let yolaCiktiClass = 'status-btn btn-yolacikti';
+                    let teslimDisabled = '';
+                    let teslimClass = 'status-btn btn-teslim';
+
+                    if (s.status === 'Hazırlanıyor') {
+                        hazirlaniyorDisabled = 'disabled';
+                        hazirlaniyorClass += ' disabled';
+                    } else if (s.status === 'Yola Çıktı') {
+                        hazirlaniyorDisabled = 'disabled';
+                        hazirlaniyorClass += ' disabled';
+                        yolaCiktiDisabled = 'disabled';
+                        yolaCiktiClass += ' disabled';
+                    } else if (s.status === 'Teslim Edildi') {
+                        hazirlaniyorDisabled = 'disabled';
+                        hazirlaniyorClass += ' disabled';
+                        yolaCiktiDisabled = 'disabled';
+                        yolaCiktiClass += ' disabled';
+                        teslimDisabled = 'disabled';
+                        teslimClass += ' disabled';
+                    }
+
                     card.innerHTML = `
                         <div>
                             <div class="order-card-header">
                                 <span class="order-id"><i class="fa-regular fa-clock"></i> ${s.date} - ${s.time}</span>
-                                <span class="order-branch-badge">${s.branch}</span>
+                                <span class="order-branch-badge">${s.branch} (${s.status})</span>
                             </div>
                             <div class="order-body">
                                 <p><strong>Müşteri:</strong> ${s.name}</p>
@@ -184,13 +239,21 @@
                             </div>
                         </div>
                         <div class="order-footer">
-                            <span class="order-price">${s.price} ₺</span>
-                            <select class="order-status-select" onchange="siparisDurumGuncelle('${s.id}', this.value)">
-                                <option value="Yeni Sipariş" ${s.status === 'Yeni Sipariş' ? 'selected' : ''}>Yeni Sipariş</option>
-                                <option value="Hazırlanıyor" ${s.status === 'Hazırlanıyor' ? 'selected' : ''}>Hazırlanıyor</option>
-                                <option value="Yola Çıktı" ${s.status === 'Yola Çıktı' ? 'selected' : ''}>Yola Çıktı</option>
-                                <option value="Teslim Edildi" ${s.status === 'Teslim Edildi' ? 'selected' : ''}>Teslim Edildi</option>
-                            </select>
+                            <div class="order-price-status">
+                                <span class="order-price">${s.price} ₺</span>
+                                <span style="font-size:12px; font-weight:700; color:${s.status === 'Teslim Edildi' ? '#10b981' : (s.status === 'Yola Çıktı' ? '#3b82f6' : '#f59e0b')}">${s.status}</span>
+                            </div>
+                            <div class="status-buttons-container">
+                                <button type="button" class="${hazirlaniyorClass}" ${hazirlaniyorDisabled} onclick="siparisDurumGuncelle('${s.id}', 'Hazırlanıyor')">
+                                    <i class="fa-solid fa-fire"></i> Hazırlanıyor
+                                </button>
+                                <button type="button" class="${yolaCiktiClass}" ${yolaCiktiDisabled} onclick="siparisDurumGuncelle('${s.id}', 'Yola Çıktı')">
+                                    <i class="fa-solid fa-person-biking"></i> Yola Çıktı
+                                </button>
+                                <button type="button" class="${teslimDisabled ? 'status-btn btn-teslim disabled' : 'status-btn btn-teslim'}" ${teslimDisabled} onclick="siparisDurumGuncelle('${s.id}', 'Teslim Edildi')">
+                                    <i class="fa-solid fa-check"></i> Teslim Edildi
+                                </button>
+                            </div>
                         </div>
                     `;
                     listeDiv.appendChild(card);
