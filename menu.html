@@ -36,7 +36,7 @@
             box-shadow: 0 10px 25px rgba(255,107,0,0.15);
             border: 2px solid #ff6b00;
         }
-        #panelAktifBtn {
+        #proSiparisBtn {
             width: 100%;
             background: #ff6b00 !important;
             color: white !important;
@@ -49,7 +49,7 @@
             margin-top: 15px;
             display: block !important;
         }
-        #panelAktifBtn:hover { background: #e66000 !important; }
+        #proSiparisBtn:hover { background: #e66000 !important; }
     </style>
 </head>
 <body>
@@ -81,7 +81,7 @@
 
         <!-- ÜRÜNLER LİSTESİ -->
         <div class="food-grid">
-            <div class="food-card" data-category="durum" onclick="modalAc('Klasik Dürüm Çiğ Köfte', '90 ₺')">
+            <div class="food-card" data-category="durum" onclick="modalAc('Klasik Dürüm Çiğ Köfte', 90)">
                 <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=600&q=80" alt="Klasik Dürüm" class="food-img">
                 <div class="food-body">
                     <div class="food-title-price">
@@ -93,7 +93,7 @@
                 </div>
             </div>
 
-            <div class="food-card" data-category="durum" onclick="modalAc('Özel Soslu Mega Dürüm', '130 ₺')">
+            <div class="food-card" data-category="durum" onclick="modalAc('Özel Soslu Mega Dürüm', 130)">
                 <img src="https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&w=600&q=80" alt="Özel Soslu Mega Dürüm" class="food-img">
                 <div class="food-body">
                     <div class="food-title-price">
@@ -105,7 +105,7 @@
                 </div>
             </div>
 
-            <div class="food-card" data-category="porsiyon" onclick="modalAc('Ertan Kartal Porsiyon (Orta)', '180 ₺')">
+            <div class="food-card" data-category="porsiyon" onclick="modalAc('Ertan Kartal Porsiyon (Orta)', 180)">
                 <img src="https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80" alt="Porsiyon Tabak" class="food-img">
                 <div class="food-body">
                     <div class="food-title-price">
@@ -117,7 +117,7 @@
                 </div>
             </div>
 
-            <div class="food-card" data-category="icecek" onclick="modalAc('Kola / Ayran (Büyük Boy)', '35 ₺')">
+            <div class="food-card" data-category="icecek" onclick="modalAc('Kola / Ayran (Büyük Boy)', 35)">
                 <img src="https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=600&q=80" alt="Ayran" class="food-img">
                 <div class="food-body">
                     <div class="food-title-price">
@@ -139,6 +139,8 @@
                 <span onclick="modalKapat()" style="font-size:24px; cursor:pointer; color:#64748b;">&times;</span>
             </div>
             
+            <input type="hidden" id="productPriceVal" value="0">
+
             <div class="form-group" style="margin-bottom:12px;">
                 <label style="display:block; font-size:13px; font-weight:600; margin-bottom:5px;">Şube Seçin *</label>
                 <select id="branchSelect" style="width:100%; padding:10px; border:2px solid #e2e8f0; border-radius:8px;">
@@ -160,14 +162,14 @@
                 <textarea id="customerAddress" rows="3" placeholder="Mahalle, Cadde, Ada, Sokak, No, Daire..." style="width:100%; padding:10px; border:2px solid #e2e8f0; border-radius:8px;"></textarea>
             </div>
 
-            <!-- Panel Uyumlu Aktif Buton -->
-            <button type="button" id="panelAktifBtn" onclick="panelSiparisGonder()">Siparişi Onayla ve Gönder</button>
+            <button type="button" id="proSiparisBtn" onclick="siparihiPaneleGonder()">Siparişi Onayla ve Gönder</button>
         </div>
     </div>
 
     <script>
         function modalAc(ad, fiyat) {
-            document.getElementById('modalProductName').textContent = ad + " (" + fiyat + ")";
+            document.getElementById('modalProductName').textContent = ad + " (" + fiyat + " ₺)";
+            document.getElementById('productPriceVal').value = fiyat;
             document.getElementById('orderModal').style.display = 'flex';
         }
 
@@ -175,25 +177,17 @@
             document.getElementById('orderModal').style.display = 'none';
         }
 
-        function panelSiparisGonder() {
+        function siparihiPaneleGonder() {
             const sube = document.getElementById('branchSelect').value;
             const isim = document.getElementById('customerName').value.trim();
             const telefon = document.getElementById('customerPhone').value.trim();
             const adres = document.getElementById('customerAddress').value.trim();
             const urun = document.getElementById('modalProductName').textContent;
+            const fiyat = parseFloat(document.getElementById('productPriceVal').value) || 0;
 
-            if(!isim) {
-                alert("Lütfen isim soyisim giriniz.");
-                return;
-            }
-            if(!telefon || telefon.length < 10) {
-                alert("Lütfen geçerli bir telefon numarası giriniz.");
-                return;
-            }
-            if(!adres) {
-                alert("Lütfen teslimat adresinizi giriniz.");
-                return;
-            }
+            if(!isim) { alert("Lütfen isim soyisim giriniz."); return; }
+            if(!telefon || telefon.length < 10) { alert("Lütfen geçerli bir telefon numarası giriniz."); return; }
+            if(!adres) { alert("Lütfen teslimat adresinizi giriniz."); return; }
 
             const yeniSiparis = {
                 id: Date.now(),
@@ -202,25 +196,24 @@
                 phone: telefon,
                 address: adres,
                 product: urun,
-                status: "Yeni Sipariş",
-                time: new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })
+                price: fiyat,
+                status: "Yeni Sipariş", // "Yeni Sipariş" veya "Geçmiş"
+                time: new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' }),
+                date: new Date().toLocaleDateString('tr-TR')
             };
 
-            // Siparişi panel.html'in okuyacağı ortak hafızaya kaydet
             let siparisler = JSON.parse(localStorage.getItem('ertan_orders')) || [];
             siparisler.unshift(yeniSiparis);
             localStorage.setItem('ertan_orders', JSON.stringify(siparisler));
 
-            alert("Tebrikler! Siparişiniz alındı ve panele iletildi.");
+            alert("Harika! Siparişiniz başarıyla alındı ve şube paneline iletildi.");
             modalKapat();
 
-            // Formu temizle
             document.getElementById('customerName').value = '';
             document.getElementById('customerPhone').value = '';
             document.getElementById('customerAddress').value = '';
         }
 
-        // Filtreleme
         document.addEventListener('DOMContentLoaded', () => {
             const filterButtons = document.querySelectorAll('.filter-btn');
             const foodCards = document.querySelectorAll('.food-card');
