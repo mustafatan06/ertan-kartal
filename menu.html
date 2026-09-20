@@ -66,11 +66,11 @@
             <p>Ürüne tıklayarak hemen siparişini oluşturabilirsin.</p>
         </section>
 
-        <!-- SİPARİŞ VERİLDİKTEN SONRA GÖRÜnen CANLI TAKİP EKRANI -->
+        <!-- SİPARİŞ TAKİP EKRANI (Sayfa yenilense bile kaybolmaz) -->
         <div id="canliTakipKutusu">
             <h3><i class="fa-solid fa-person-biking"></i> Sipariş Durumunuz</h3>
-            <p id="durumMetni" style="font-size: 18px; font-weight: 700; color: #1e293b;">Sipariş Alındı, onay bekleniyor...</p>
-            <p style="font-size: 13px; color: #64748b; margin-top: 5px;">Bu ekran üzerinden siparişinizin durumunu canlı takip edebilirsiniz.</p>
+            <p id="durumMetni" style="font-size: 18px; font-weight: 700; color: #1e293b;">Siparişiniz kontrol ediliyor...</p>
+            <p style="font-size: 13px; color: #64748b; margin-top: 5px;">Sayfayı yenileseniz bile durumunuz buradan canlı takip edilir.</p>
         </div>
 
         <div class="filter-container" style="margin-top: 20px;">
@@ -167,8 +167,6 @@
         if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
         const db = firebase.database();
 
-        let aktifSiparisId = null;
-
         function modalAc(ad, fiyat) {
             document.getElementById('modalProductName').textContent = ad + " (" + fiyat + " ₺)";
             document.getElementById('productPriceVal').value = fiyat;
@@ -192,7 +190,6 @@
             if(!adres) { alert("Lütfen teslimat adresinizi giriniz."); return; }
 
             const siparisId = Date.now();
-            aktifSiparisId = siparisId;
 
             const yeniSiparis = {
                 id: siparisId,
@@ -209,13 +206,15 @@
 
             db.ref('orders/' + siparisId).set(yeniSiparis)
                 .then(() => {
+                    // Sipariş ID'sini telefonda kalıcı hafızaya kaydet
+                    localStorage.setItem('aktif_siparis_id', siparisId);
+
                     alert("Tebrikler! Siparişiniz alındı ve şube paneline iletildi.");
                     modalKapat();
                     document.getElementById('customerName').value = '';
                     document.getElementById('customerPhone').value = '';
                     document.getElementById('customerAddress').value = '';
 
-                    // Canlı takip kutusunu göster ve dinlemeye başla
                     document.getElementById('canliTakipKutusu').style.display = 'block';
                     musteriDurumDinle(siparisId);
                 })
@@ -238,9 +237,29 @@
                     } else if (veri.status === 'Teslim Edildi') {
                         durumElementi.style.color = '#10b981';
                     }
+                } else {
+                    // Sipariş silindiyse takip ekranını gizle
+                    document.getElementById('canliTakipKutusu').style.display = 'none';
+                    localStorage.removeItem('aktif_siparis_id');
                 }
             });
         }
+
+        // SAYFA YENİLENDİĞİNDE VEYA KAPATILIP AÇILDIĞINDA ESKİ SİPARİŞİ OTOMATİK GETİR
+        window.addEventListener('DOMContentLoaded', () => {
+            const kayitliId = localStorage.getItem('aktif_siparis_id');
+            if (kayitliId) {
+                // Firebase'den bu sipariş hâlâ duruyor mu kontrol et
+                db.ref('orders/' + kayitliId).once('value', (snapshot) => {
+                    if (snapshot.exists()) {
+                        document.getElementById('canliTakipKutusu').style.display = 'block';
+                        musteriDurumDinle(kayitliId);
+                    } else {
+                        localStorage.removeItem('aktif_siparis_id');
+                    }
+                });
+            }
+        });
     </script>
 </body>
 </html>
