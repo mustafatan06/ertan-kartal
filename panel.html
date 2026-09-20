@@ -17,14 +17,21 @@
         .panel-header h1 { font-size: clamp(20px, 4vw, 26px); font-weight: 800; color: #0f172a; display: flex; align-items: center; gap: 10px; }
         .panel-header h1 span { color: #ff6b00; }
 
-        /* SES AKTİFLEŞTİRME UYARI BANDI (Tarayıcı izinleri için şart) */
-        .audio-permission-banner { background: #ff6b00; color: #fff; padding: 12px 20px; border-radius: 12px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; font-weight: 600; font-size: 14px; box-shadow: 0 4px 12px rgba(255,107,0,0.3); }
+        /* SES AKTİFLEŞTİRME UYARI BANDI */
+        .audio-permission-banner { background: #ff6b00; color: #fff; padding: 12px 20px; border-radius: 12px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; font-weight: 600; font-size: 14px; box-shadow: 0 4px 12px rgba(255,107,0,0.3); flex-wrap: wrap; gap: 10px; }
         .audio-permission-banner button { background: #fff; color: #ff6b00; border: none; padding: 6px 14px; border-radius: 6px; font-weight: 700; cursor: pointer; }
 
         /* ŞUBE SEÇİM KUTUSU */
         .branch-selector-box { display: flex; align-items: center; gap: 10px; }
         .branch-selector-box label { font-size: 14px; font-weight: 600; color: #475569; white-space: nowrap; }
         .branch-selector-box select { padding: 10px 15px; background: #ffffff; border: 2px solid #ff6b00; border-radius: 8px; color: #0f172a; font-weight: 700; font-size: 14px; outline: none; cursor: pointer; }
+
+        /* GÜNLÜK SATIŞ ANALİZ KUTUSU (EN ALT) */
+        .daily-analytics-box { background: linear-gradient(135deg, #1e293b, #0f172a); border: 2px solid #ff6b00; border-radius: 16px; padding: 20px 25px; margin-top: 40px; color: #ffffff; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; box-shadow: 0 10px 30px rgba(255,107,0,0.15); }
+        .analytics-item { display: flex; align-items: center; gap: 15px; }
+        .analytics-item i { font-size: 32px; color: #ff6b00; background: rgba(255,107,0,0.15); padding: 12px; border-radius: 12px; }
+        .analytics-info h4 { font-size: 13px; color: #94a3b8; font-weight: 600; text-transform: uppercase; }
+        .analytics-info p { font-size: 22px; font-weight: 800; color: #ffffff; }
 
         /* SİPARİŞLER KARTLARI */
         .orders-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; }
@@ -67,15 +74,15 @@
         .no-order { text-align: center; color: #64748b; grid-column: 1/-1; padding: 40px; font-size: 16px; background: #ffffff; border-radius: 14px; border: 1px solid #e2e8f0; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
 
         /* FOOTER İMZA */
-        .panel-footer { text-align: center; margin-top: 50px; font-size: 12px; color: #64748b; border-top: 1px solid #e2e8f0; padding-top: 20px; }
+        .panel-footer { text-align: center; margin-top: 30px; font-size: 12px; color: #64748b; border-top: 1px solid #e2e8f0; padding-top: 20px; }
     </style>
 </head>
 <body>
     <div class="panel-container">
         
-        <!-- SES AKTİFLEŞTİRME BUTONU (Tarayıcı kısıtını aşmak için) -->
+        <!-- SES AKTİFLEŞTİRME BUTONU -->
         <div id="audioBanner" class="audio-permission-banner">
-            <span><i class="fa-solid fa-volume-high"></i> Sesli bildirimlerin aktif çalışması için lütfen butona tıklayın:</span>
+            <span><i class="fa-solid fa-volume-high"></i> Sesli bildirimlerin aktif çalması için lütfen butona tıklayın:</span>
             <button onclick="sesIzniVer()">Sesi Aktifleştir</button>
         </div>
 
@@ -97,33 +104,50 @@
             <div class="no-order">Siparişler yükleniyor...</div>
         </div>
 
+        <!-- GÜNLÜK SATIŞ VE CİRO ANALİZİ (EN ALT KISIM) -->
+        <div class="daily-analytics-box">
+            <div class="analytics-item">
+                <i class="fa-solid fa-wallet"></i>
+                <div class="analytics-info">
+                    <h4>Bugünkü Toplam Ciro</h4>
+                    <p id="toplamCiroText">0 ₺</p>
+                </div>
+            </div>
+            <div class="analytics-item">
+                <i class="fa-solid fa-receipt"></i>
+                <div class="analytics-info">
+                    <h4>Bugünkü Toplam Sipariş</h4>
+                    <p id="toplamAdetText">0 Adet</p>
+                </div>
+            </div>
+        </div>
+
         <div class="panel-footer">
             <p>&copy; 2026 Uçan Paket Sepeti. Tüm hakları saklıdır.</p>
             <p style="margin-top: 6px; color: #ff6b00; font-weight: 600; letter-spacing: 0.5px;">TAN MEDYA TASARIM Tarafından Kurulmuştur.</p>
         </div>
     </div>
 
-    <!-- ÖNCE ZİL SESİ SONRA BAYAN SESİYLE "YENİ SİPARİŞ GELDİ" SİSTEMİ -->
+    <!-- KESİN ÇALAN KUSURSUZ ZİL + SESLİ OKUMA SİSTEMİ -->
     <script>
         let sesAktifMi = false;
 
         function sesIzniVer() {
             sesAktifMi = true;
             document.getElementById('audioBanner').style.display = 'none';
-            // Test sesi çal
             sesliBildirimVer();
         }
 
         function sesliBildirimVer() {
             try {
-                // 1. ADIM: ZİL SESİ (4 defa aralıklı)
+                // 1. ZİL SESİ (4 defa aralıklı)
                 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
                 
                 function mekanikZil(zaman) {
                     const osc = audioCtx.createOscillator();
                     const gain = audioCtx.createGain();
                     osc.type = 'triangle';
-                    osc.frequency.setValueAtTime(1046.50, audioCtx.currentTime + zaman); // C6
+                    osc.frequency.setValueAtTime(1046.50, audioCtx.currentTime + zaman);
                     
                     gain.gain.setValueAtTime(0.4, audioCtx.currentTime + zaman);
                     gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + zaman + 0.2);
@@ -135,33 +159,37 @@
                     osc.stop(audioCtx.currentTime + zaman + 0.2);
                 }
 
-                // 4 kez aralıklı zil çal
                 for(let i=0; i<4; i++) {
                     mekanikZil(i * 0.35);
                 }
 
-                // 2. ADIM: TÜRKÇE SESLİ MESAJ (Bayan Sesi / Sentezleyici ile "Yeni Sipariş Geldi")
+                // 2. SESLİ MESAJ (Bayan Sesi ile "Yeni Sipariş Geldi")
                 if ('speechSynthesis' in window) {
                     setTimeout(() => {
+                        window.speechSynthesis.cancel(); // Önceki takılmaları temizle
                         const msg = new SpeechSynthesisUtterance("Yeni sipariş geldi. Lütfen kontrol edin.");
                         msg.lang = 'tr-TR';
-                        msg.rate = 1.0; // Konuşma hızı
-                        msg.pitch = 1.2; // Biraz daha canlı ton
-                        
-                        // Türkçe kadın sesini bulmaya çalış
-                        constvoices = window.speechSynthesis.getVoices();
-                        const trVoice = voices.find(v => v.lang.includes('tr') && (v.name.includes('Female') || v.name.includes('Zehra') || v.name.includes('Google') || v.name.includes('Turkish')));
-                        if (trVoice) {
-                            msg.voice = trVoice;
-                        }
+                        msg.rate = 0.95;
+                        msg.pitch = 1.1;
+
+                        const voices = window.speechSynthesis.getVoices();
+                        const trVoice = voices.find(v => v.lang.startsWith('tr') || v.lang.includes('TR'));
+                        if (trVoice) { msg.voice = trVoice; }
 
                         window.speechSynthesis.speak(msg);
-                    }, 1600); // Zil bittikten hemen sonra konuşsun
+                    }, 1500);
                 }
 
             } catch(e) {
-                console.log("Ses çalma hatası: ", e);
+                console.log("Ses hatası: ", e);
             }
+        }
+
+        // Ses motoru ses listesini yüklediğinde hazır hale getir
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.onvoiceschanged = () => {
+                window.speechSynthesis.getVoices();
+            };
         }
     </script>
 
@@ -226,21 +254,36 @@
 
                 if (!snapshot.exists()) {
                     listeDiv.innerHTML = '<div class="no-order">Şubenize gelen aktif sipariş bulunmuyor.</div>';
+                    document.getElementById('toplamCiroText').textContent = '0 ₺';
+                    document.getElementById('toplamAdetText').textContent = '0 Adet';
                     return;
                 }
 
                 const tumSiparisler = snapshot.val();
                 let filtreliSiparisler = [];
+                let bugunCiro = 0;
+                let bugunAdet = 0;
+                const bugununTarihi = new Date().toLocaleDateString('tr-TR');
 
                 Object.values(tumSiparisler).forEach(siparis => {
                     if (siparis.branch === aktifSecilenSube) {
                         filtreliSiparisler.push(siparis);
+
+                        // Sadece bugüne ait (açılışından kapanışına kadar) satışları hesapla
+                        if (siparis.date === bugununTarihi) {
+                            bugunCiro += (parseFloat(siparis.price) || 0);
+                            bugunAdet += 1;
+                        }
                     }
                 });
 
+                // Ciro ve adet analizini güncelle
+                document.getElementById('toplamCiroText').textContent = bugunCiro + ' ₺';
+                document.getElementById('toplamAdetText').textContent = bugunAdet + ' Adet';
+
                 filtreliSiparisler.reverse();
 
-                // Yeni sipariş gelirse ve kullanıcı ses izni verdiyse sesli bildirimi tetikle
+                // Yeni sipariş gelince sesli bildirimi tetikle
                 if (eskiSiparisSayisi !== null && filtreliSiparisler.length > eskiSiparisSayisi) {
                     sesliBildirimVer();
                 }
