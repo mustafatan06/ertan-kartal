@@ -17,9 +17,38 @@
         .panel-header h1 { font-size: clamp(20px, 4vw, 26px); font-weight: 800; color: #0f172a; display: flex; align-items: center; gap: 10px; }
         .panel-header h1 span { color: #ff6b00; }
 
-        /* SES AKTİFLEŞTİRME UYARI BANDI */
-        .audio-permission-banner { background: #ff6b00; color: #fff; padding: 12px 20px; border-radius: 12px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; font-weight: 600; font-size: 14px; box-shadow: 0 4px 12px rgba(255,107,0,0.3); flex-wrap: wrap; gap: 10px; }
-        .audio-permission-banner button { background: #fff; color: #ff6b00; border: none; padding: 6px 14px; border-radius: 6px; font-weight: 700; cursor: pointer; }
+        /* YANIP SÖNEN DİKKAT ÇEKİCİ KIRMIZI UYARI BANDI */
+        @keyframes kirmiziYanipSoner {
+            0% { background-color: #ef4444; box-shadow: 0 0 10px rgba(239, 68, 68, 0.5); }
+            50% { background-color: #b91c1c; box-shadow: 0 0 25px rgba(239, 68, 68, 0.9); }
+            100% { background-color: #ef4444; box-shadow: 0 0 10px rgba(239, 68, 68, 0.5); }
+        }
+
+        .audio-permission-banner { 
+            animation: kirmiziYanipSoner 1.5s infinite; 
+            color: #fff; 
+            padding: 15px 20px; 
+            border-radius: 12px; 
+            margin-bottom: 25px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            flex-wrap: wrap; 
+            gap: 12px;
+            transition: all 0.5s ease;
+        }
+
+        .audio-permission-banner.aktif-yesil {
+            animation: none !important;
+            background-color: #10b981 !important;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+        }
+
+        .banner-text-group h3 { font-size: 16px; font-weight: 700; margin-bottom: 3px; display: flex; align-items: center; gap: 8px; }
+        .banner-text-group p { font-size: 12px; opacity: 0.9; font-weight: 400; }
+
+        .audio-permission-banner button { background: #fff; color: #0f172a; border: none; padding: 8px 16px; border-radius: 8px; font-weight: 700; cursor: pointer; transition: 0.2s; }
+        .audio-permission-banner button:hover { background: #f1f5f9; }
 
         /* ŞUBE SEÇİM KUTUSU */
         .branch-selector-box { display: flex; align-items: center; gap: 10px; }
@@ -78,10 +107,13 @@
 <body>
     <div class="panel-container">
         
-        <!-- SES AKTİFLEŞTİRME UYARI BANDI -->
+        <!-- YANIP SÖNEN UYARI BANDI -->
         <div id="audioBanner" class="audio-permission-banner">
-            <span><i class="fa-solid fa-volume-high"></i> Çan sesi ve sesli bildirimlerin aktif çalması için lütfen butona tıklayın:</span>
-            <button onclick="sesIzniVer()">Sesi Aktifleştir</button>
+            <div class="banner-text-group">
+                <h3 id="bannerTitle"><i class="fa-solid fa-triangle-exclamation"></i> Lütfen Bildirim Seslerini Aktif Edin</h3>
+                <p id="bannerDesc">Gelen siparişleri sesli olarak duyabilmek için lütfen sesi aktif edin.</p>
+            </div>
+            <button id="bannerBtn" onclick="sesIzniVer()">Sesi Aktifleştir</button>
         </div>
 
         <div class="panel-header">
@@ -126,17 +158,24 @@
         </div>
     </div>
 
-    <!-- 2 KEZ ARKA ARKAYA (ÇAN + SESLİ ANONS BİTİNCE İKİNCİ TUR) TEKRAR EDEN SİSTEM -->
+    <!-- 2 TUR TEKRAR EDEN ÇAN + BAYAN SESİ VE YEŞİL SABİT BANT SİSTEMİ -->
     <script>
         let sesAktifMi = false;
 
         function sesIzniVer() {
             sesAktifMi = true;
-            document.getElementById('audioBanner').style.display = 'none';
+            
+            // Bantı yeşile döndür, sabitle ve metni değiştir
+            const banner = document.getElementById('audioBanner');
+            banner.classList.add('aktif-yesil');
+            document.getElementById('bannerTitle').innerHTML = '<i class="fa-solid fa-circle-check"></i> Bildirim Sesleri Aktif';
+            document.getElementById('bannerDesc').textContent = 'Sistem sesli bildirimler için tamamen hazır.';
+            document.getElementById('bannerBtn').style.display = 'none';
+
             sesliBildirimVer();
         }
 
-        function tek TurBildirimCal(callback) {
+        function tekTurBildirimCal(callback) {
             try {
                 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
                 
@@ -157,12 +196,10 @@
                     osc.stop(audioCtx.currentTime + zaman + 0.8);
                 }
 
-                // Çan Sesleri (Din - Don - Din)
                 yemeksepetiCani(1046.50, 0.0);  
                 yemeksepetiCani(783.99, 0.35); 
                 yemeksepetiCani(1046.50, 0.70); 
 
-                // Bayan Sesiyle Okuma
                 if ('speechSynthesis' in window) {
                     setTimeout(() => {
                         const msg = new SpeechSynthesisUtterance("Yeni sipariş geldi. Lütfen kontrol edin.");
@@ -175,7 +212,7 @@
                         if (trVoice) { msg.voice = trVoice; }
 
                         msg.onend = () => {
-                            if (callback) callback(); // 1. tur bittiğinde 2. turu tetikle
+                            if (callback) callback();
                         };
 
                         window.speechSynthesis.speak(msg);
@@ -190,9 +227,7 @@
         }
 
         function sesliBildirimVer() {
-            // 1. Tur Bildirim
             tekTurBildirimCal(() => {
-                // 1. Tur tamamen bittikten sonra 1 saniye bekleyip 2. Turu başlat
                 setTimeout(() => {
                     tekTurBildirimCal(null);
                 }, 1000);
