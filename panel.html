@@ -10,6 +10,28 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
         body { background: #f8fafc; color: #1e293b; padding: 20px; }
 
+        /* GİRİŞ EKRANI (LOGIN MODAL) */
+        #loginOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0f172a; display: flex; justify-content: center; align-items: center; z-index: 999999; padding: 15px; }
+        .login-card { background: #ffffff; padding: 30px; border-radius: 16px; width: 100%; max-width: 400px; box-shadow: 0 15px 35px rgba(0,0,0,0.3); border: 1px solid #e2e8f0; text-align: center; }
+        .login-card h2 { color: #0f172a; font-size: 22px; font-weight: 800; margin-bottom: 8px; }
+        .login-card h2 span { color: #ff6b00; }
+        .login-card p { font-size: 13px; color: #64748b; margin-bottom: 20px; }
+        .login-form-group { margin-bottom: 15px; text-align: left; }
+        .login-form-group label { display: block; font-size: 12px; font-weight: 600; color: #475569; margin-bottom: 5px; }
+        .login-form-group select, .login-form-group input { width: 100%; padding: 12px; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; outline: none; color: #0f172a; font-weight: 600; }
+        .login-form-group select:focus, .login-form-group input:focus { border-color: #ff6b00; background: #fff; }
+        
+        /* BENİ HATIRLA CHECKBOX */
+        .remember-group { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; text-align: left; font-size: 13px; color: #475569; cursor: pointer; font-weight: 500; }
+        .remember-group input { width: 18px; height: 18px; accent-color: #ff6b00; cursor: pointer; }
+
+        .login-btn { width: 100%; background: #ff6b00; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 700; font-size: 15px; cursor: pointer; transition: 0.3s; margin-top: 5px; }
+        .login-btn:hover { background: #e05e00; }
+        .login-error { color: #ef4444; font-size: 12px; font-weight: 600; margin-top: 10px; display: none; }
+
+        /* PANEL ANA YAPI */
+        #panelMainContent { display: none; }
+
         .panel-container { max-width: 1200px; margin: 0 auto; }
         
         /* HEADER BAR */
@@ -17,13 +39,11 @@
         .panel-header h1 { font-size: clamp(20px, 4vw, 26px); font-weight: 800; color: #0f172a; display: flex; align-items: center; gap: 10px; }
         .panel-header h1 span { color: #ff6b00; }
 
-        /* YANIP SÖNEN DİKKAT ÇEKİCİ KIRMIZI UYARI BANDI */
-        @keyframes kirmiziYanipSoner {
-            0% { background-color: #ef4444; box-shadow: 0 0 10px rgba(239, 68, 68, 0.5); }
-            50% { background-color: #b91c1c; box-shadow: 0 0 25px rgba(239, 68, 68, 0.9); }
-            100% { background-color: #ef4444; box-shadow: 0 0 10px rgba(239, 68, 68, 0.5); }
-        }
+        .header-right-actions { display: flex; align-items: center; gap: 15px; flex-wrap: wrap; }
+        .logout-btn { background: #ef4444; color: white; border: none; padding: 10px 15px; border-radius: 8px; font-weight: 700; font-size: 13px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 6px; }
+        .logout-btn:hover { background: #dc2626; }
 
+        /* UYARI BANDI */
         .audio-permission-banner { 
             animation: kirmiziYanipSoner 1.5s infinite; 
             color: #fff; 
@@ -38,6 +58,12 @@
             transition: all 0.5s ease;
         }
 
+        @keyframes kirmiziYanipSoner {
+            0% { background-color: #ef4444; box-shadow: 0 0 10px rgba(239, 68, 68, 0.5); }
+            50% { background-color: #b91c1c; box-shadow: 0 0 25px rgba(239, 68, 68, 0.9); }
+            100% { background-color: #ef4444; box-shadow: 0 0 10px rgba(239, 68, 68, 0.5); }
+        }
+
         .audio-permission-banner.aktif-yesil {
             animation: none !important;
             background-color: #10b981 !important;
@@ -50,19 +76,14 @@
         .audio-permission-banner button { background: #fff; color: #0f172a; border: none; padding: 8px 16px; border-radius: 8px; font-weight: 700; cursor: pointer; transition: 0.2s; }
         .audio-permission-banner button:hover { background: #f1f5f9; }
 
-        /* ŞUBE SEÇİM KUTUSU */
-        .branch-selector-box { display: flex; align-items: center; gap: 10px; }
-        .branch-selector-box label { font-size: 14px; font-weight: 600; color: #475569; white-space: nowrap; }
-        .branch-selector-box select { padding: 10px 15px; background: #ffffff; border: 2px solid #ff6b00; border-radius: 8px; color: #0f172a; font-weight: 700; font-size: 14px; outline: none; cursor: pointer; }
-
-        /* GÜNLÜK SATIŞ ANALİZ KUTUSU */
+        /* GÜNLÜK ANALİZ KUTUSU */
         .daily-analytics-box { background: linear-gradient(135deg, #1e293b, #0f172a); border: 2px solid #ff6b00; border-radius: 16px; padding: 20px 25px; margin-top: 40px; color: #ffffff; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; box-shadow: 0 10px 30px rgba(255,107,0,0.15); }
         .analytics-item { display: flex; align-items: center; gap: 15px; }
         .analytics-item i { font-size: 32px; color: #ff6b00; background: rgba(255,107,0,0.15); padding: 12px; border-radius: 12px; }
         .analytics-info h4 { font-size: 13px; color: #94a3b8; font-weight: 600; text-transform: uppercase; }
         .analytics-info p { font-size: 22px; font-weight: 800; color: #ffffff; }
 
-        /* SİPARİŞLER KARTLARI */
+        /* SİPARİŞ KARTLARI */
         .orders-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; }
         .order-card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 20px; display: flex; flex-direction: column; justify-content: space-between; position: relative; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: 0.3s; }
         .order-card:hover { border-color: #ff6b00; box-shadow: 0 8px 25px rgba(255,107,0,0.15); }
@@ -76,7 +97,6 @@
 
         .order-products-box { background: #f8fafc; border: 1px solid #e2e8f0; padding: 10px; border-radius: 8px; margin: 10px 0; font-size: 13px; color: #1e293b; }
 
-        /* DURUM VE İPTAL BUTONLARI ALANI */
         .order-footer { margin-top: 15px; border-top: 1px solid #f1f5f9; padding-top: 12px; display: flex; flex-direction: column; gap: 10px; }
         .order-price-status { display: flex; justify-content: space-between; align-items: center; }
         .order-price { font-size: 16px; font-weight: 800; color: #ff6b00; }
@@ -84,16 +104,12 @@
         .status-buttons-container { display: flex; gap: 6px; flex-wrap: wrap; }
         .status-btn { flex: 1; padding: 9px 4px; border: none; border-radius: 8px; font-weight: 700; font-size: 11px; cursor: pointer; transition: 0.2s; color: #fff; display: flex; align-items: center; justify-content: center; gap: 4px; }
         
-        /* BUTON RENKLERİ */
         .btn-hazirlaniyor { background: #f59e0b; }
         .btn-hazirlaniyor:hover { background: #d97706; }
-
         .btn-yolacikti { background: #3b82f6; }
         .btn-yolacikti:hover { background: #2563eb; }
-
         .btn-teslim { background: #10b981; }
         .btn-teslim:hover { background: #059669; }
-
         .btn-iptal { background: #ef4444; width: 100%; margin-top: 5px; font-size: 12px; padding: 8px; }
         .btn-iptal:hover { background: #dc2626; }
 
@@ -105,67 +121,166 @@
     </style>
 </head>
 <body>
-    <div class="panel-container">
-        
-        <!-- YANIP SÖNEN UYARI BANDI -->
-        <div id="audioBanner" class="audio-permission-banner">
-            <div class="banner-text-group">
-                <h3 id="bannerTitle"><i class="fa-solid fa-triangle-exclamation"></i> Lütfen Bildirim Seslerini Aktif Edin</h3>
-                <p id="bannerDesc">Gelen siparişleri sesli olarak duyabilmek için lütfen sesi aktif edin.</p>
-            </div>
-            <button id="bannerBtn" onclick="sesIzniVer()">Sesi Aktifleştir</button>
-        </div>
 
-        <div class="panel-header">
-            <h1><i class="fa-solid fa-chart-line" style="color:#ff6b00;"></i> Şube <span>Yönetim Paneli</span></h1>
+    <!-- GİRİŞ EKRANI (LOGIN) -->
+    <div id="loginOverlay">
+        <div class="login-card">
+            <h2>Uçan Paket <span>Yönetim</span></h2>
+            <p>Lütfen şube bilgilerinizi giriniz</p>
             
-            <div class="branch-selector-box">
-                <label><i class="fa-solid fa-store"></i> Aktif Şubeniz:</label>
-                <select id="yonetimSubeSecim" onchange="subeDegisti()">
+            <div class="login-form-group">
+                <label>Şube Seçin</label>
+                <select id="loginSubeSelect" onchange="hatirlananBilgileriDoldur()">
                     <option value="Merkez Gülpınar Şube">Merkez Gülpınar Şube</option>
                     <option value="Feridunçelik Şube">Feridunçelik Şube</option>
                     <option value="Karapürçek Şube">Karapürçek Şube</option>
                 </select>
             </div>
-        </div>
 
-        <!-- SİPARİŞLERİN LİSTELENECEĞİ ALAN -->
-        <div id="subeSiparisleriListesi" class="orders-grid">
-            <div class="no-order">Siparişler yükleniyor...</div>
-        </div>
-
-        <!-- GÜNLÜK SATIŞ VE CİRO ANALİZİ -->
-        <div class="daily-analytics-box">
-            <div class="analytics-item">
-                <i class="fa-solid fa-wallet"></i>
-                <div class="analytics-info">
-                    <h4>Bugünkü Toplam Ciro</h4>
-                    <p id="toplamCiroText">0 ₺</p>
-                </div>
+            <div class="login-form-group">
+                <label>Şube Şifresi</label>
+                <input type="password" id="loginSifreInput" placeholder="Şubenizin şifresi...">
             </div>
-            <div class="analytics-item">
-                <i class="fa-solid fa-receipt"></i>
-                <div class="analytics-info">
-                    <h4>Bugünkü Toplam Sipariş</h4>
-                    <p id="toplamAdetText">0 Adet</p>
-                </div>
-            </div>
-        </div>
 
-        <div class="panel-footer">
-            <p>&copy; 2026 Uçan Paket Sepeti. Tüm hakları saklıdır.</p>
-            <p style="margin-top: 6px; color: #ff6b00; font-weight: 600; letter-spacing: 0.5px;">TAN MEDYA TASARIM Tarafından Kurulmuştur.</p>
+            <label class="remember-group">
+                <input type="checkbox" id="beniHatirlaCheck" checked> Beni Hatırla (Şifre ve Şubeyi Kaydet)
+            </label>
+
+            <button type="button" class="login-btn" onclick="subeGirisYap()"><i class="fa-solid fa-right-to-bracket"></i> Giriş Yap</button>
+            <div id="loginErrorText" class="login-error">Hatalı şifre! Lütfen tekrar deneyin.</div>
         </div>
     </div>
 
-    <!-- 2 TUR TEKRAR EDEN ÇAN + BAYAN SESİ VE YEŞİL SABİT BANT SİSTEMİ -->
+    <!-- YÖNETİM PANELİ ANA İÇERİK -->
+    <div id="panelMainContent">
+        <div class="panel-container">
+            
+            <!-- UYARI BANDI -->
+            <div id="audioBanner" class="audio-permission-banner">
+                <div class="banner-text-group">
+                    <h3 id="bannerTitle"><i class="fa-solid fa-triangle-exclamation"></i> Lütfen Bildirim Seslerini Aktif Edin</h3>
+                    <p id="bannerDesc">Gelen siparişleri sesli olarak duyabilmek için lütfen sesi aktif edin.</p>
+                </div>
+                <button id="bannerBtn" onclick="sesIzniVer()">Sesi Aktifleştir</button>
+            </div>
+
+            <div class="panel-header">
+                <h1><i class="fa-solid fa-chart-line" style="color:#ff6b00;"></i> <span id="headerSubeAdi">Şube</span> Yönetim Paneli</h1>
+                
+                <div class="header-right-actions">
+                    <button type="button" class="logout-btn" onclick="cikisYap()"><i class="fa-solid fa-right-from-bracket"></i> Çıkış Yap</button>
+                </div>
+            </div>
+
+            <!-- SİPARİŞLER LİSTESİ -->
+            <div id="subeSiparisleriListesi" class="orders-grid">
+                <div class="no-order">Siparişler yükleniyor...</div>
+            </div>
+
+            <!-- GÜNLÜK ANALİZ -->
+            <div class="daily-analytics-box">
+                <div class="analytics-item">
+                    <i class="fa-solid fa-wallet"></i>
+                    <div class="analytics-info">
+                        <h4>Bugünkü Toplam Ciro</h4>
+                        <p id="toplamCiroText">0 ₺</p>
+                    </div>
+                </div>
+                <div class="analytics-item">
+                    <i class="fa-solid fa-receipt"></i>
+                    <div class="analytics-info">
+                        <h4>Bugünkü Toplam Sipariş</h4>
+                        <p id="toplamAdetText">0 Adet</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel-footer">
+                <p>&copy; 2026 Uçan Paket Sepeti. Tüm hakları saklıdır.</p>
+                <p style="margin-top: 6px; color: #ff6b00; font-weight: 600; letter-spacing: 0.5px;">TAN MEDYA TASARIM Tarafından Kurulmuştur.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- SİSTEM KODLARI -->
     <script>
+        const subeSifreleri = {
+            "Merkez Gülpınar Şube": "Gülpınar2026",
+            "Feridunçelik Şube": "Feridunçelik2026",
+            "Karapürçek Şube": "Karapürçek2026"
+        };
+
+        let aktifSecilenSube = localStorage.getItem('yonetim_aktif_sube') || "";
         let sesAktifMi = false;
+
+        // Sayfa açıldığında "Beni Hatırla" verisi varsa direkt içeri al
+        window.addEventListener('DOMContentLoaded', () => {
+            const kayitliSube = localStorage.getItem('hatirlanan_sube');
+            const kayitliSifre = localStorage.getItem('hatirlanan_sifre');
+
+            if (kayitliSube && kayitliSifre && subeSifreleri[kayitliSube] === kayitliSifre) {
+                aktifSecilenSube = kayitliSube;
+                document.getElementById('loginOverlay').style.display = 'none';
+                document.getElementById('panelMainContent').style.display = 'block';
+                document.getElementById('headerSubeAdi').textContent = aktifSecilenSube;
+                siparisleriDinleVeGoster();
+            } else {
+                hatirlananBilgileriDoldur();
+            }
+        });
+
+        function hatirlananBilgileriDoldur() {
+            const secilenSube = document.getElementById('loginSubeSelect').value;
+            const kayitliSube = localStorage.getItem('hatirlanan_sube');
+            const kayitliSifre = localStorage.getItem('hatirlanan_sifre');
+
+            if (kayitliSube === secilenSube && kayitliSifre) {
+                document.getElementById('loginSifreInput').value = kayitliSifre;
+                document.getElementById('beniHatirlaCheck').checked = true;
+            } else {
+                document.getElementById('loginSifreInput').value = "";
+                document.getElementById('beniHatirlaCheck').checked = false;
+            }
+        }
+
+        function subeGirisYap() {
+            const secilenSube = document.getElementById('loginSubeSelect').value;
+            const girilenSifre = document.getElementById('loginSifreInput').value.trim();
+            const beniHatirla = document.getElementById('beniHatirlaCheck').checked;
+            const errorBox = document.getElementById('loginErrorText');
+
+            if (subeSifreleri[secilenSube] === girilenSifre) {
+                if (beniHatirla) {
+                    localStorage.setItem('hatirlanan_sube', secilenSube);
+                    localStorage.setItem('hatirlanan_sifre', girilenSifre);
+                } else {
+                    localStorage.removeItem('hatirlanan_sube');
+                    localStorage.removeItem('hatirlanan_sifre');
+                }
+
+                localStorage.setItem('yonetim_aktif_sube', secilenSube);
+                aktifSecilenSube = secilenSube;
+                
+                document.getElementById('loginOverlay').style.display = 'none';
+                document.getElementById('panelMainContent').style.display = 'block';
+                document.getElementById('headerSubeAdi').textContent = aktifSecilenSube;
+                
+                eskiSiparisSayisi = null;
+                siparisleriDinleVeGoster();
+            } else {
+                errorBox.style.display = 'block';
+            }
+        }
+
+        function cikisYap() {
+            localStorage.removeItem('yonetim_aktif_sube');
+            localStorage.removeItem('hatirlanan_sube');
+            localStorage.removeItem('hatirlanan_sifre');
+            location.reload();
+        }
 
         function sesIzniVer() {
             sesAktifMi = true;
-            
-            // Bantı yeşile döndür, sabitle ve metni değiştir
             const banner = document.getElementById('audioBanner');
             banner.classList.add('aktif-yesil');
             document.getElementById('bannerTitle').innerHTML = '<i class="fa-solid fa-circle-check"></i> Bildirim Sesleri Aktif';
@@ -227,6 +342,7 @@
         }
 
         function sesliBildirimVer() {
+            if (!sesAktifMi) return;
             tekTurBildirimCal(() => {
                 setTimeout(() => {
                     tekTurBildirimCal(null);
@@ -241,7 +357,7 @@
         }
     </script>
 
-    <!-- Firebase SDK -->
+    <!-- Firebase SDK ve Sipariş Dinleme -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     <script>
@@ -258,17 +374,7 @@
         if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
         const db = firebase.database();
 
-        let aktifSecilenSube = localStorage.getItem('yonetim_aktif_sube') || "Merkez Gülpınar Şube";
-        document.getElementById('yonetimSubeSecim').value = aktifSecilenSube;
-
         let eskiSiparisSayisi = null;
-
-        function subeDegisti() {
-            aktifSecilenSube = document.getElementById('yonetimSubeSecim').value;
-            localStorage.setItem('yonetim_aktif_sube', aktifSecilenSube);
-            eskiSiparisSayisi = null;
-            siparisleriDinleVeGoster();
-        }
 
         function siparisDurumGuncelle(siparisId, yeniDurum) {
             db.ref('orders/' + siparisId).update({ status: yeniDurum })
@@ -296,6 +402,8 @@
         }
 
         function siparisleriDinleVeGoster() {
+            if (!aktifSecilenSube) return;
+
             db.ref('orders').on('value', (snapshot) => {
                 const listeDiv = document.getElementById('subeSiparisleriListesi');
                 listeDiv.innerHTML = '';
@@ -412,8 +520,6 @@
                 });
             });
         }
-
-        siparisleriDinleVeGoster();
     </script>
 </body>
 </html>
