@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Menü | Bölge Yemek</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
+        body { background: #0f172a; color: #f8fafc; padding-bottom: 90px; }
+
+        /* HEADER */
+        header { background: #000000; border-bottom: 2px solid #ff6b00; padding: 15px; text-align: center; position: sticky; top: 0; z-index: 1000; }
+        .logo { font-size: 20px; font-weight: 800; text-decoration: none; text-transform: uppercase; }
+        .logo .bolge { color: #ffffff; }
+        .logo .yemek { color: #ff6b00; }
+        
+        .container { max-width: 800px; margin: 0 auto; padding: 15px; }
+
+        /* MASA BİLGİ BANNERI */
+        .qr-banner { background: linear-gradient(135deg, #1e293b, #0f172a); border: 1px solid #ff6b00; border-radius: 14px; padding: 15px; text-align: center; margin-bottom: 20px; box-shadow: 0 5px 20px rgba(255,107,0,0.2); }
+        .qr-banner h2 { font-size: 18px; color: #ffffff; margin-bottom: 5px; }
+        .qr-banner span { color: #ff6b00; font-weight: 700; }
+
+        /* KATEGORİ BAŞLIK */
+        .section-title { font-size: 18px; font-weight: 700; color: #ffffff; margin: 25px 0 12px 0; border-left: 4px solid #ff6b00; padding-left: 8px; display: flex; align-items: center; gap: 8px; }
+
+        /* QR MENÜ LİSTE KARTLARI (Kompakt ve Hızlı) */
+        .qr-menu-list { display: flex; flex-direction: column; gap: 12px; }
+        .qr-item-card { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; transition: 0.2s; }
+        .qr-item-card:hover { border-color: #ff6b00; }
+        
+        .qr-item-info h4 { font-size: 14px; font-weight: 700; color: #ffffff; margin-bottom: 3px; }
+        .qr-item-info p { font-size: 11px; color: #94a3b8; line-height: 1.3; max-width: 240px; }
+        .qr-item-right { display: flex; align-items: center; gap: 12px; }
+        .qr-price { font-size: 15px; font-weight: 800; color: #ff6b00; white-space: nowrap; }
+        
+        .qr-add-btn { background: #ff6b00; color: white; border: none; width: 36px; height: 36px; border-radius: 8px; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
+        .qr-add-btn:hover { background: #e05e00; transform: scale(1.05); }
+
+        /* ALT SEPET BARİ */
+        .bottom-cart-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(0,0,0,0.95); border-top: 2px solid #ff6b00; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; z-index: 9999; backdrop-filter: blur(10px); }
+        .bottom-cart-total { font-size: 14px; font-weight: 600; color: #cbd5e1; }
+        .bottom-cart-total span { color: #ff6b00; font-size: 18px; font-weight: 800; }
+        .complete-order-btn { background: #ff6b00; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 700; font-size: 13px; cursor: pointer; text-transform: uppercase; }
+
+        /* MODAL */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); justify-content: center; align-items: center; z-index: 10000; padding: 15px; }
+        .modal-content { background: #1e293b; padding: 20px; border-radius: 14px; width: 100%; max-width: 400px; border: 1px solid #334155; }
+        .form-group { margin-bottom: 12px; }
+        .form-group label { display: block; font-size: 12px; color: #cbd5e1; margin-bottom: 4px; font-weight: 600; }
+        .form-group input, .form-group textarea { width: 100%; padding: 10px; background: #0f172a; border: 1px solid #334155; border-radius: 8px; color: #fff; font-size: 13px; outline: none; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="#" class="logo"><span class="bolge">Bölge</span> <span class="yemek">Yemek</span></a>
+    </header>
+
+    <div class="container">
+        <!-- MASA VEYA QR BİLGİSİ -->
+        <div class="qr-banner">
+            <h2><i class="fa-solid fa-qrcode" style="color:#ff6b00;"></i> Dijital QR Menü</h2>
+            <p>Masa No: <span id="masaNumarasi">Masa-1</span> | Hızlı Sipariş Ekranı</p>
+        </div>
+
+        <h3 class="section-title"><i class="fa-solid fa-fire"></i> Pan Dürümler</h3>
+        <div class="qr-menu-list">
+            <div class="qr-item-card">
+                <div class="qr-item-info">
+                    <h4>Pan Klasik Dürüm</h4>
+                    <p>90 Gram Tek Lavaş. Doritoslu, İstediğiniz Malzeme.</p>
+                </div>
+                <div class="qr-item-right">
+                    <span class="qr-price">95 ₺</span>
+                    <button class="qr-add-btn" onclick="qrSepeteEkle('Pan Klasik Dürüm', 95)"><i class="fa-solid fa-plus"></i></button>
+                </div>
+            </div>
+
+            <div class="qr-item-card">
+                <div class="qr-item-info">
+                    <h4>Pan Mega Dürüm</h4>
+                    <p>125 Gram Tek Lavaş. Doritoslu, İstediğiniz Malzeme.</p>
+                </div>
+                <div class="qr-item-right">
+                    <span class="qr-price">105 ₺</span>
+                    <button class="qr-add-btn" onclick="qrSepeteEkle('Pan Mega Dürüm', 105)"><i class="fa-solid fa-plus"></i></button>
+                </div>
+            </div>
+
+            <div class="qr-item-card">
+                <div class="qr-item-info">
+                    <h4>Pan Süper Mega Dürüm</h4>
+                    <p>150 Gram Çift Lavaş. Doritoslu, İstediğiniz Malzeme.</p>
+                </div>
+                <div class="qr-item-right">
+                    <span class="qr-price">120 ₺</span>
+                    <button class="qr-add-btn" onclick="qrSepeteEkle('Pan Süper Mega Dürüm', 120)"><i class="fa-solid fa-plus"></i></button>
+                </div>
+            </div>
+        </div>
+
+        <h3 class="section-title"><i class="fa-solid fa-utensils"></i> Pan Porsiyonlar</h3>
+        <div class="qr-menu-list">
+            <div class="qr-item-card">
+                <div class="qr-item-info">
+                    <h4>1 Kişilik Porsiyon (200 Gr)</h4>
+                    <p>2 Lavaş, Göbek Aysberk, Nar Ekşisi, Acı Sos, Çeyrek Limon.</p>
+                </div>
+                <div class="qr-item-right">
+                    <span class="qr-price">170 ₺</span>
+                    <button class="qr-add-btn" onclick="qrSepeteEkle('1 Kişilik Porsiyon (200 Gr)', 170)"><i class="fa-solid fa-plus"></i></button>
+                </div>
+            </div>
+
+            <div class="qr-item-card">
+                <div class="qr-item-info">
+                    <h4>2 Kişilik Porsiyon (400 Gr)</h4>
+                    <p>4 Lavaş, Göbek Aysberk, Nar Ekşisi, Acı Sos, Yarım Limon.</p>
+                </div>
+                <div class="qr-item-right">
+                    <span class="qr-price">300 ₺</span>
+                    <button class="qr-add-btn" onclick="qrSepeteEkle('2 Kişilik Porsiyon (400 Gr)', 300)"><i class="fa-solid fa-plus"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ALT SEPET BARİ -->
+    <div class="bottom-cart-bar">
+        <div class="bottom-cart-total">
+            Toplam: <span id="qrToplamTutar">0 ₺</span>
+        </div>
+        <button class="complete-order-btn" onclick="qrSiparisModalAc()">Siparişi Tamamla</button>
+    </div>
+
+    <!-- ONAY MODALI -->
+    <div id="qrModal" class="modal">
+        <div class="modal-content">
+            <h3 style="color:#fff; font-size:16px; margin-bottom:12px; border-bottom:1px solid #334155; padding-bottom:8px;">Masa Sipariş Onayı</h3>
+            <div class="form-group">
+                <label>Adınız Soyadınız *</label>
+                <input type="text" id="qrIsim" placeholder="Ad Soyad">
+            </div>
+            <div class="form-group">
+                <label>Telefon Numaranız *</label>
+                <input type="tel" id="qrTelefon" placeholder="05XXXXXXXXX">
+            </div>
+            <div class="form-group">
+                <label>Not / Ek Talepler (İsteğe bağlı)</label>
+                <textarea id="qrNot" rows="2" placeholder="Örn: Acılı olsun, bol soslu..."></textarea>
+            </div>
+            <button type="button" onclick="qrSiparisGonder()" style="width:100%; background:#ff6b00; color:white; border:none; padding:12px; border-radius:8px; font-weight:700; cursor:pointer; margin-top:5px;">Siparişi Gönder</button>
+            <button type="button" onclick="document.getElementById('qrModal').style.display='none'" style="width:100%; background:transparent; color:#94a3b8; border:none; padding:8px; cursor:pointer; margin-top:5px; font-size:12px;">Vazgeç</button>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <script>
+        const firebaseConfig = {
+          apiKey: "AIzaSyDMIz96KNZF-7zWGRuI-2fvQ72fZImHtUw",
+          authDomain: "eretankartal.firebaseapp.com",
+          databaseURL: "https://eretankartal-default-rtdb.europe-west1.firebasedatabase.app",
+          projectId: "eretankartal",
+          storageBucket: "eretankartal.firebasestorage.app",
+          messagingSenderId: "775846519838",
+          appId: "1:775846519838:web:75b1d7dfb4ef942a3f7a0f"
+        };
+
+        if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
+        const db = firebase.database();
+
+        let qrSepet = [];
+        let masaAdi = "Masa-1";
+
+        // URL'den masa bilgisini yakala (Örn: bolgeyemek.com/qr.html?masa=5)
+        window.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const masa = urlParams.get('masa');
+            if (masa) {
+                masaAdi = "Masa " + masa;
+                document.getElementById('masaNumarasi').textContent = masaAdi;
+            }
+        });
+
+        function qrSepeteEkle(urunAdi, fiyat) {
+            const varOlan = qrSepet.find(i => i.name === urunAdi);
+            if(varOlan) {
+                varOlan.qty++;
+            } else {
+                qrSepet.push({ name: urunAdi, price: fiyat, qty: 1 });
+            }
+            qrSepetiHesapla();
+            alert(urunAdi + " sepete eklendi!");
+        }
+
+        function qrSepetiHesapla() {
+            let toplam = 0;
+            qrSepet.forEach(i => toplam += (i.price * i.qty));
+            document.getElementById('qrToplamTutar').textContent = toplam + " ₺";
+        }
+
+        function qrSiparisModalAc() {
+            if(qrSepet.length === 0) {
+                alert("Sepetiniz boş!");
+                return;
+            }
+            document.getElementById('qrModal').style.display = 'flex';
+        }
+
+        function qrSiparisGonder() {
+            const isim = document.getElementById('qrIsim').value.trim();
+            const tel = document.getElementById('qrTelefon').value.trim();
+            const not = document.getElementById('qrNot').value.trim();
+
+            if(!isim || !tel) {
+                alert("Lütfen adınızı ve telefonunuzu girin.");
+                return;
+            }
+
+            let toplamTutar = 0;
+            let urunlerStr = qrSepet.map(i => {
+                toplamTutar += (i.price * i.qty);
+                return `${i.qty}x ${i.name}`;
+            }).join(', ');
+
+            const siparisId = 'QR-' + Date.now();
+            const yeniSiparis = {
+                id: siparisId,
+                branch: "QR Menü (" + masaAdi + ")",
+                name: isim,
+                phone: tel,
+                address: "QR Menü Masadan Sipariş - " + masaAdi + (not ? " | Not: " + not : ""),
+                product: urunlerStr,
+                price: toplamTutar,
+                status: "Yeni Sipariş",
+                time: new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' }),
+                date: new Date().toLocaleDateString('tr-TR')
+            };
+
+            db.ref('orders/' + siparisId).set(yeniSiparis).then(() => {
+                alert("Siparişiniz restorana iletildi! Afiyet olsun.");
+                document.getElementById('qrModal').style.display = 'none';
+                qrSepet = [];
+                qrSepetiHesapla();
+                document.getElementById('qrIsim').value = '';
+                document.getElementById('qrTelefon').value = '';
+                document.getElementById('qrNot').value = '';
+            }).catch(err => {
+                alert("Hata: " + err.message);
+            });
+        }
+    </script>
+</body>
+</html>
