@@ -37,7 +37,7 @@
             opacity: 0.95;
         }
 
-        /* GURME & İŞTAH AÇICI GİRİŞ EKRANI */
+        /* GİRİŞ EKRANI */
         #loginOverlay { 
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
             background: linear-gradient(135deg, rgba(11, 15, 25, 0.92), rgba(26, 15, 10, 0.95)), 
@@ -102,7 +102,10 @@
         .panel-header h1 { font-size: clamp(20px, 4vw, 26px); font-weight: 800; color: #0f172a; display: flex; align-items: center; gap: 10px; }
         .panel-header h1 span { color: #ff6b00; }
 
-        .header-right-actions { display: flex; align-items: center; gap: 15px; flex-wrap: wrap; }
+        .header-right-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+        .history-btn { background: #3b82f6; color: white; border: none; padding: 10px 15px; border-radius: 8px; font-weight: 700; font-size: 13px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 6px; text-decoration: none; }
+        .history-btn:hover { background: #2563eb; }
+
         .logout-btn { background: #ef4444; color: white; border: none; padding: 10px 15px; border-radius: 8px; font-weight: 700; font-size: 13px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 6px; }
         .logout-btn:hover { background: #dc2626; }
 
@@ -146,7 +149,7 @@
         .analytics-info h4 { font-size: 13px; color: #94a3b8; font-weight: 600; text-transform: uppercase; }
         .analytics-info p { font-size: 22px; font-weight: 800; color: #ffffff; }
 
-        /* SİPARİŞ KARTLARI (BEYAZ TEMA KORUNDU) */
+        /* SİPARİŞ KARTLARI */
         .orders-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; }
         .order-card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 20px; display: flex; flex-direction: column; justify-content: space-between; position: relative; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: 0.3s; color: #1e293b; }
         .order-card:hover { border-color: #ff6b00; box-shadow: 0 8px 25px rgba(255,107,0,0.15); }
@@ -185,10 +188,9 @@
 </head>
 <body>
 
-    <!-- GURME İŞTAH AÇICI GİRİŞ EKRANI -->
+    <!-- GİRİŞ EKRANI -->
     <div id="loginOverlay">
         <div class="login-card">
-            <!-- TAN MEDYA DESTEK BANDI (GİRİŞ EKRANI ÜSTÜ) -->
             <div class="tan-medya-destek-bar" style="margin-bottom: 20px;">
                 <h4><i class="fa-solid fa-headset"></i> TAN MEDYA TASARIM DESTEK</h4>
                 <p>0501 090 17 22<br>Sistem ile ilgili hata oluştuğunda 7/24 Destek Alabilirsiniz.</p>
@@ -225,7 +227,6 @@
     <div id="panelMainContent">
         <div class="panel-container">
             
-            <!-- TAN MEDYA DESTEK BANDI (PANEL İÇİ ÜST KISIM) -->
             <div class="tan-medya-destek-bar">
                 <h4><i class="fa-solid fa-headset"></i> TAN MEDYA TASARIM DESTEK: 0501 090 17 22</h4>
                 <p>Sistem ile ilgili hata oluştuğunda 7/24 Destek Alabilirsiniz.</p>
@@ -244,6 +245,7 @@
                 <h1><i class="fa-solid fa-bowl-food" style="color:#ff6b00;"></i> <span id="headerSubeAdi">Şube</span> Yönetim Paneli</h1>
                 
                 <div class="header-right-actions">
+                    <button type="button" class="history-btn" onclick="gecmisSiparisleriAc()"><i class="fa-solid fa-clock-rotate-left"></i> Geçmiş Siparişler</button>
                     <button type="button" class="logout-btn" onclick="cikisYap()"><i class="fa-solid fa-right-from-bracket"></i> Çıkış Yap</button>
                 </div>
             </div>
@@ -450,6 +452,7 @@
         const db = firebase.database();
 
         let eskiSiparisSayisi = null;
+        let gosterimModu = 'aktif'; // 'aktif' veya 'gecmis'
 
         function siparisDurumGuncelle(siparisId, yeniDurum) {
             db.ref('orders/' + siparisId).update({ status: yeniDurum })
@@ -476,6 +479,19 @@
             }
         }
 
+        function gecmisSiparisleriAc() {
+            gosterimModu = (gosterimModu === 'aktif') ? 'gecmis' : 'aktif';
+            const btn = document.querySelector('.history-btn');
+            if (gosterimModu === 'gecmis') {
+                btn.innerHTML = '<i class="fa-solid fa-bolt"></i> Aktif Siparişler';
+                btn.style.background = '#10b981';
+            } else {
+                btn.innerHTML = '<i class="fa-solid fa-clock-rotate-left"></i> Geçmiş Siparişler';
+                btn.style.background = '#3b82f6';
+            }
+            siparisleriDinleVeGoster();
+        }
+
         function siparisleriDinleVeGoster() {
             if (!aktifSecilenSube) return;
 
@@ -484,7 +500,7 @@
                 listeDiv.innerHTML = '';
 
                 if (!snapshot.exists()) {
-                    listeDiv.innerHTML = '<div class="no-order">Şubenize gelen aktif sipariş bulunmuyor.</div>';
+                    listeDiv.innerHTML = '<div class="no-order">Şubenize gelen sipariş bulunmuyor.</div>';
                     document.getElementById('toplamCiroText').textContent = '0 ₺';
                     document.getElementById('toplamAdetText').textContent = '0 Adet';
                     return;
@@ -498,11 +514,26 @@
 
                 Object.values(tumSiparisler).forEach(siparis => {
                     if (siparis.branch === aktifSecilenSube) {
-                        filtreliSiparisler.push(siparis);
+                        const bugunMu = (siparis.date === bugununTarihi);
+                        const teslimEdildiMi = (siparis.status === 'Teslim Edildi');
 
-                        if (siparis.date === bugununTarihi) {
+                        // Bugünün cirosunu ve adetini her zaman hesapla
+                        if (bugunMu) {
                             bugunCiro += (parseFloat(siparis.price) || 0);
                             bugunAdet += 1;
+                        }
+
+                        // MOD KONTROLÜ: 
+                        // Aktif Mod: Sadece bugünün siparişleri VEYA henüz teslim edilmemiş siparişler görünür.
+                        // Geçmiş Mod: Sadece geçmiş tarihli veya teslim edilmiş eski siparişler görünür.
+                        if (gosterimModu === 'aktif') {
+                            if (bugunMu || !teslimEdildiMi) {
+                                filtreliSiparisler.push(siparis);
+                            }
+                        } else {
+                            if (!bugunMu && teslimEdildiMi) {
+                                filtreliSiparisler.push(siparis);
+                            }
                         }
                     }
                 });
@@ -512,13 +543,14 @@
 
                 filtreliSiparisler.reverse();
 
-                if (eskiSiparisSayisi !== null && filtreliSiparisler.length > eskiSiparisSayisi) {
+                if (gosterimModu === 'aktif' && eskiSiparisSayisi !== null && filtreliSiparisler.length > eskiSiparisSayisi) {
                     sesliBildirimVer();
                 }
                 eskiSiparisSayisi = filtreliSiparisler.length;
 
                 if (filtreliSiparisler.length === 0) {
-                    listeDiv.innerHTML = `<div class="no-order"><strong>${aktifSecilenSube}</strong> için şu anda aktif sipariş yok.</div>`;
+                    const mesaj = gosterimModu === 'aktif' ? 'Şubeniz için şu anda aktif sipariş yok.' : 'Geçmiş sipariş bulunmuyor.';
+                    listeDiv.innerHTML = `<div class="no-order">${mesaj}</div>`;
                     return;
                 }
 
