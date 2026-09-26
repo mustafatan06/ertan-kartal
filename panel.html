@@ -3,31 +3,94 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Şube Yönetim Paneli | Uçan Paket Sepeti</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>Gurme Şube Yönetim Paneli | Bölge Yemek</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
-        body { background: #f8fafc; color: #1e293b; padding: 20px; }
+        body { background: #0b0f19; color: #f1f5f9; padding: 20px; min-height: 100vh; }
 
-        /* GİRİŞ EKRANI (LOGIN MODAL) */
-        #loginOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0f172a; display: flex; justify-content: center; align-items: center; z-index: 999999; padding: 15px; }
-        .login-card { background: #ffffff; padding: 30px; border-radius: 16px; width: 100%; max-width: 400px; box-shadow: 0 15px 35px rgba(0,0,0,0.3); border: 1px solid #e2e8f0; text-align: center; }
-        .login-card h2 { color: #0f172a; font-size: 22px; font-weight: 800; margin-bottom: 8px; }
-        .login-card h2 span { color: #ff6b00; }
-        .login-card p { font-size: 13px; color: #64748b; margin-bottom: 20px; }
-        .login-form-group { margin-bottom: 15px; text-align: left; }
-        .login-form-group label { display: block; font-size: 12px; font-weight: 600; color: #475569; margin-bottom: 5px; }
-        .login-form-group select, .login-form-group input { width: 100%; padding: 12px; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; outline: none; color: #0f172a; font-weight: 600; }
-        .login-form-group select:focus, .login-form-group input:focus { border-color: #ff6b00; background: #fff; }
+        /* TAN MEDYA TASARIM SABİT DESTEK BANDI */
+        .tan-medya-destek-bar {
+            background: linear-gradient(135deg, #ff6b00, #cc5500);
+            color: #ffffff;
+            padding: 12px 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(255,107,0,0.3);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .tan-medya-destek-bar h4 {
+            font-size: 15px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            margin-bottom: 3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .tan-medya-destek-bar p {
+            font-size: 12px;
+            font-weight: 500;
+            opacity: 0.95;
+        }
+
+        /* GURME & İŞTAH AÇICI GİRİŞ EKRANI */
+        #loginOverlay { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: linear-gradient(135deg, rgba(11, 15, 25, 0.92), rgba(26, 15, 10, 0.95)), 
+                        url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=1920&auto=format&fit=crop') no-repeat center center/cover;
+            display: flex; justify-content: center; align-items: center; z-index: 999999; padding: 15px; 
+        }
         
-        /* BENİ HATIRLA CHECKBOX */
-        .remember-group { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; text-align: left; font-size: 13px; color: #475569; cursor: pointer; font-weight: 500; }
+        .login-card { 
+            background: rgba(18, 22, 33, 0.85); 
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            padding: 35px 30px; 
+            border-radius: 24px; 
+            width: 100%; 
+            max-width: 420px; 
+            box-shadow: 0 25px 50px rgba(0,0,0,0.6), inset 0 1px 1px rgba(255,255,255,0.1); 
+            border: 1px solid rgba(255, 107, 0, 0.3); 
+            text-align: center; 
+        }
+
+        .login-badge {
+            background: linear-gradient(135deg, #ff6b00, #ff8800);
+            color: white; font-size: 11px; font-weight: 800; text-transform: uppercase;
+            letter-spacing: 1.5px; padding: 6px 14px; border-radius: 20px; display: inline-block;
+            margin-bottom: 15px; box-shadow: 0 4px 15px rgba(255,107,0,0.4);
+        }
+
+        .login-card h2 { color: #ffffff; font-size: 26px; font-weight: 800; margin-bottom: 8px; letter-spacing: -0.5px; }
+        .login-card h2 span { color: #ff6b00; text-shadow: 0 0 20px rgba(255,107,0,0.5); }
+        .login-card p { font-size: 13px; color: #94a3b8; margin-bottom: 25px; font-weight: 400; }
+
+        .login-form-group { margin-bottom: 18px; text-align: left; }
+        .login-form-group label { display: block; font-size: 12px; font-weight: 600; color: #cbd5e1; margin-bottom: 6px; }
+        .login-form-group select, .login-form-group input { 
+            width: 100%; padding: 14px 16px; background: rgba(15, 23, 42, 0.8); 
+            border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; font-size: 14px; 
+            outline: none; color: #ffffff; font-weight: 600; transition: 0.3s; 
+        }
+        .login-form-group select:focus, .login-form-group input:focus { 
+            border-color: #ff6b00; background: rgba(15, 23, 42, 0.95); 
+            box-shadow: 0 0 15px rgba(255,107,0,0.25); 
+        }
+        
+        .remember-group { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; text-align: left; font-size: 13px; color: #cbd5e1; cursor: pointer; font-weight: 500; }
         .remember-group input { width: 18px; height: 18px; accent-color: #ff6b00; cursor: pointer; }
 
-        .login-btn { width: 100%; background: #ff6b00; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 700; font-size: 15px; cursor: pointer; transition: 0.3s; margin-top: 5px; }
-        .login-btn:hover { background: #e05e00; }
-        .login-error { color: #ef4444; font-size: 12px; font-weight: 600; margin-top: 10px; display: none; }
+        .login-btn { 
+            width: 100%; background: linear-gradient(135deg, #ff6b00, #e65c00); color: white; border: none; 
+            padding: 14px; border-radius: 12px; font-weight: 700; font-size: 16px; cursor: pointer; 
+            transition: 0.3s; box-shadow: 0 8px 25px rgba(255,107,0,0.4); 
+        }
+        .login-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(255,107,0,0.6); }
+        .login-error { color: #f87171; font-size: 12px; font-weight: 600; margin-top: 12px; display: none; }
 
         /* PANEL ANA YAPI */
         #panelMainContent { display: none; }
@@ -35,7 +98,7 @@
         .panel-container { max-width: 1200px; margin: 0 auto; }
         
         /* HEADER BAR */
-        .panel-header { background: #ffffff; border: 1px solid #e2e8f0; padding: 20px; border-radius: 16px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; flex-wrap: wrap; gap: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .panel-header { background: #ffffff; border: 1px solid #e2e8f0; padding: 20px; border-radius: 16px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; flex-wrap: wrap; gap: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); color: #1e293b; }
         .panel-header h1 { font-size: clamp(20px, 4vw, 26px); font-weight: 800; color: #0f172a; display: flex; align-items: center; gap: 10px; }
         .panel-header h1 span { color: #ff6b00; }
 
@@ -83,9 +146,9 @@
         .analytics-info h4 { font-size: 13px; color: #94a3b8; font-weight: 600; text-transform: uppercase; }
         .analytics-info p { font-size: 22px; font-weight: 800; color: #ffffff; }
 
-        /* SİPARİŞ KARTLARI */
+        /* SİPARİŞ KARTLARI (BEYAZ TEMA KORUNDU) */
         .orders-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; }
-        .order-card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 20px; display: flex; flex-direction: column; justify-content: space-between; position: relative; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: 0.3s; }
+        .order-card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 20px; display: flex; flex-direction: column; justify-content: space-between; position: relative; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: 0.3s; color: #1e293b; }
         .order-card:hover { border-color: #ff6b00; box-shadow: 0 8px 25px rgba(255,107,0,0.15); }
         
         .order-card-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f1f5f9; padding-bottom: 12px; margin-bottom: 12px; }
@@ -115,21 +178,28 @@
 
         .status-btn.disabled, .status-btn:disabled { background: #cbd5e1 !important; color: #64748b !important; cursor: not-allowed; box-shadow: none; opacity: 0.7; }
 
-        .no-order { text-align: center; color: #64748b; grid-column: 1/-1; padding: 40px; font-size: 16px; background: #ffffff; border-radius: 14px; border: 1px solid #e2e8f0; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .no-order { text-align: center; color: #94a3b8; grid-column: 1/-1; padding: 40px; font-size: 16px; background: #ffffff; border-radius: 14px; border: 1px solid #e2e8f0; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
 
-        .panel-footer { text-align: center; margin-top: 30px; font-size: 12px; color: #64748b; border-top: 1px solid #e2e8f0; padding-top: 20px; }
+        .panel-footer { text-align: center; margin-top: 30px; font-size: 12px; color: #94a3b8; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; }
     </style>
 </head>
 <body>
 
-    <!-- GİRİŞ EKRANI (LOGIN) -->
+    <!-- GURME İŞTAH AÇICI GİRİŞ EKRANI -->
     <div id="loginOverlay">
         <div class="login-card">
-            <h2>Uçan Paket <span>Yönetim</span></h2>
-            <p>Lütfen şube bilgilerinizi giriniz</p>
+            <!-- TAN MEDYA DESTEK BANDI (GİRİŞ EKRANI ÜSTÜ) -->
+            <div class="tan-medya-destek-bar" style="margin-bottom: 20px;">
+                <h4><i class="fa-solid fa-headset"></i> TAN MEDYA TASARIM DESTEK</h4>
+                <p>0501 090 17 22<br>Sistem ile ilgili hata oluştuğunda 7/24 Destek Alabilirsiniz.</p>
+            </div>
+
+            <span class="login-badge"><i class="fa-solid fa-fire-burner"></i> Gurme Yönetim</span>
+            <h2>Bölge <span>Yemek</span></h2>
+            <p>Lezzet operasyonunuzu yönetmek için şubenizi seçin</p>
             
             <div class="login-form-group">
-                <label>Şube Seçin</label>
+                <label><i class="fa-solid fa-store" style="color:#ff6b00;"></i> Şube Seçin</label>
                 <select id="loginSubeSelect" onchange="hatirlananBilgileriDoldur()">
                     <option value="Merkez Gülpınar Şube">Merkez Gülpınar Şube</option>
                     <option value="Feridunçelik Şube">Feridunçelik Şube</option>
@@ -138,15 +208,15 @@
             </div>
 
             <div class="login-form-group">
-                <label>Şube Şifresi</label>
+                <label><i class="fa-solid fa-lock" style="color:#ff6b00;"></i> Şube Şifresi</label>
                 <input type="password" id="loginSifreInput" placeholder="Şubenizin şifresi...">
             </div>
 
             <label class="remember-group">
-                <input type="checkbox" id="beniHatirlaCheck" checked> Beni Hatırla (Şifre ve Şubeyi Kaydet)
+                <input type="checkbox" id="beniHatirlaCheck" checked> Beni Hatırla
             </label>
 
-            <button type="button" class="login-btn" onclick="subeGirisYap()"><i class="fa-solid fa-right-to-bracket"></i> Giriş Yap</button>
+            <button type="button" class="login-btn" onclick="subeGirisYap()"><i class="fa-solid fa-utensils"></i> Panele Giriş Yap</button>
             <div id="loginErrorText" class="login-error">Hatalı şifre! Lütfen tekrar deneyin.</div>
         </div>
     </div>
@@ -155,6 +225,12 @@
     <div id="panelMainContent">
         <div class="panel-container">
             
+            <!-- TAN MEDYA DESTEK BANDI (PANEL İÇİ ÜST KISIM) -->
+            <div class="tan-medya-destek-bar">
+                <h4><i class="fa-solid fa-headset"></i> TAN MEDYA TASARIM DESTEK: 0501 090 17 22</h4>
+                <p>Sistem ile ilgili hata oluştuğunda 7/24 Destek Alabilirsiniz.</p>
+            </div>
+
             <!-- UYARI BANDI -->
             <div id="audioBanner" class="audio-permission-banner">
                 <div class="banner-text-group">
@@ -165,7 +241,7 @@
             </div>
 
             <div class="panel-header">
-                <h1><i class="fa-solid fa-chart-line" style="color:#ff6b00;"></i> <span id="headerSubeAdi">Şube</span> Yönetim Paneli</h1>
+                <h1><i class="fa-solid fa-bowl-food" style="color:#ff6b00;"></i> <span id="headerSubeAdi">Şube</span> Yönetim Paneli</h1>
                 
                 <div class="header-right-actions">
                     <button type="button" class="logout-btn" onclick="cikisYap()"><i class="fa-solid fa-right-from-bracket"></i> Çıkış Yap</button>
@@ -196,7 +272,7 @@
             </div>
 
             <div class="panel-footer">
-                <p>&copy; 2026 Uçan Paket Sepeti. Tüm hakları saklıdır.</p>
+                <p>&copy; 2026 Bölge Yemek. Tüm hakları saklıdır.</p>
                 <p style="margin-top: 6px; color: #ff6b00; font-weight: 600; letter-spacing: 0.5px;">TAN MEDYA TASARIM Tarafından Kurulmuştur.</p>
             </div>
         </div>
@@ -213,7 +289,6 @@
         let aktifSecilenSube = localStorage.getItem('yonetim_aktif_sube') || "";
         let sesAktifMi = false;
 
-        // Sayfa açıldığında "Beni Hatırla" verisi varsa direkt içeri al
         window.addEventListener('DOMContentLoaded', () => {
             const kayitliSube = localStorage.getItem('hatirlanan_sube');
             const kayitliSifre = localStorage.getItem('hatirlanan_sifre');
