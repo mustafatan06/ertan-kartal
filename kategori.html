@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kategori Restoranları | Bölge Yemek</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
+        body { background: #0b0f19; color: #f8fafc; padding-bottom: 40px; }
+        header { background: #000000; border-bottom: 2px solid #ff6b00; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; }
+        .logo { font-size: 20px; font-weight: 800; text-decoration: none; color: #fff; text-transform: uppercase; }
+        .logo .yemek { color: #ff6b00; }
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+        .page-title { font-size: 20px; font-weight: 800; margin-bottom: 20px; color: #fff; border-left: 4px solid #ff6b00; padding-left: 10px; display: flex; align-items: center; gap: 8px; text-transform: capitalize; }
+        
+        .restoran-listesi { display: flex; flex-direction: column; gap: 15px; }
+        .rest-kart { background: #1e293b; border-radius: 14px; border: 1px solid #334155; display: flex; overflow: hidden; text-decoration: none; transition: 0.3s; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+        .rest-kart:hover { border-color: #ff6b00; transform: translateY(-2px); }
+        .rest-gorsel { width: 120px; height: 120px; object-fit: cover; background: #0b0f19; }
+        .rest-detay { padding: 15px; display: flex; flex-direction: column; justify-content: center; }
+        .rest-detay h3 { font-size: 16px; color: #fff; font-weight: 700; margin-bottom: 4px; }
+        .rest-detay p { font-size: 12px; color: #94a3b8; margin-bottom: 8px; }
+        .rest-badge { background: rgba(255,107,0,0.15); color: #ff6b00; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 6px; width: fit-content; }
+        
+        .bos-uyari { background: #1e293b; padding: 30px; border-radius: 14px; text-align: center; border: 1px solid #334155; color: #94a3b8; font-size: 14px; }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo"><span class="bolge">Bölge</span> <span class="yemek">Yemek</span></a>
+        <a href="index.html" style="color:#94a3b8; font-size:13px; text-decoration:none;"><i class="fa-solid fa-arrow-left"></i> Ana Sayfa</a>
+    </header>
+
+    <div class="container">
+        <h2 id="kategoriBaslik" class="page-title"><i class="fa-solid fa-store"></i> Restoranlar</h2>
+        
+        <div class="restoran-listesi" id="restoranListesiContainer">
+            <!-- Dinamik olarak kategoriye göre dolacak -->
+        </div>
+    </div>
+
+    <script>
+        // TÜM MAĞAZALARIN KATEGORİ HARİTASI (İleride panelden veya veritabanından dinamik çekilecek)
+        const sistemMagazalari = [
+            {
+                id: "pan-cig-kofte",
+                kategori: "cig-kofte",
+                isim: "Pan Çiğ Köfte & Dürüm",
+                aciklama: "Çiğ Köfte, Porsiyon Menüler, Özel Dürümler",
+                puan: "4.9",
+                minTutar: "250 ₺",
+                gorsel: "images/pan-klasik.jpg",
+                sayfa: "isletme.html?dukkan=Pan Cig Kofte"
+            }
+            // Diğer kategorilere yeni mağazalar eklendikçe buraya eklenecek.
+            // Örn: { kategori: "hamburger", isim: "Burger King", ... }
+        ];
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const kat = urlParams.get('kat') || 'cig-kofte';
+
+        // Kategori başlığını düzenle
+        document.getElementById('kategoriBaslik').innerHTML = `<i class="fa-solid fa-utensils"></i> ${kat.replace('-', ' ').toUpperCase()} Kategorisindeki İşletmeler`;
+
+        // Sadece o kategoriye ait mağazaları filtrele
+        const filtrelenmisMagazalar = sistemMagazalari.filter(m => m.kategori === kat);
+        const container = document.getElementById('restoranListesiContainer');
+
+        if(filtrelenmisMagazalar.length > 0) {
+            container.innerHTML = '';
+            filtrelenmisMagazalar.forEach(magaza => {
+                container.innerHTML += `
+                    <a href="${magaza.sayfa}" class="rest-kart">
+                        <img src="${magaza.gorsel}" alt="${magaza.isim}" class="rest-gorsel" onerror="this.src='https://images.unsplash.com/photo-1541544741938-0af808871cc0?w=500&auto=format&fit=crop&q=60'">
+                        <div class="rest-detay">
+                            <h3>${magaza.isim}</h3>
+                            <p>${magaza.aciklama}</p>
+                            <span class="rest-badge">⭐ ${magaza.puan} • Min. ${magaza.minTutar} • Hızlı Teslimat</span>
+                        </div>
+                    </a>
+                `;
+            });
+        } else {
+            container.innerHTML = `
+                <div class="bos-uyari">
+                    <i class="fa-solid fa-store-slash" style="font-size:32px; color:#ff6b00; margin-bottom:10px;"></i>
+                    <p>Bu kategoride henüz aktif bir işletme bulunmuyor.</p>
+                    <span style="font-size:12px; color:#64748b; display:block; margin-top:5px;">Yukarıdaki "Satıcı Ol" butonuna basarak ilk işletmenizi bu kategoriye ekleyebilirsiniz!</span>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>

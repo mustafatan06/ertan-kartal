@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pan Çiğ Köfte Menüsü | Bölge Yemek</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
+        body { background: #0b0f19; color: #f8fafc; padding-bottom: 40px; }
+        header { background: #000000; border-bottom: 2px solid #ff6b00; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; }
+        .logo { font-size: 20px; font-weight: 800; text-decoration: none; color: #fff; text-transform: uppercase; }
+        .logo .yemek { color: #ff6b00; }
+        .container { max-width: 1100px; margin: 0 auto; padding: 15px; }
+
+        .rest-banner { background: linear-gradient(135deg, #1e293b, #0f172a); border: 1px solid rgba(255,107,0,0.4); border-radius: 16px; padding: 25px; margin-bottom: 25px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .rest-banner h2 { font-size: 22px; color: #fff; font-weight: 900; margin-bottom: 5px; }
+        .rest-banner p { font-size: 13px; color: #f59e0b; font-weight: 600; }
+
+        .section-title { font-size: 18px; font-weight: 800; color: #ffffff; margin: 30px 0 15px 0; border-left: 4px solid #ff6b00; padding-left: 10px; display: flex; align-items: center; gap: 8px; }
+
+        /* MOBİL UYUMLU 2'Lİ YAN YANA GRID YAPISI */
+        .qr-food-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+        @media (min-width: 768px) { .qr-food-grid { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; } }
+
+        .qr-food-card { background: #1e293b; border-radius: 14px; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; border: 1px solid #334155; text-decoration: none; transition: 0.3s; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+        .qr-food-card:hover { border-color: #ff6b00; transform: translateY(-3px); box-shadow: 0 8px 25px rgba(255,107,0,0.25); }
+
+        .qr-img-container { width: 100%; height: 120px; background: #0b0f19; overflow: hidden; border-bottom: 2px solid #ff6b00; }
+        @media (min-width: 768px) { .qr-img-container { height: 160px; } }
+        .qr-img-container img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s; }
+        .qr-food-card:hover .qr-img-container img { transform: scale(1.05); }
+
+        .qr-body { padding: 12px; display: flex; flex-direction: column; gap: 8px; flex-grow: 1; justify-content: space-between; }
+        .qr-title-price { display: flex; flex-direction: column; gap: 2px; }
+        @media(min-width: 576px) { .qr-title-price { flex-direction: row; justify-content: space-between; align-items: flex-start; } }
+        .qr-title-price h3 { font-size: 13px; color: #fff; font-weight: 700; }
+        @media (min-width: 768px) { .qr-title-price h3 { font-size: 15px; } }
+        .qr-price { font-size: 13px; color: #ff6b00; font-weight: 800; background: rgba(255,107,0,0.1); padding: 2px 6px; border-radius: 6px; white-space: nowrap; }
+        .qr-body p { font-size: 11px; color: #94a3b8; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        
+        .siparis-ver-btn { width: 100%; background: linear-gradient(135deg, #ff6b00, #e65c00); color: white; border: none; padding: 9px; border-radius: 6px; font-weight: 700; font-size: 11px; text-transform: uppercase; margin-top: 5px; text-align: center; display: block; box-shadow: 0 4px 12px rgba(255,107,0,0.3); }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="logo"><span class="bolge">Bölge</span> <span class="yemek">Yemek</span></a>
+        <a href="index.html" style="color:#94a3b8; font-size:13px; text-decoration:none; font-weight:600;"><i class="fa-solid fa-arrow-left"></i> Ana Sayfa</a>
+    </header>
+
+    <div class="container">
+        <div class="rest-banner">
+            <h2 id="isletmeAdi">Pan Çiğ Köfte & Dürüm</h2>
+            <p><i class="fa-solid fa-star"></i> 4.9 Puan (Lezzet: 5.0 | Hız: 4.8 | Kurye: 4.9) • Min. Sipariş: 250 ₺</p>
+        </div>
+
+        <!-- 1. KATEGORİ: PAN DÜRÜMLER -->
+        <h3 class="section-title"><i class="fa-solid fa-fire"></i> Pan Dürümler</h3>
+        <div class="qr-food-grid">
+            <a href="urun.html?ad=Pan Klasik Dürüm&fiyat=95&gorsel=images/pan-klasik.jpg" class="qr-food-card">
+                <div class="qr-img-container"><img src="images/pan-klasik.jpg" alt="Pan Klasik Dürüm" onerror="this.src='https://images.unsplash.com/photo-1541544741938-0af808871cc0?w=500&auto=format&fit=crop&q=60'"></div>
+                <div class="qr-body">
+                    <div>
+                        <div class="qr-title-price"><h3>Pan Klasik Dürüm</h3><span class="qr-price">95 ₺</span></div>
+                        <p>90 Gram Tek Lavaş. Doritoslu, Özel Sos.</p>
+                    </div>
+                    <span class="siparis-ver-btn">Ürünü İncele & Seçenekler</span>
+                </div>
+            </a>
+
+            <a href="urun.html?ad=Pan Mega Dürüm&fiyat=105&gorsel=images/pan-mega.jpg" class="qr-food-card">
+                <div class="qr-img-container"><img src="images/pan-mega.jpg" alt="Pan Mega Dürüm" onerror="this.src='https://images.unsplash.com/photo-1541544741938-0af808871cc0?w=500&auto=format&fit=crop&q=60'"></div>
+                <div class="qr-body">
+                    <div>
+                        <div class="qr-title-price"><h3>Pan Mega Dürüm</h3><span class="qr-price">105 ₺</span></div>
+                        <p>125 Gram Tek Lavaş. Doritoslu, Özel Sos.</p>
+                    </div>
+                    <span class="siparis-ver-btn">Ürünü İncele & Seçenekler</span>
+                </div>
+            </a>
+
+            <a href="urun.html?ad=Pan Süper Mega Dürüm&fiyat=120&gorsel=images/pan-super-mega.jpg" class="qr-food-card">
+                <div class="qr-img-container"><img src="images/pan-super-mega.jpg" alt="Pan Süper Mega Dürüm" onerror="this.src='https://images.unsplash.com/photo-1541544741938-0af808871cc0?w=500&auto=format&fit=crop&q=60'"></div>
+                <div class="qr-body">
+                    <div>
+                        <div class="qr-title-price"><h3>Pan Süper Mega Dürüm</h3><span class="qr-price">120 ₺</span></div>
+                        <p>150 Gram Çift Lavaş. Doritoslu, Özel Sos.</p>
+                    </div>
+                    <span class="siparis-ver-btn">Ürünü İncele & Seçenekler</span>
+                </div>
+            </a>
+
+            <a href="urun.html?ad=Pan Double Dürüm&fiyat=140&gorsel=images/pan-double.jpg" class="qr-food-card">
+                <div class="qr-img-container"><img src="images/pan-double.jpg" alt="Pan Double Dürüm" onerror="this.src='https://images.unsplash.com/photo-1541544741938-0af808871cc0?w=500&auto=format&fit=crop&q=60'"></div>
+                <div class="qr-body">
+                    <div>
+                        <div class="qr-title-price"><h3>Pan Double Dürüm</h3><span class="qr-price">140 ₺</span></div>
+                        <p>175 Gram Çift Lavaş. Doritoslu, Özel Sos.</p>
+                    </div>
+                    <span class="siparis-ver-btn">Ürünü İncele & Seçenekler</span>
+                </div>
+            </a>
+
+            <a href="urun.html?ad=Pan Bazuka Dürüm&fiyat=160&gorsel=images/pan-bazuka.jpg" class="qr-food-card">
+                <div class="qr-img-container"><img src="images/pan-bazuka.jpg" alt="Pan Bazuka Dürüm" onerror="this.src='https://images.unsplash.com/photo-1541544741938-0af808871cc0?w=500&auto=format&fit=crop&q=60'"></div>
+                <div class="qr-body">
+                    <div>
+                        <div class="qr-title-price"><h3>Pan Bazuka Dürüm</h3><span class="qr-price">160 ₺</span></div>
+                        <p>200 Gram Çift Lavaş. Doritoslu, Özel Sos.</p>
+                    </div>
+                    <span class="siparis-ver-btn">Ürünü İncele & Seçenekler</span>
+                </div>
+            </a>
+        </div>
+
+        <!-- 2. KATEGORİ: PAN PORSİYON MENÜLER -->
+        <h3 class="section-title"><i class="fa-solid fa-utensils"></i> Pan Porsiyon Menüler</h3>
+        <div class="qr-food-grid">
+            <a href="urun.html?ad=1 Kişilik Porsiyon (200 Gr)&fiyat=170&gorsel=images/porsiyon-1k.jpg" class="qr-food-card">
+                <div class="qr-img-container"><img src="images/porsiyon-1k.jpg" alt="1 Kişilik Porsiyon" onerror="this.src='https://images.unsplash.com/photo-1541544741938-0af808871cc0?w=500&auto=format&fit=crop&q=60'"></div>
+                <div class="qr-body">
+                    <div>
+                        <div class="qr-title-price"><h3>1 Kişilik Porsiyon (200 Gr)</h3><span class="qr-price">170 ₺</span></div>
+                        <p>2 Lavaş, Göbek Aysberk, Nar Ekşisi, Acı Sos, Çeyrek Limon.</p>
+                    </div>
+                    <span class="siparis-ver-btn">Ürünü İncele & Seçenekler</span>
+                </div>
+            </a>
+
+            <a href="urun.html?ad=2 Kişilik Porsiyon (400 Gr)&fiyat=300&gorsel=images/porsiyon-2k.jpg" class="qr-food-card">
+                <div class="qr-img-container"><img src="images/porsiyon-2k.jpg" alt="2 Kişilik Porsiyon" onerror="this.src='https://images.unsplash.com/photo-1541544741938-0af808871cc0?w=500&auto=format&fit=crop&q=60'"></div>
+                <div class="qr-body">
+                    <div>
+                        <div class="qr-title-price"><h3>2 Kişilik Porsiyon (400 Gr)</h3><span class="qr-price">300 ₺</span></div>
+                        <p>4 Lavaş, Göbek Aysberk, Nar Ekşisi, Acı Sos, Yarım Limon.</p>
+                    </div>
+                    <span class="siparis-ver-btn">Ürünü İncele & Seçenekler</span>
+                </div>
+            </a>
+
+            <a href="urun.html?ad=3 Kişilik Porsiyon (600 Gr)&fiyat=430&gorsel=images/porsiyon-3k.jpg" class="qr-food-card">
+                <div class="qr-img-container"><img src="images/porsiyon-3k.jpg" alt="3 Kişilik Porsiyon" onerror="this.src='https://images.unsplash.com/photo-1541544741938-0af808871cc0?w=500&auto=format&fit=crop&q=60'"></div>
+                <div class="qr-body">
+                    <div>
+                        <div class="qr-title-price"><h3>3 Kişilik Porsiyon (600 Gr)</h3><span class="qr-price">430 ₺</span></div>
+                        <p>6 Lavaş, Göbek Aysberk, Nar Ekşisi, Acı Sos, Tam Limon.</p>
+                    </div>
+                    <span class="siparis-ver-btn">Ürünü İncele & Seçenekler</span>
+                </div>
+            </a>
+
+            <a href="urun.html?ad=4 Kişilik Porsiyon (800 Gr)&fiyat=560&gorsel=images/porsiyon-4k.jpg" class="qr-food-card">
+                <div class="qr-img-container"><img src="images/porsiyon-4k.jpg" alt="4 Kişilik Porsiyon" onerror="this.src='https://images.unsplash.com/photo-1541544741938-0af808871cc0?w=500&auto=format&fit=crop&q=60'"></div>
+                <div class="qr-body">
+                    <div>
+                        <div class="qr-title-price"><h3>4 Kişilik Porsiyon (800 Gr)</h3><span class="qr-price">560 ₺</span></div>
+                        <p>8 Lavaş, Göbek Aysberk, Nar Ekşisi, Acı Sos, Tam Limon.</p>
+                    </div>
+                    <span class="siparis-ver-btn">Ürünü İncele & Seçenekler</span>
+                </div>
+            </a>
+
+            <a href="urun.html?ad=5 Kişilik Porsiyon (1000 Gr)&fiyat=640&gorsel=images/porsiyon-5k.jpg" class="qr-food-card">
+                <div class="qr-img-container"><img src="images/porsiyon-5k.jpg" alt="5 Kişilik Porsiyon" onerror="this.src='https://images.unsplash.com/photo-1541544741938-0af808871cc0?w=500&auto=format&fit=crop&q=60'"></div>
+                <div class="qr-body">
+                    <div>
+                        <div class="qr-title-price"><h3>5 Kişilik Porsiyon (1000 Gr)</h3><span class="qr-price">640 ₺</span></div>
+                        <p>10 Lavaş, Göbek Aysberk, Nar Ekşisi, Acı Sos, Tam Limon.</p>
+                    </div>
+                    <span class="siparis-ver-btn">Ürünü İncele & Seçenekler</span>
+                </div>
+            </a>
+
+            <a href="urun.html?ad=500 Gr. Beyaz Porsiyon&fiyat=330&gorsel=images/porsiyon-beyaz-500g.jpg" class="qr-food-card">
+                <div class="qr-img-container"><img src="images/porsiyon-beyaz-500g.jpg" alt="Beyaz Porsiyon" onerror="this.src='https://images.unsplash.com/photo-1541544741938-0af808871cc0?w=500&auto=format&fit=crop&q=60'"></div>
+                <div class="qr-body">
+                    <div>
+                        <div class="qr-title-price"><h3>500 Gr. Beyaz Porsiyon</h3><span class="qr-price">330 ₺</span></div>
+                        <p>5 Lavaş, Göbek Aysberk, Nar Ekşisi, Acı Sos, Tam Limon.</p>
+                    </div>
+                    <span class="siparis-ver-btn">Ürünü İncele & Seçenekler</span>
+                </div>
+            </a>
+
+            <a href="urun.html?ad=500 Gr. Turuncu Porsiyon&fiyat=305&gorsel=images/porsiyon-turuncu-500g.jpg" class="qr-food-card">
+                <div class="qr-img-container"><img src="images/porsiyon-turuncu-500g.jpg" alt="Turuncu Porsiyon" onerror="this.src='https://images.unsplash.com/photo-1541544741938-0af808871cc0?w=500&auto=format&fit=crop&q=60'"></div>
+                <div class="qr-body">
+                    <div>
+                        <div class="qr-title-price"><h3>500 Gr. Turuncu Porsiyon</h3><span class="qr-price">305 ₺</span></div>
+                        <p>Yeşilliksiz. 5 Lavaş, Nar Ekşisi, Acı Sos, Yarım Limon.</p>
+                    </div>
+                    <span class="siparis-ver-btn">Ürünü İncele & Seçenekler</span>
+                </div>
+            </a>
+        </div>
+
+        <!-- 3. KATEGORİ: ÖZEL MENÜLER & KAMPANYALAR -->
+        <h3 class="section-title"><i class="fa-solid fa-star"></i> Özel Menüler & Kampanyalar</h3>
+        <div class="qr-food-grid">
+            <a href="urun.html?ad=600 Gr. Çiğ Köfte + Ayran&fiyat=250&gorsel=images/kampanya-600gr.jpg" class="qr-food-card">
+                <div class="qr-img-container"><img src="images/kampanya-600gr.jpg" alt="600 Gr Kampanya" onerror="this.src='https://images.unsplash.com/photo-1541544741938-0af808871cc0?w=500&auto=format&fit=crop&q=60'"></div>
+                <div class="qr-body">
+                    <div>
+                        <div class="qr-title-price"><h3>600 Gr. Çiğ Köfte + Ayran</h3><span class="qr-price">250 ₺</span></div>
+                        <p>600 Gr. Çiğ Köfte + 1 Litre Ayran Hediyeee!</p>
+                    </div>
+                    <span class="siparis-ver-btn">Ürünü İncele & Seçenekler</span>
+                </div>
+            </a>
+
+            <a href="urun.html?ad=800 Gr. Çiğ Köfte + Ayran&fiyat=320&gorsel=images/kampanya-800gr.jpg" class="qr-food-card">
+                <div class="qr-img-container"><img src="images/kampanya-800gr.jpg" alt="800 Gr Kampanya" onerror="this.src='https://images.unsplash.com/photo-1541544741938-0af808871cc0?w=500&auto=format&fit=crop&q=60'"></div>
+                <div class="qr-body">
+                    <div>
+                        <div class="qr-title-price"><h3>800 Gr. Çiğ Köfte + Ayran</h3><span class="qr-price">320 ₺</span></div>
+                        <p>800 Gr. Çiğ Köfte + Ayran Hediyeee!</p>
+                    </div>
+                    <span class="siparis-ver-btn">Ürünü İncele & Seçenekler</span>
+                </div>
+            </a>
+
+            <a href="urun.html?ad=1000 Gr. Çiğ Köfte + Ayran&fiyat=400&gorsel=images/kampanya-1000gr.jpg" class="qr-food-card">
+                <div class="qr-img-container"><img src="images/kampanya-1000gr.jpg" alt="1000 Gr Kampanya" onerror="this.src='https://images.unsplash.com/photo-1541544741938-0af808871cc0?w=500&auto=format&fit=crop&q=60'"></div>
+                <div class="qr-body">
+                    <div>
+                        <div class="qr-title-price"><h3>1000 Gr. Çiğ Köfte + Ayran</h3><span class="qr-price">400 ₺</span></div>
+                        <p>1000 Gr. Çiğ Köfte + 1 Litre Ayran Hediyeee!</p>
+                    </div>
+                    <span class="siparis-ver-btn">Ürünü İncele & Seçenekler</span>
+                </div>
+            </a>
+
+            <a href="urun.html?ad=İçli Köfte (Adet)&fiyat=95&gorsel=images/icli-kofte.jpg" class="qr-food-card">
+                <div class="qr-img-container"><img src="images/icli-kofte.jpg" alt="İçli Köfte" onerror="this.src='https://images.unsplash.com/photo-1541544741938-0af808871cc0?w=500&auto=format&fit=crop&q=60'"></div>
+                <div class="qr-body">
+                    <div>
+                        <div class="qr-title-price"><h3>İçli Köfte (Adet)</h3><span class="qr-price">95 ₺</span></div>
+                        <p>Bize Özel, Size Güzel. Çıtır dış kabuk, bol kıymalı harç.</p>
+                    </div>
+                    <span class="siparis-ver-btn">Ürünü İncele & Seçenekler</span>
+                </div>
+            </a>
+
+            <a href="urun.html?ad=Ciğer Dürüm&fiyat=190&gorsel=images/ciger-durum.jpg" class="qr-food-card">
+                <div class="qr-img-container"><img src="images/ciger-durum.jpg" alt="Ciğer Dürüm" onerror="this.src='https://images.unsplash.com/photo-1561651857-450f96e4c278?w=500&auto=format&fit=crop&q=60'"></div>
+                <div class="qr-body">
+                    <div>
+                        <div class="qr-title-price"><h3>Ciğer Dürüm</h3><span class="qr-price">190 ₺</span></div>
+                        <p>Taze ve yumuşak kıvamıyla özel sarım lezzetli ciğer dürüm.</p>
+                    </div>
+                    <span class="siparis-ver-btn">Ürünü İncele & Seçenekler</span>
+                </div>
+            </a>
+
+            <a href="urun.html?ad=Suşi Çiğ Köfte (150 Gr)&fiyat=190&gorsel=images/susi-cigkofte.jpg" class="qr-food-card">
+                <div class="qr-img-container"><img src="images/susi-cigkofte.jpg" alt="Suşi Çiğ Köfte" onerror="this.src='https://images.unsplash.com/photo-1541544741938-0af808871cc0?w=500&auto=format&fit=crop&q=60'"></div>
+                <div class="qr-body">
+                    <div>
+                        <div class="qr-title-price"><h3>Suşi Çiğ Köfte (150 Gr)</h3><span class="qr-price">190 ₺</span></div>
+                        <p>Özel sunum ve kesimiyle yenilikçi suşi konseptli çiğ köfte.</p>
+                    </div>
+                    <span class="siparis-ver-btn">Ürünü İncele & Seçenekler</span>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const dukkan = urlParams.get('dukkan');
+        if(dukkan) {
+            document.getElementById('isletmeAdi').textContent = dukkan;
+        }
+    </script>
+</body>
+</html>

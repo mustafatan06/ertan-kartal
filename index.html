@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bölge Yemek | Online Yemek Pazar Yeri</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
+        body { background: #0b0f19; color: #f8fafc; padding-bottom: 50px; overflow-x: hidden; }
+
+        header { background: #000000; border-bottom: 2px solid #ff6b00; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
+        .logo { font-size: 22px; font-weight: 800; text-decoration: none; text-transform: uppercase; letter-spacing: 0.5px; }
+        .logo .bolge { color: #ffffff; }
+        .logo .yemek { color: #ff6b00; text-shadow: 0 0 15px rgba(255,107,0,0.6); }
+        
+        .header-buttons { display: flex; gap: 10px; }
+        .satici-ol-btn { background: #10b981; color: white; border: none; padding: 8px 16px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: 0.3s; box-shadow: 0 4px 15px rgba(16,185,129,0.3); }
+        .satici-ol-btn:hover { background: #059669; }
+        .panel-giris-btn { background: rgba(255,107,0,0.15); border: 1px solid #ff6b00; color: #ff6b00; padding: 8px 16px; border-radius: 8px; font-size: 12px; font-weight: 700; text-decoration: none; display: flex; align-items: center; gap: 6px; transition: 0.3s; }
+        .panel-giris-btn:hover { background: #ff6b00; color: #fff; }
+
+        .hero-section { background: linear-gradient(135deg, #1e293b, #0f172a); border-bottom: 1px solid #334155; padding: 50px 20px; text-align: center; }
+        .hero-section h1 { font-size: 26px; font-weight: 900; color: #ffffff; margin-bottom: 10px; }
+        .hero-section p { font-size: 14px; color: #94a3b8; margin-bottom: 25px; }
+
+        .container { max-width: 1100px; margin: 0 auto; padding: 20px; }
+
+        .section-title { font-size: 19px; font-weight: 800; color: #ffffff; margin: 30px 0 15px 0; border-left: 5px solid #ff6b00; padding-left: 10px; display: flex; align-items: center; gap: 10px; }
+        
+        /* 4'LÜ / 3'LÜ ESNEK KATEGORİ GRID YAPISI */
+        .categories-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
+        @media(min-width: 768px) { .categories-grid { grid-template-columns: repeat(4, 1fr); gap: 20px; } }
+        
+        .category-card { background: #1e293b; border-radius: 16px; overflow: hidden; border: 1px solid #334155; text-decoration: none; transition: 0.3s; display: flex; flex-direction: column; box-shadow: 0 5px 20px rgba(0,0,0,0.4); }
+        .category-card:hover { border-color: #ff6b00; transform: translateY(-4px); box-shadow: 0 10px 30px rgba(255,107,0,0.3); }
+        .cat-img { width: 100%; height: 120px; object-fit: cover; border-bottom: 2px solid #ff6b00; }
+        @media(min-width: 768px) { .cat-img { height: 140px; } }
+        .cat-body { padding: 14px; text-align: center; }
+        .cat-body h3 { font-size: 14px; font-weight: 700; color: #ffffff; margin-bottom: 2px; }
+        .cat-body span { font-size: 11px; color: #94a3b8; font-weight: 600; }
+
+        .restaurants-grid { display: grid; grid-template-columns: 1fr; gap: 15px; }
+        @media(min-width: 768px) { .restaurants-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; } }
+        .restaurant-card { background: #1e293b; border-radius: 16px; border: 1px solid #334155; display: flex; overflow: hidden; text-decoration: none; transition: 0.3s; box-shadow: 0 5px 20px rgba(0,0,0,0.4); }
+        .restaurant-card:hover { border-color: #ff6b00; transform: translateY(-3px); box-shadow: 0 10px 30px rgba(255,107,0,0.25); }
+        .rest-logo { width: 120px; height: 120px; object-fit: cover; background: #0b0f19; }
+        .rest-info { padding: 15px; display: flex; flex-direction: column; justify-content: center; }
+        .rest-info h4 { font-size: 16px; color: #fff; font-weight: 800; margin-bottom: 4px; }
+        .rest-info p { font-size: 12px; color: #94a3b8; margin-bottom: 8px; }
+        .rest-puanlar { display: flex; gap: 10px; font-size: 11px; color: #cbd5e1; font-weight: 600; }
+        .rest-puanlar span { color: #f59e0b; font-weight: 800; }
+
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.88); backdrop-filter: blur(8px); justify-content: center; align-items: center; z-index: 10000; padding: 15px; }
+        .modal-content { background: #1e293b; padding: 25px; border-radius: 18px; width: 100%; max-width: 450px; border: 1px solid #334155; box-shadow: 0 20px 50px rgba(0,0,0,0.6); }
+        .form-group { margin-bottom: 12px; text-align: left; }
+        .form-group label { display: block; font-size: 12px; color: #cbd5e1; margin-bottom: 4px; font-weight: 600; }
+        .form-group input, .form-group textarea { width: 100%; padding: 11px; background: #0b0f19; border: 1px solid #334155; border-radius: 8px; color: #fff; font-size: 13px; outline: none; }
+
+        .footer { text-align: center; margin-top: 50px; padding: 30px 0; border-top: 1px solid rgba(255,255,255,0.08); font-size: 12px; color: #94a3b8; }
+        .footer span { color: #ff6b00; font-weight: 700; display: inline-block; margin-top: 4px; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="logo"><span class="bolge">Bölge</span> <span class="yemek">Yemek</span></a>
+        <div class="header-buttons">
+            <button type="button" class="satici-ol-btn" onclick="document.getElementById('saticiModal').style.display='flex'"><i class="fa-solid fa-store"></i> Satıcı Ol</button>
+            <a href="panel.html" class="panel-giris-btn"><i class="fa-solid fa-lock"></i> Giriş</a>
+        </div>
+    </header>
+
+    <div class="hero-section">
+        <h1>Ankara'nın En Lezzetli Pazar Yeri</h1>
+        <p>Yüzlerce lezzet, binlerce restoran kapında!</p>
+    </div>
+
+    <div class="container">
+        <!-- TÜM KATEGORİLER -->
+        <h3 class="section-title"><i class="fa-solid fa-utensils"></i> Yemek Kategorileri</h3>
+        <div class="categories-grid">
+            <!-- 1. Çiğ Köfte -->
+            <a href="kategori.html?kat=cig-kofte" class="category-card">
+                <img src="images/kat-cigkofte.jpg" alt="Çiğ Köfte" class="cat-img" onerror="this.src='https://images.unsplash.com/photo-1541544741938-0af808871cc0?w=500&auto=format&fit=crop&q=60'">
+                <div class="cat-body"><h3>Çiğ Köfte</h3><span>1 Aktif Mağaza</span></div>
+            </a>
+            <!-- 2. Döner & Dürüm -->
+            <a href="kategori.html?kat=durum-doner" class="category-card">
+                <img src="images/kat-doner.jpg" alt="Döner & Dürüm" class="cat-img" onerror="this.src='https://images.unsplash.com/photo-1561651857-450f96e4c278?w=500&auto=format&fit=crop&q=60'">
+                <div class="cat-body"><h3>Döner & Dürüm</h3><span>Yakında</span></div>
+            </a>
+            <!-- 3. Hamburger -->
+            <a href="kategori.html?kat=hamburger" class="category-card">
+                <img src="images/kat-hamburger.jpg" alt="Hamburger" class="cat-img" onerror="this.src='https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500&auto=format&fit=crop&q=60'">
+                <div class="cat-body"><h3>Hamburger</h3><span>Yakında</span></div>
+            </a>
+            <!-- 4. Lahmacun & Pide -->
+            <a href="kategori.html?kat=pide-lahmacun" class="category-card">
+                <img src="images/kat-lahmacun.jpg" alt="Lahmacun & Pide" class="cat-img" onerror="this.src='https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=500&auto=format&fit=crop&q=60'">
+                <div class="cat-body"><h3>Lahmacun & Pide</h3><span>Yakında</span></div>
+            </a>
+            <!-- 5. Pizza -->
+            <a href="kategori.html?kat=pizza" class="category-card">
+                <img src="images/kat-pizza.jpg" alt="Pizza" class="cat-img" onerror="this.src='https://images.unsplash.com/photo-1513104890138-7c749659a591?w=500&auto=format&fit=crop&q=60'">
+                <div class="cat-body"><h3>Pizza</h3><span>Yakında</span></div>
+            </a>
+            <!-- 6. Tatlı -->
+            <a href="kategori.html?kat=tatli" class="category-card">
+                <img src="images/kat-tatli.jpg" alt="Tatlı" class="cat-img" onerror="this.src='https://images.unsplash.com/photo-1551024709-8f23befc6f87?w=500&auto=format&fit=crop&q=60'">
+                <div class="cat-body"><h3>Tatlı</h3><span>Yakında</span></div>
+            </a>
+            <!-- 7. Tost & Sandviç -->
+            <a href="kategori.html?kat=tost-sandvic" class="category-card">
+                <img src="images/kat-tost.jpg" alt="Tost & Sandviç" class="cat-img" onerror="this.src='https://images.unsplash.com/photo-1528735602780-2552fd46c7af?w=500&auto=format&fit=crop&q=60'">
+                <div class="cat-body"><h3>Tost & Sandviç</h3><span>Yakında</span></div>
+            </a>
+            <!-- 8. Ev Yemekleri -->
+            <a href="kategori.html?kat=ev-yemekleri" class="category-card">
+                <img src="images/kat-evyemek.jpg" alt="Ev Yemekleri" class="cat-img" onerror="this.src='https://images.unsplash.com/photo-1543339308-43e59d6b73a6?w=500&auto=format&fit=crop&q=60'">
+                <div class="cat-body"><h3>Ev Yemekleri</h3><span>Yakında</span></div>
+            </a>
+            <!-- 9. Waffle -->
+            <a href="kategori.html?kat=waffle" class="category-card">
+                <img src="images/kat-waffle.jpg" alt="Waffle" class="cat-img" onerror="this.src='https://images.unsplash.com/photo-1562376552-0d160a2f238d?w=500&auto=format&fit=crop&q=60'">
+                <div class="cat-body"><h3>Waffle</h3><span>Yakında</span></div>
+            </a>
+            <!-- 10. Köfte -->
+            <a href="kategori.html?kat=kofte" class="category-card">
+                <img src="images/kat-kofte.jpg" alt="Köfte" class="cat-img" onerror="this.src='https://images.unsplash.com/photo-1529692236671-f1f6cf9683ba?w=500&auto=format&fit=crop&q=60'">
+                <div class="cat-body"><h3>Köfte</h3><span>Yakında</span></div>
+            </a>
+            <!-- 11. Tantuni -->
+            <a href="kategori.html?kat=tantuni" class="category-card">
+                <img src="images/kat-tantuni.jpg" alt="Tantuni" class="cat-img" onerror="this.src='https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?w=500&auto=format&fit=crop&q=60'">
+                <div class="cat-body"><h3>Tantuni</h3><span>Yakında</span></div>
+            </a>
+        </div>
+
+        <!-- BÖLGEDEKİ AKTİF İŞLETME -->
+        <h3 class="section-title"><i class="fa-solid fa-store"></i> Bölgedeki Aktif İşletmeler</h3>
+        <div class="restaurants-grid">
+            <a href="isletme.html?dukkan=Pan Cig Kofte" class="restaurant-card">
+                <img src="images/pan-klasik.jpg" alt="Pan Çiğ Köfte" class="rest-logo">
+                <div class="rest-info">
+                    <h4>Pan Çiğ Köfte & Dürüm</h4>
+                    <p>Çiğ Köfte, Porsiyon Menüler</p>
+                    <div class="rest-puanlar">
+                        <span><i class="fa-solid fa-star"></i> 4.9</span>
+                        <text>Lezzet: 5.0 | Hız: 4.8 | Kurye: 4.9</text>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="footer">
+            <p>&copy; 2026 Bölge Yemek. Tüm hakları saklıdır.</p>
+            <span>TAN MEDYA TASARIM Tarafından Kurulmuştur.</span>
+        </div>
+    </div>
+
+    <!-- SATICI OL BAŞVURU MODALI -->
+    <div id="saticiModal" class="modal">
+        <div class="modal-content">
+            <h3 style="color:#fff; font-size:18px; font-weight:800; margin-bottom:12px; border-bottom:1px solid #334155; padding-bottom:8px;"><i class="fa-solid fa-store" style="color:#ff6b00;"></i> Bölge Yemek Satıcı Başvurusu</h3>
+            <div class="form-group">
+                <label>İşletme Adınız *</label>
+                <input type="text" id="basvuruIsletme" placeholder="Örn: Lezzet Dürüm Evi">
+            </div>
+            <div class="form-group">
+                <label>Yetkili Ad Soyad *</label>
+                <input type="text" id="basvuruYetkili" placeholder="Ad Soyad">
+            </div>
+            <div class="form-group">
+                <label>Telefon Numaranız *</label>
+                <input type="tel" id="basvuruTel" placeholder="05XXXXXXXXX">
+            </div>
+            <div class="form-group">
+                <label>Faaliyet Alanı / Kategori *</label>
+                <input type="text" id="basvuruKategori" placeholder="Örn: Pizza, Tatlı, Tantuni...">
+            </div>
+            <button type="button" onclick="saticiBasvuruGonder()" style="width:100%; background:linear-gradient(135deg, #ff6b00, #e65c00); color:white; border:none; padding:12px; border-radius:8px; font-weight:800; font-size:15px; cursor:pointer; margin-top:10px; box-shadow:0 4px 15px rgba(255,107,0,0.4);">Başvuruyu Gönder</button>
+            <button type="button" onclick="document.getElementById('saticiModal').style.display='none'" style="width:100%; background:transparent; color:#94a3b8; border:none; padding:8px; cursor:pointer; margin-top:8px; font-size:13px;">Vazgeç</button>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <script>
+        const firebaseConfig = {
+          apiKey: "AIzaSyDMIz96KNZF-7zWGRuI-2fvQ72fZImHtUw",
+          authDomain: "eretankartal.firebaseapp.com",
+          databaseURL: "https://eretankartal-default-rtdb.europe-west1.firebasedatabase.app",
+          projectId: "eretankartal",
+          storageBucket: "eretankartal.firebasestorage.app",
+          messagingSenderId: "775846519838",
+          appId: "1:775846519838:web:75b1d7dfb4ef942a3f7a0f"
+        };
+        if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
+        const db = firebase.database();
+
+        function saticiBasvuruGonder() {
+            const isletme = document.getElementById('basvuruIsletme').value.trim();
+            const yetkili = document.getElementById('basvuruYetkili').value.trim();
+            const tel = document.getElementById('basvuruTel').value.trim();
+            const kat = document.getElementById('basvuruKategori').value.trim();
+
+            if(!isletme || !yetkili || !tel) {
+                alert("Lütfen zorunlu alanları doldurun.");
+                return;
+            }
+
+            const basvuruId = 'BASVURU-' + Date.now();
+            db.ref('seller_applications/' + basvuruId).set({
+                id: basvuruId,
+                isletmeAdi: isletme,
+                yetkiliAdi: yetkili,
+                telefon: tel,
+                kategori: kat,
+                tarih: new Date().toLocaleDateString('tr-TR')
+            }).then(() => {
+                alert("Başvurunuz başarıyla alındı! En kısa sürede incelenip tarafınıza dönüş yapılacaktır.");
+                document.getElementById('saticiModal').style.display = 'none';
+            });
+        }
+    </script>
+</body>
+</html>

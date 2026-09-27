@@ -1,0 +1,26 @@
+{
+  "name": "bolge-yemek-yonetim",
+  "version": "1.0.0",
+  "description": "Bölge Yemek Şube Yönetim Paneli",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder"
+  },
+  "build": {
+    "appId": "com.bolgeyemek.yonetim",
+    "productName": "Bolge Yemek Yonetim",
+    "win": {
+      "target": "nsis",
+      "icon": "icon.ico"
+    },
+    "directories": {
+      "output": "dist"
+    }
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "electron": "^28.0.0",
+    "electron-builder": "^24.9.0"
+  }
+}

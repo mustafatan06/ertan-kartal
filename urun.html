@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ürün Detayı | Bölge Yemek</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
+        body { background: #0b0f19; color: #f8fafc; padding-bottom: 130px; }
+        header { background: #000000; border-bottom: 2px solid #ff6b00; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; }
+        .logo { font-size: 20px; font-weight: 800; text-decoration: none; color: #fff; text-transform: uppercase; }
+        .logo .yemek { color: #ff6b00; }
+        .container { max-width: 700px; margin: 25px auto; padding: 15px; }
+
+        /* ÜRÜN DETAY KARTI */
+        .product-detail-card { background: #1e293b; border-radius: 18px; border: 1px solid #334155; overflow: hidden; box-shadow: 0 15px 40px rgba(0,0,0,0.5); }
+        .product-img { width: 100%; height: 260px; object-fit: cover; border-bottom: 3px solid #ff6b00; }
+        @media(min-width: 768px) { .product-img { height: 340px; } }
+        .product-body { padding: 22px; }
+        .product-title-price { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .product-title-price h1 { font-size: 22px; color: #fff; font-weight: 800; }
+        .product-price { font-size: 24px; color: #ff6b00; font-weight: 900; background: rgba(255,107,0,0.12); padding: 5px 14px; border-radius: 10px; }
+        .product-desc { font-size: 13px; color: #94a3b8; margin-bottom: 20px; line-height: 1.5; }
+
+        /* GARNİTÜR SEÇENEKLERİ */
+        .options-section { background: #0f172a; border-radius: 14px; padding: 16px; border: 1px solid #334155; margin-bottom: 20px; }
+        .options-section h3 { font-size: 14px; color: #ff6b00; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+        .options-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+        @media(min-width: 576px) { .options-grid { grid-template-columns: repeat(3, 1fr); } }
+        .checkbox-label { display: flex; align-items: center; gap: 8px; font-size: 12px; color: #cbd5e1; cursor: pointer; background: #1e293b; padding: 9px 12px; border-radius: 8px; border: 1px solid #334155; transition: 0.2s; }
+        .checkbox-label:hover { border-color: #ff6b00; background: rgba(255,107,0,0.05); }
+        .checkbox-label input { accent-color: #ff6b00; width: 16px; height: 16px; cursor: pointer; }
+
+        /* MÜŞTERİ NOTU ALANI */
+        .note-section { background: #0f172a; border-radius: 14px; padding: 16px; border: 1px solid #334155; margin-bottom: 25px; }
+        .note-section h3 { font-size: 14px; color: #ff6b00; font-weight: 700; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+        .note-section textarea { width: 100%; padding: 12px; background: #1e293b; border: 1px solid #334155; border-radius: 8px; color: #fff; font-size: 13px; outline: none; resize: vertical; }
+        .note-section textarea:focus { border-color: #ff6b00; }
+
+        .add-to-cart-main-btn { width: 100%; background: linear-gradient(135deg, #ff6b00, #e65c00); color: white; border: none; padding: 15px; border-radius: 12px; font-weight: 800; font-size: 16px; cursor: pointer; text-transform: uppercase; box-shadow: 0 6px 20px rgba(255,107,0,0.4); transition: 0.3s; }
+        .add-to-cart-main-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(255,107,0,0.6); }
+
+        /* SABİT SEPET ÇUBUĞU */
+        .floating-cart-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(11, 15, 25, 0.98); border-top: 2px solid #ff6b00; padding: 14px 5%; display: none; justify-content: space-between; align-items: center; z-index: 9999; backdrop-filter: blur(12px); box-shadow: 0 -10px 30px rgba(0,0,0,0.7); }
+        .cart-info-left { display: flex; align-items: center; gap: 12px; }
+        .cart-thumb { width: 55px; height: 55px; border-radius: 10px; object-fit: cover; border: 2px solid #ff6b00; }
+        .cart-text h4 { font-size: 13px; color: #fff; font-weight: 700; }
+        .cart-text span { font-size: 15px; color: #ff6b00; font-weight: 900; }
+        .checkout-btn { background: #10b981; color: white; border: none; padding: 13px 28px; border-radius: 10px; font-weight: 800; font-size: 14px; cursor: pointer; text-transform: uppercase; box-shadow: 0 4px 15px rgba(16,185,129,0.4); }
+        .checkout-btn:hover { background: #059669; }
+
+        /* MODAL */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.88); backdrop-filter: blur(8px); justify-content: center; align-items: center; z-index: 10000; padding: 15px; }
+        .modal-content { background: #1e293b; padding: 25px; border-radius: 18px; width: 100%; max-width: 450px; border: 1px solid #334155; box-shadow: 0 20px 50px rgba(0,0,0,0.6); }
+        .form-group { margin-bottom: 14px; text-align: left; }
+        .form-group label { display: block; font-size: 12px; color: #cbd5e1; margin-bottom: 5px; font-weight: 600; }
+        .form-group input, .form-group textarea { width: 100%; padding: 11px; background: #0f172a; border: 1px solid #334155; border-radius: 8px; color: #fff; font-size: 13px; outline: none; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="logo"><span class="bolge">Bölge</span> <span class="yemek">Yemek</span></a>
+        <a href="index.html" style="color:#94a3b8; font-size:13px; text-decoration:none; font-weight:600;"><i class="fa-solid fa-arrow-left"></i> Restorana Dön</a>
+    </header>
+
+    <div class="container">
+        <div class="product-detail-card">
+            <img src="images/pan-klasik.jpg" id="urunGorsel" alt="Ürün Görseli" class="product-img">
+            <div class="product-body">
+                <div class="product-title-price">
+                    <h1 id="urunAdi">Pan Klasik Dürüm</h1>
+                    <span id="urunFiyat" class="product-price">95 ₺</span>
+                </div>
+                <p class="product-desc" id="urunAciklama">90 Gram Tek Lavaş. Doritoslu, taze yeşillikler ve özel soslar ile özenle hazırlanır.</p>
+
+                <!-- GARNİTÜR SEÇENEKLERİ -->
+                <div class="options-section">
+                    <h3><i class="fa-solid fa-check-double"></i> Garnitür ve Malzeme Seçimleri</h3>
+                    <div class="options-grid">
+                        <label class="checkbox-label"><input type="checkbox" name="garnitur" value="Doritos"> Doritos</label>
+                        <label class="checkbox-label"><input type="checkbox" name="garnitur" value="Yeşillik"> Yeşillik</label>
+                        <label class="checkbox-label"><input type="checkbox" name="garnitur" value="Mısır"> Mısır</label>
+                        <label class="checkbox-label"><input type="checkbox" name="garnitur" value="Nar Ekşisi"> Nar Ekşisi</label>
+                        <label class="checkbox-label"><input type="checkbox" name="garnitur" value="Limon"> Limon</label>
+                        <label class="checkbox-label"><input type="checkbox" name="garnitur" value="Acı Sos"> Acı Sos</label>
+                        <label class="checkbox-label"><input type="checkbox" name="garnitur" value="Burger Sos"> Burger Sos</label>
+                        <label class="checkbox-label"><input type="checkbox" name="garnitur" value="Karalahana"> Karalahana</label>
+                        <label class="checkbox-label"><input type="checkbox" name="garnitur" value="Cin Biberi"> Cin Biberi</label>
+                        <label class="checkbox-label"><input type="checkbox" name="garnitur" value="Maydanoz"> Maydanoz</label>
+                        <label class="checkbox-label"><input type="checkbox" name="garnitur" value="Domates"> Domates</label>
+                        <label class="checkbox-label"><input type="checkbox" name="garnitur" value="Yeşil Soğan"> Yeşil Soğan</label>
+                        <label class="checkbox-label"><input type="checkbox" name="garnitur" value="Nane"> Nane</label>
+                        <label class="checkbox-label"><input type="checkbox" name="garnitur" value="Kapya Biber"> Kapya Biber</label>
+                        <label class="checkbox-label"><input type="checkbox" name="garnitur" value="Jalapeno"> Jalapeno</label>
+                    </div>
+                </div>
+
+                <!-- MÜŞTERİ ÖZEL NOT ALANI -->
+                <div class="note-section">
+                    <h3><i class="fa-solid fa-pen-to-square"></i> Sipariş Notu / Özel Talepler</h3>
+                    <textarea id="musteriNotu" rows="2" placeholder="Örn: Zili çalmayın uyuyan bebek var, sosu bol olsun..."></textarea>
+                </div>
+
+                <button type="button" class="add-to-cart-main-btn" onclick="sepeteEkleAction()">Sepete Ekle</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SABİT SEPET ÇUBUĞU -->
+    <div id="floatingCartBar" class="floating-cart-bar">
+        <div class="cart-info-left">
+            <img src="images/pan-klasik.jpg" id="cartThumb" alt="" class="cart-thumb">
+            <div class="cart-text">
+                <h4 id="cartUrunAdi">1x Ürün</h4>
+                <span>Toplam: <span id="cartToplamTutar">0</span> ₺</span>
+            </div>
+        </div>
+        <button type="button" class="checkout-btn" onclick="sepetiOnaylaModalAc()">Sepeti Onayla</button>
+    </div>
+
+    <!-- ONAY MODALI (MİN 250 TL KONTROLLÜ) -->
+    <div id="siparisModal" class="modal">
+        <div class="modal-content">
+            <h3 style="color:#fff; font-size:18px; font-weight:800; margin-bottom:12px; border-bottom:1px solid #334155; padding-bottom:8px;"><i class="fa-solid fa-bag-shopping" style="color:#ff6b00;"></i> Siparişi Tamamla</h3>
+            <p style="font-size:12px; color:#f59e0b; margin-bottom:15px; font-weight:600;"><i class="fa-solid fa-circle-info"></i> Minimum sipariş tutarı 250 ₺'dir.</p>
+            
+            <div class="form-group">
+                <label>Adınız Soyadınız *</label>
+                <input type="text" id="sipIsim" placeholder="Ad Soyad">
+            </div>
+            <div class="form-group">
+                <label>Telefon Numaranız *</label>
+                <input type="tel" id="sipTelefon" placeholder="05XXXXXXXXX">
+            </div>
+            <div class="form-group">
+                <label>Teslimat Adresi *</label>
+                <textarea id="sipAdres" rows="2" placeholder="Mahalle, Sokak, No, Daire..."></textarea>
+            </div>
+            <button type="button" onclick="siparisVerFirebase()" style="width:100%; background:linear-gradient(135deg, #10b981, #059669); color:white; border:none; padding:13px; border-radius:10px; font-weight:800; font-size:15px; cursor:pointer; margin-top:10px; box-shadow:0 4px 15px rgba(16,185,129,0.4);">Siparişi Tamamla ve Gönder</button>
+            <button type="button" onclick="document.getElementById('siparisModal').style.display='none'" style="width:100%; background:transparent; color:#94a3b8; border:none; padding:8px; cursor:pointer; margin-top:8px; font-size:13px;">Vazgeç</button>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <script>
+        const firebaseConfig = {
+          apiKey: "AIzaSyDMIz96KNZF-7zWGRuI-2fvQ72fZImHtUw",
+          authDomain: "eretankartal.firebaseapp.com",
+          databaseURL: "https://eretankartal-default-rtdb.europe-west1.firebasedatabase.app",
+          projectId: "eretankartal",
+          storageBucket: "eretankartal.firebasestorage.app",
+          messagingSenderId: "775846519838",
+          appId: "1:775846519838:web:75b1d7dfb4ef942a3f7a0f"
+        };
+        if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
+        const db = firebase.database();
+
+        let aktifUrunAdi = "Pan Klasik Dürüm";
+        let aktifFiyat = 95;
+        let aktifGorsel = "images/pan-klasik.jpg";
+        let sepetDoluMu = false;
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            const ad = params.get('ad');
+            const fiyat = params.get('fiyat');
+            const gorsel = params.get('gorsel');
+
+            if(ad) { aktifUrunAdi = ad; document.getElementById('urunAdi').textContent = ad; }
+            if(fiyat) { aktifFiyat = parseInt(fiyat); document.getElementById('urunFiyat').textContent = fiyat + " ₺"; }
+            if(gorsel) { aktifGorsel = gorsel; document.getElementById('urunGorsel').src = gorsel; }
+        });
+
+        function sepeteEkleAction() {
+            sepetDoluMu = true;
+            document.getElementById('cartUrunAdi').textContent = "1x " + aktifUrunAdi;
+            document.getElementById('cartToplamTutar').textContent = aktifFiyat;
+            document.getElementById('cartThumb').src = aktifGorsel;
+            document.getElementById('floatingCartBar').style.display = 'flex';
+            alert(aktifUrunAdi + " sepete eklendi!");
+        }
+
+        function sepetiOnaylaModalAc() {
+            if(aktifFiyat < 250) {
+                alert("Minimum sipariş tutarı 250 ₺'dir! Lütfen sepetinize ek ürünler ekleyin (Sepet Tutarınız: " + aktifFiyat + " ₺).");
+                return;
+            }
+            document.getElementById('siparisModal').style.display = 'flex';
+        }
+
+        function siparisVerFirebase() {
+            const isim = document.getElementById('sipIsim').value.trim();
+            const tel = document.getElementById('sipTelefon').value.trim();
+            const adres = document.getElementById('sipAdres').value.trim();
+            const musteriNotu = document.getElementById('musteriNotu').value.trim();
+
+            if(!isim || !tel || !adres) {
+                alert("Lütfen ad, telefon ve adres alanlarını doldurun.");
+                return;
+            }
+
+            const secilenGarniturler = [];
+            document.querySelectorAll('input[name="garnitur"]:checked').forEach(cb => {
+                secilenGarniturler.push(cb.value);
+            });
+            const garniturStr = secilenGarniturler.length > 0 ? " | Garnitürler: " + secilenGarniturler.join(", ") : "";
+            const notStr = musteriNotu ? " | Not: " + musteriNotu : "";
+
+            const siparisId = 'MZ-' + Date.now();
+            const yeniSiparis = {
+                id: siparisId,
+                branch: "Pan Çiğ Köfte",
+                name: isim,
+                phone: tel,
+                address: adres,
+                product: "1x " + aktifUrunAdi + garniturStr + notStr,
+                price: aktifFiyat,
+                status: "Yeni Sipariş",
+                time: new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' }),
+                date: new Date().toLocaleDateString('tr-TR')
+            };
+
+            db.ref('orders/' + siparisId).set(yeniSiparis).then(() => {
+                alert("Siparişiniz başarıyla alındı ve restorana iletildi! Afiyet olsun.");
+                document.getElementById('siparisModal').style.display = 'none';
+                document.getElementById('floatingCartBar').style.display = 'none';
+                sepetDoluMu = false;
+            }).catch(err => {
+                alert("Hata: " + err.message);
+            });
+        }
+    </script>
+</body>
+</html>

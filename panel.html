@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yönetim Paneli | Bölge Yemek</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
+        body { background: #0f172a; color: #f8fafc; padding-bottom: 50px; }
+        header { background: #000000; border-bottom: 2px solid #ff6b00; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; }
+        .logo { font-size: 20px; font-weight: 800; text-decoration: none; color: #fff; text-transform: uppercase; }
+        .logo .yemek { color: #ff6b00; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        
+        /* GİRİŞ EKRANI */
+        #loginScreen { max-width: 400px; margin: 80px auto; background: #1e293b; padding: 30px; border-radius: 16px; border: 1px solid #334155; box-shadow: 0 10px 30px rgba(0,0,0,0.5); text-align: center; }
+        #loginScreen h2 { margin-bottom: 20px; color: #fff; font-size: 22px; }
+        .form-group { margin-bottom: 15px; text-align: left; }
+        .form-group label { display: block; font-size: 12px; color: #cbd5e1; margin-bottom: 5px; font-weight: 600; }
+        .form-group input, .form-group select { width: 100%; padding: 12px; background: #0f172a; border: 1px solid #334155; border-radius: 8px; color: #fff; font-size: 14px; outline: none; }
+        .login-btn { width: 100%; background: #ff6b00; color: #fff; border: none; padding: 12px; border-radius: 8px; font-weight: 700; cursor: pointer; margin-top: 10px; }
+
+        /* PANEL ANA EKRANI */
+        #panelScreen { display: none; }
+        .panel-nav { display: flex; gap: 10px; margin-bottom: 25px; overflow-x: auto; padding-bottom: 5px; }
+        .nav-tab { background: #1e293b; border: 1px solid #334155; color: #cbd5e1; padding: 10px 20px; border-radius: 8px; font-weight: 700; cursor: pointer; white-space: nowrap; transition: 0.2s; }
+        .nav-tab.active, .nav-tab:hover { background: #ff6b00; color: #fff; border-color: #ff6b00; }
+
+        .panel-section { display: none; background: #1e293b; border-radius: 14px; padding: 20px; border: 1px solid #334155; }
+        .panel-section.active { display: block; }
+
+        /* TABLOLAR VE LİSTELER */
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #334155; font-size: 13px; }
+        th { color: #ff6b00; font-weight: 700; }
+        .action-btn { background: #ff6b00; color: #fff; border: none; padding: 6px 12px; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 11px; margin-right: 5px; }
+        .danger-btn { background: #ef4444; }
+        .success-btn { background: #10b981; }
+
+        /* TAN MEDYA İMZASI */
+        .panel-footer { text-align: center; margin-top: 40px; font-size: 11px; color: #94a3b8; }
+        .panel-footer span { color: #ff6b00; font-weight: 700; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="logo"><span class="bolge">Bölge</span> <span class="yemek">Yemek</span></a>
+        <div id="userInfo" style="font-size: 13px; font-weight: 600; color: #cbd5e1;"></div>
+    </header>
+
+    <div class="container">
+        <!-- GİRİŞ EKRANI -->
+        <div id="loginScreen">
+            <h2>İşletme / Admin Girişi</h2>
+            <div class="form-group">
+                <label>Mağaza / Admin Adı</label>
+                <input type="text" id="loginKullanici" placeholder="Örn: Pan Çiğ Köfte veya admin">
+            </div>
+            <div class="form-group">
+                <label>Şifre</label>
+                <input type="password" id="loginSifre" placeholder="Şifreniz">
+            </div>
+            <button type="button" class="login-btn" onclick="girisYap()">Panele Giriş Yap</button>
+        </div>
+
+        <!-- PANEL YÖNETİM EKRANI -->
+        <div id="panelScreen">
+            <div class="panel-nav">
+                <button class="nav-tab active" onclick="sekmeDegistir('siparisler')"><i class="fa-solid fa-bell"></i> Canlı Siparişler</button>
+                <button class="nav-tab" onclick="sekmeDegistir('urunYonetimi')"><i class="fa-solid fa-utensils"></i> Ürün & Mağaza Yönetimi (Profil)</button>
+                <button class="nav-tab" id="adminTab" style="display:none;" onclick="sekmeDegistir('adminOnay')"><i class="fa-solid fa-shield-halved"></i> Süper Admin Görsel Denetimi</button>
+                <button class="nav-tab" onclick="cikisYap()" style="background:#ef4444; border-color:#ef4444; color:#fff; margin-left:auto;"><i class="fa-solid fa-right-from-bracket"></i> Çıkış</button>
+            </div>
+
+            <!-- 1. CANLI SİPARİŞLER SEKMESİ -->
+            <div id="siparislerSecenek" class="panel-section active">
+                <h3 style="color:#fff; margin-bottom:15px;"><i class="fa-solid fa-list-check"></i> Mağazanıza Gelen Canlı Siparişler</h3>
+                <div style="overflow-x:auto;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Sipariş ID</th>
+                                <th>Müşteri</th>
+                                <th>Telefon / Adres</th>
+                                <th>Ürünler</th>
+                                <th>Tutar</th>
+                                <th>Durum</th>
+                                <th>İşlemler</th>
+                            </tr>
+                        </thead>
+                        <tbody id="canliSiparislerBody">
+                            <!-- Firebase verileri buraya dolacak -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- 2. ÜRÜN & MAĞAZA YÖNETİMİ (PROFİL) -->
+            <div id="urunYonetimiSecenek" class="panel-section">
+                <h3 style="color:#fff; margin-bottom:15px;"><i class="fa-solid fa-store"></i> Mağaza Ürün ve Fiyat Yönetimi</h3>
+                <p style="font-size:12px; color:#94a3b8; margin-bottom:15px;">Eklediğiniz ürünler ve fiyatlar doğrudan müşterinin gördüğü mağazanıza yansır. Görseller admin onayından sonra aktifleşir.</p>
+                
+                <div style="background:#0f172a; padding:15px; border-radius:10px; margin-bottom:20px; border:1px solid #334155;">
+                    <h4 style="color:#ff6b00; font-size:14px; margin-bottom:10px;">Yeni Ürün Ekle</h4>
+                    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:10px;">
+                        <input type="text" id="yeniUrunAdi" placeholder="Ürün Adı (Örn: Mega Dürüm)" style="padding:10px; background:#1e293b; border:1px solid #334155; color:#fff; border-radius:6px;">
+                        <input type="number" id="yeniUrunFiyat" placeholder="Fiyat (₺)" style="padding:10px; background:#1e293b; border:1px solid #334155; color:#fff; border-radius:6px;">
+                        <input type="text" id="yeniUrunGorsel" placeholder="Görsel URL (images/urun.jpg)" style="padding:10px; background:#1e293b; border:1px solid #334155; color:#fff; border-radius:6px;">
+                    </div>
+                    <textarea id="yeniUrunAciklama" placeholder="Ürün İçeriği ve Açıklama" rows="2" style="width:100%; margin-top:10px; padding:10px; background:#1e293b; border:1px solid #334155; color:#fff; border-radius:6px;"></textarea>
+                    <button type="button" class="action-btn success-btn" style="margin-top:10px; padding:10px 20px;" onclick="urunEkleOnayaGonder()">Onaya Gönder ve Ekle</button>
+                </div>
+
+                <h4 style="color:#fff; font-size:14px; margin-bottom:10px;">Mevcut Ürünleriniz</h4>
+                <div id="magazaUrunleriListesi">
+                    <!-- Restoranın kendi ürünleri burada listelenir -->
+                </div>
+            </div>
+
+            <!-- 3. SÜPER ADMIN GÖRSEL DENETİMİ -->
+            <div id="adminOnaySecenek" class="panel-section">
+                <h3 style="color:#fff; margin-bottom:15px;"><i class="fa-solid fa-shield-halved"></i> Süper Admin: Onay Bekleyen Mağaza Ürünleri</h3>
+                <p style="font-size:12px; color:#94a3b8; margin-bottom:15px;">Firmaların yüklediği görselleri ve içerikleri buradan kontrol edip onaylayabilir veya silebilirsiniz.</p>
+                <div id="adminOnayListesi">
+                    <!-- Onay bekleyen ürünler buraya düşer -->
+                </div>
+            </div>
+        </div>
+
+        <div class="panel-footer">
+            <p>&copy; 2026 Bölge Yemek. Tüm hakları saklıdır.</p>
+            <span>TAN MEDYA TASARIM Tarafından Kurulmuştur.</span>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <script>
+        const firebaseConfig = {
+          apiKey: "AIzaSyDMIz96KNZF-7zWGRuI-2fvQ72fZImHtUw",
+          authDomain: "eretankartal.firebaseapp.com",
+          databaseURL: "https://eretankartal-default-rtdb.europe-west1.firebasedatabase.app",
+          projectId: "eretankartal",
+          storageBucket: "eretankartal.firebasestorage.app",
+          messagingSenderId: "775846519838",
+          appId: "1:775846519838:web:75b1d7dfb4ef942a3f7a0f"
+        };
+
+        if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
+        const db = firebase.database();
+
+        let aktifKullanici = null;
+        let aktifRol = null;
+
+        function girisYap() {
+            const kullanici = document.getElementById('loginKullanici').value.trim();
+            const sifre = document.getElementById('loginSifre').value.trim();
+
+            if(kullanici === "admin" && sifre === "1234") {
+                aktifKullanici = "Süper Admin";
+                aktifRol = "admin";
+                document.getElementById('adminTab').style.display = 'block';
+                panelAcilisIslemleri();
+            } else if(kullanici && sifre) {
+                // Restoran girişi simülasyonu
+                aktifKullanici = kullanici;
+                aktifRol = "restoran";
+                document.getElementById('adminTab').style.display = 'none';
+                panelAcilisIslemleri();
+            } else {
+                alert("Lütfen bilgileri girin.");
+            }
+        }
+
+        function panelAcilisIslemleri() {
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('panelScreen').style.display = 'block';
+            document.getElementById('userInfo').textContent = `Hoş Geldiniz, ${aktifKullanici} (${aktifRol.toUpperCase()})`;
+            canliSiparisleriGetir();
+        }
+
+        function cikisYap() {
+            location.reload();
+        }
+
+        function sekmeDegistir(sekmeAdi) {
+            document.querySelectorAll('.panel-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+
+            if(sekmeAdi === 'siparisler') {
+                document.getElementById('siparislerSecenek').classList.add('active');
+            } else if(sekmeAdi === 'urunYonetimi') {
+                document.getElementById('urunYonetimiSecenek').classList.add('active');
+            } else if(sekmeAdi === 'adminOnay') {
+                document.getElementById('adminOnaySecenek').classList.add('active');
+                adminOnayListesiniYukle();
+            }
+            event.currentTarget.classList.add('active');
+        }
+
+        function canliSiparisleriGetir() {
+            db.ref('orders').on('value', snapshot => {
+                const tbody = document.getElementById('canliSiparislerBody');
+                tbody.innerHTML = '';
+                const data = snapshot.val();
+                if(!data) {
+                    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:#94a3b8;">Henüz sipariş bulunmuyor.</td></tr>`;
+                    return;
+                }
+
+                Object.values(data).forEach(sip => {
+                    // Eğer giriş yapan restoran ise sadece kendi siparişini görür, admin hepsini görür
+                    if(aktifRol === 'restoran' && sip.branch !== aktifKullanici) return;
+
+                    tbody.innerHTML += `
+                        <tr>
+                            <td><b>${sip.id}</b></td>
+                            <td>${sip.name}</td>
+                            <td>${sip.phone}<br><span style="font-size:11px; color:#94a3b8;">${sip.address}</span></td>
+                            <td>${sip.product}</td>
+                            <td style="color:#ff6b00; font-weight:700;">${sip.price} ₺</td>
+                            <td><span style="background:rgba(255,107,0,0.15); color:#ff6b00; padding:3px 8px; border-radius:4px; font-weight:700;">${sip.status}</span></td>
+                            <td>
+                                <button class="action-btn success-btn" onclick="siparisDurumGuncelle('${sip.id}', 'Hazırlanıyor')">Hazırla</button>
+                                <button class="action-btn danger-btn" onclick="siparisSil('${sip.id}')">Sil</button>
+                            </td>
+                        </tr>
+                    `;
+                });
+            });
+        }
+
+        function siparisDurumGuncelle(id, yeniDurum) {
+            db.ref('orders/' + id).update({ status: yeniDurum });
+        }
+
+        function siparisSil(id) {
+            if(confirm("Siparişi silmek istediğinize emin misiniz?")) {
+                db.ref('orders/' + id).remove();
+            }
+        }
+
+        function urunEkleOnayaGonder() {
+            const ad = document.getElementById('yeniUrunAdi').value.trim();
+            const fiyat = document.getElementById('yeniUrunFiyat').value.trim();
+            const gorsel = document.getElementById('yeniUrunGorsel').value.trim();
+            const aciklama = document.getElementById('yeniUrunAciklama').value.trim();
+
+            if(!ad || !fiyat) {
+                alert("Lütfen ürün adı ve fiyatını girin.");
+                return;
+            }
+
+            const urunId = 'ONAY-' + Date.now();
+            const yeniUrun = {
+                id: urunId,
+                restaurant: aktifKullanici,
+                name: ad,
+                price: fiyat,
+                image: gorsel || 'images/pan-klasik.jpg',
+                description: aciklama,
+                status: "Onay Bekliyor"
+            };
+
+            db.ref('pending_products/' + urunId).set(yeniUrun).then(() => {
+                alert("Ürününüz başarıyla süper admin onayına gönderildi! Onaylandığında mağazanızda görünecektir.");
+                document.getElementById('yeniUrunAdi').value = '';
+                document.getElementById('yeniUrunFiyat').value = '';
+                document.getElementById('yeniUrunGorsel').value = '';
+                document.getElementById('yeniUrunAciklama').value = '';
+            });
+        }
+
+        function adminOnayListesiniYukle() {
+            db.ref('pending_products').on('value', snapshot => {
+                const container = document.getElementById('adminOnayListesi');
+                container.innerHTML = '';
+                const data = snapshot.val();
+                if(!data) {
+                    container.innerHTML = `<p style="color:#94a3b8; font-size:13px;">Onay bekleyen ürün bulunmuyor.</p>`;
+                    return;
+                }
+
+                Object.values(data).forEach(urun => {
+                    container.innerHTML += `
+                        <div style="background:#0f172a; padding:15px; border-radius:10px; margin-bottom:10px; border:1px solid #334155; display:flex; justify-content:space-between; align-items:center;">
+                            <div>
+                                <h4 style="color:#fff; font-size:14px;">${urun.name} <span style="color:#ff6b00;">(${urun.price} ₺)</span></h4>
+                                <p style="font-size:12px; color:#94a3b8;">Mağaza: <b>${urun.restaurant}</b> | Açıklama: ${urun.description}</p>
+                                <p style="font-size:11px; color:#10b981; margin-top:3px;">Görsel: ${urun.image}</p>
+                            </div>
+                            <div>
+                                <button class="action-btn success-btn" onclick="urunOnayla('${urun.id}')">Onayla & Yayınla</button>
+                                <button class="action-btn danger-btn" onclick="urunReddet('${urun.id}')">Reddet / Sil</button>
+                            </div>
+                        </div>
+                    `;
+                });
+            });
+        }
+
+        function urunOnayla(id) {
+            db.ref('pending_products/' + id).once('value', snapshot => {
+                const urun = snapshot.val();
+                if(urun) {
+                    // Onaylanan ürünü aktif ürünler havuzuna taşı
+                    db.ref('active_products/' + id).set(urun).then(() => {
+                        db.ref('pending_products/' + id).remove();
+                        alert("Ürün onaylandı ve mağazada yayına alındı!");
+                    });
+                }
+            });
+        }
+
+        function urunReddet(id) {
+            if(confirm("Bu ürünü reddetmek istediğinize emin misiniz?")) {
+                db.ref('pending_products/' + id).remove();
+            }
+        }
+    </script>
+</body>
+</html>
